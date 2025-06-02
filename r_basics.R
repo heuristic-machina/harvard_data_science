@@ -41,3 +41,22 @@ murders$population
 #>[28]  1826341  2700551  1316470  8791894  2059179 19378102  9535483   672591 11536504
 #>[37]  3751351  3831074 12702379  1052567  4625364   814180  6346105 25145561  2763885
 #>[46]   625741  8001024  6724540  1852994  5686986   563626
+
+#>vectors refer to objects with several entries
+#>function length gives count of entries in the vector
+pop <- murders$population
+length(pop)
+#>[1] 51
+
+#>factors are useful for categorical data using the levels() function
+class(murders$region)
+#> [1] "factor"
+#> categories save space vs character data types
+levels(murders$region)
+#> [1] "Northeast"     "South"         "North Central" "West"
+#> factors can be reordered based on the sum
+region <- murders$region
+value <- murders$total
+region <- reorder(region, value, FUN = sum)
+levels(region)
+#> [1] "Northeast"     "North Central" "West"          "South"
