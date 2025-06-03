@@ -1,3 +1,5 @@
+#>2.2 Basics
+
 coef_a <- 1
 coef_b <- 1
 coef_c <- -1
@@ -5,19 +7,19 @@ coef_c <- -1
 (-coef_b + sqrt(coef_b^2 - 4*coef_a*coef_c))/(2*coef_a)
 #> [1] 0.618
 
-#> Data types used in the console
+#> 2.3 Data types used in the console
 #> numeric
 a <- 2
 class(a)
 #>[1] "numeric"
 
-#>data frame
+#>2.3.1 data frame
 library(dslabs)
 class(murders)
 #> [1] "data.frame"
 
 
-#>Examining objects shows the 50 states plus DC with 5 variables
+#>2.3.2 Examining objects shows the 50 states plus DC with 5 variables
 str(murders)
 #>'data.frame':	51 obs. of  5 variables:
 #>$ state     : chr  "Alabama" "Alaska" "Arizona" "Arkansas" ...
@@ -33,7 +35,7 @@ head(murders)
 names(murders)
 #>[1] "state"      "abb"        "region"     "population" "total"
 
-#>accessor $ returns specified column data for the entire table
+#>2.3.3 accessor $ returns specified column data for the entire table
 murders$population
 #> [1]  4779736   710231  6392017  2915918 37253956  5029196  3574097   897934   601723
 #>[10] 19687653  9920000  1360301  1567582 12830632  6483802  3046355  2853118  4339367
@@ -42,13 +44,13 @@ murders$population
 #>[37]  3751351  3831074 12702379  1052567  4625364   814180  6346105 25145561  2763885
 #>[46]   625741  8001024  6724540  1852994  5686986   563626
 
-#>vectors refer to objects with several entries
+#>2.3.4 vectors refer to objects with several entries
 #>function length gives count of entries in the vector
 pop <- murders$population
 length(pop)
 #>[1] 51
 
-#>factors are useful for categorical data using the levels() function
+#>2.3.5 factors are useful for categorical data using the levels() function
 class(murders$region)
 #> [1] "factor"
 #> categories save space vs character data types
@@ -61,7 +63,7 @@ region <- reorder(region, value, FUN = sum)
 levels(region)
 #> [1] "Northeast"     "North Central" "West"          "South"
 
-#>extract list data using accessor $
+#>2.3.6 extract list data using accessor $
 record <- list(name = "John Doe",
                student_id = 1234,
                grades = c(95, 82, 91, 97, 93),
@@ -77,7 +79,7 @@ record2[[1]]
 
 
  
-#> matrix(data specified, rows, columns)
+#>2.3.7  matrix(data specified, rows, columns)
 mat <- matrix(1:12, 4, 3)
 mat
 #>      [,1] [,2] [,3]
@@ -119,8 +121,8 @@ murders[2:3, ]
 #> 3 Arizona  AZ   West    6392017   232
 
 
-#>creating vectors
-#> assign names to a vector with use of c concatenation
+#>2.4.1 creating vectors
+#>2.4.2 assign names to a vector with use of c concatenation
 codes <- c(380, 124, 818)
 country <- c("italy","canada","egypt")
 names(codes) <- country
@@ -128,7 +130,7 @@ codes
 #>  italy canada  egypt 
 #>    380    124    818
 #>    
-#>generating sequences
+#>2.4.3 generating sequences
 seq(1, 10)
 #>  [1]  1  2  3  4  5  6  7  8  9 10
 #>  add argument for increments
@@ -141,9 +143,7 @@ class(seq(1, 10, 0.5))
 #> [1] "numeric"
 
 
-
-
-#> subsetting vectors using square brackets
+#>2.4.4 subsetting vectors using square brackets
 codes[2]
 #> canada 
 #>    124
@@ -167,7 +167,7 @@ codes[c("egypt","italy")]
 
 
 
-#>coercion
+#>2.5 coercion
 x <- c(1, "canada", 3)
 x
 #> [1] "1"      "canada" "3"
