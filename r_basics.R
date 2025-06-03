@@ -164,4 +164,22 @@ codes["canada"]
 codes[c("egypt","italy")]
 #> egypt italy 
 #>   818   380
- 
+
+
+
+#>coercion
+x <- c(1, "canada", 3)
+x
+#> [1] "1"      "canada" "3"
+class(x)
+#> [1] "character"
+#> 
+#> coerce to character
+x <- 1:5
+y <- as.character(x)
+y
+#> [1] "1" "2" "3" "4" "5"
+#> 
+#> coerce to numeric
+as.numeric(y)
+#> [1] 1 2 3 4 5 
