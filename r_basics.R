@@ -60,3 +60,18 @@ value <- murders$total
 region <- reorder(region, value, FUN = sum)
 levels(region)
 #> [1] "Northeast"     "North Central" "West"          "South"
+
+#>extract list data using accessor $
+record <- list(name = "John Doe",
+               student_id = 1234,
+               grades = c(95, 82, 91, 97, 93),
+               final_grade = "A")
+class(record)
+#> [1] "list"
+record$student_id
+#> [1] 1234
+#> nameless lists accessed with index notation
+record2 <- list("John Doe", 1234)
+record2[[1]]
+#> [1] "John Doe"
+ 
