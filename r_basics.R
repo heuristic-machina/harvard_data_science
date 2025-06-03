@@ -119,7 +119,7 @@ murders[2:3, ]
 #> 3 Arizona  AZ   West    6392017   232
 
 
-
+#>creating vectors
 #> assign names to a vector with use of c concatenation
 codes <- c(380, 124, 818)
 country <- c("italy","canada","egypt")
@@ -127,4 +127,16 @@ names(codes) <- country
 codes
 #>  italy canada  egypt 
 #>    380    124    818
+#>    
+#>generating sequences
+seq(1, 10)
+#>  [1]  1  2  3  4  5  6  7  8  9 10
+#>  add argument for increments
+seq(1, 10, 2)
+#> [1] 1 3 5 7 9
+class(1:10)
+#> [1] "integer"
+#> class changes to numeric if sequence includes non-integers
+class(seq(1, 10, 0.5))
+#> [1] "numeric"
  
