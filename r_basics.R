@@ -74,4 +74,47 @@ record$student_id
 record2 <- list("John Doe", 1234)
 record2[[1]]
 #> [1] "John Doe"
+
+
+ 
+#> matrix(data specified, rows, columns)
+mat <- matrix(1:12, 4, 3)
+mat
+#>      [,1] [,2] [,3]
+#> [1,]    1    5    9
+#> [2,]    2    6   10
+#> [3,]    3    7   11
+#> [4,]    4    8   12
+#> 
+#> specify matrix entries using square brackets
+mat[2, 3]
+#> [1] 10
+#> 
+#> selecting a row or column only
+mat[2, 3]
+#> [1] 10
+mat[2, ]
+#> [1]  2  6 10
+#> 
+#> accessing more than one column or row creates a new matrix
+mat[, 2:3]
+#>      [,1] [,2]
+#> [1,]    5    9
+#> [2,]    6   10
+#> [3,]    7   11
+#> [4,]    8   12
+#> 
+#> subsetting both rows and columns
+mat[1:2, 2:3]
+#>      [,1] [,2]
+#> [1,]    5    9
+#> [2,]    6   10
+#> 
+#> accessing data frame rows and columns with square brackets
+murders[25, 1]
+#> [1] "Mississippi"
+murders[2:3, ]
+#>     state abb region population total
+#> 2  Alaska  AK   West     710231    19
+#> 3 Arizona  AZ   West    6392017   232
  
