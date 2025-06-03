@@ -117,4 +117,14 @@ murders[2:3, ]
 #>     state abb region population total
 #> 2  Alaska  AK   West     710231    19
 #> 3 Arizona  AZ   West    6392017   232
+
+
+
+#> assign names to a vector with use of c concatenation
+codes <- c(380, 124, 818)
+country <- c("italy","canada","egypt")
+names(codes) <- country
+codes
+#>  italy canada  egypt 
+#>    380    124    818
  
