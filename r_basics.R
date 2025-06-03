@@ -139,4 +139,29 @@ class(1:10)
 #> class changes to numeric if sequence includes non-integers
 class(seq(1, 10, 0.5))
 #> [1] "numeric"
+
+
+
+
+#> subsetting vectors using square brackets
+codes[2]
+#> canada 
+#>    124
+#>multi-entry vector as an index
+codes[c(1,3)]
+#> italy egypt 
+#>   380   818
+  
+#> accessing consecutive elements
+codes[1:2]
+#>  italy canada 
+#>    380    124
+  
+#>accessing elements by names
+codes["canada"]
+#> canada 
+#>    124
+codes[c("egypt","italy")]
+#> egypt italy 
+#>   818   380
  
