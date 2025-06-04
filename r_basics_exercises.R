@@ -19,3 +19,22 @@ sum(x)
 #>4.Use one line of code to compute the log, in base 10, of the square root of 100.
 log(sqrt(100), base=10)
 log10(sqrt(100))
+
+#>5. Which of the following will always return the numeric value stored in x?
+#>5.a
+#>log(10^1) (is the natural log of 10)
+#> log(1, 10)
+#>0 not 1
+#>
+#>5.b
+#>log10(x^10)
+#> log(10, 1)
+#>is 0 not 1
+#>
+#>5.c
+#>log(exp(x))
+#>correct answer
+#>
+#>5.d
+#>exp(log(x, base = 2))
+#>is 0 not 2
