@@ -66,6 +66,7 @@ x + y
 #> object length
 #> [1] 11 22 33 41 52 63 71
 
+
 #>2.9 indexing
 #>2.9.1 subsetting with logicals
 #>finds if states have a murder rate of less than .71
@@ -73,3 +74,48 @@ library(dslabs)
 murder_rate <- murders$total / murders$population * 100000
 ind <- murder_rate < 0.71
 murders$state[ind]
+#>
+#>logical vectors get coerced to numeric with TRUE coded as 1 and FALSE as 0 using
+#>sum
+sum(ind)
+#> [1] 5
+
+#>2.9.2 logical operators
+#>refresher
+TRUE & TRUE
+#> [1] TRUE
+TRUE & FALSE
+#> [1] FALSE
+FALSE & FALSE
+#> [1] FALSE
+#> finding a western state with murder rate at most 1
+west <- murders$region == "West"
+safe <- murder_rate <= 1
+ind <- safe & west
+murders$state[ind]
+#> [1] "Hawaii"  "Idaho"   "Oregon"  "Utah"    "Wyoming"
+
+#>2.9.3 which
+#>finding the murder rate of california
+ind <- which(murders$state == "California")
+murder_rate[ind]
+#> [1] 3.37
+
+#>2.9.4 match
+#>finds out the murder rates for several states by the index
+ind <- match(c("New York", "Florida", "Texas"), murders$state)
+ind
+#> [1] 33 10 44
+murder_rate[ind]
+#> [1] 2.67 3.40 3.20
+
+#>2.9.5 %in%
+#>finding if each element of a first vector is in a second
+c("Boston", "Dakota", "Washington") %in% murders$state
+#> [1] FALSE FALSE  TRUE
+#> 
+#> similarity of match and which producing same index but in different order
+match(c("New York", "Florida", "Texas"), murders$state)
+#> [1] 33 10 44
+which(murders$state %in% c("New York", "Florida", "Texas"))
+#> [1] 10 33 44
