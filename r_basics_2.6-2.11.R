@@ -1,4 +1,4 @@
-#>2.6 Not availables
+#>2.6 Not available
 x <- c("1", "b", "3")
 as.numeric(x)
 #> Warning: NAs introduced by coercion
@@ -22,6 +22,9 @@ murders$abb[ind]
 #> [14] "WV" "NE" "OR" "DE" "MN" "KS" "CO" "NM" "NV" "AR" "WA" "CT" "WI"
 #> [27] "DC" "OK" "KY" "MA" "MS" "AL" "IN" "SC" "TN" "AZ" "NJ" "VA" "NC"
 #> [40] "MD" "OH" "MO" "LA" "IL" "GA" "MI" "PA" "NY" "FL" "TX" "CA"
+#> this formula is tweaked in vector arithmetic 2.8.2 (two vectors) 
+#> for murders per every 100000 giving a more accurate representation of safety
+#> than the above example
 
 
 #>2.7.3 max and which.max
@@ -36,3 +39,37 @@ murders$state[i_max]
 x <- c(31, 4, 15, 92, 65)
 rank(x)
 #> [1] 3 1 2 5 4
+
+
+#>2.8 vector arithmetic 
+#>2.8.1 rescaling a vector by multiplication
+inches <- c(69, 62, 66, 70, 70, 73, 67, 73, 67, 70)
+inches * 2.54
+#>  [1] 175 157 168 178 178 185 170 185 170 178
+#>2.8.1 rescaling a vector by subtraction
+inches - 69
+#>  [1]  0 -7 -3  1  1  4 -2  4 -2  1
+
+#>2.8.2 two vectors
+murder_rate <- murders$total / murders$population * 100000
+murders$abb[order(murder_rate)]
+#>  [1] "VT" "NH" "HI" "ND" "IA" "ID" "UT" "ME" "WY" "OR" "SD" "MN" "MT"
+#> [14] "CO" "WA" "WV" "RI" "WI" "NE" "MA" "IN" "KS" "NY" "KY" "AK" "OH"
+#> [27] "CT" "NJ" "AL" "IL" "OK" "NC" "NV" "VA" "AR" "TX" "NM" "CA" "FL"
+#> [40] "TN" "PA" "AZ" "GA" "MS" "MI" "DE" "SC" "MD" "MO" "LA" "DC"
+
+#>2.8.3 two vectors of unequal length causes recycling (warning w/no error)
+x <- c(1, 2, 3)
+y <- c(10, 20, 30, 40, 50, 60, 70)
+x + y
+#> Warning in x + y: longer object length is not a multiple of shorter
+#> object length
+#> [1] 11 22 33 41 52 63 71
+
+#>2.9 indexing
+#>2.9.1 subsetting with logicals
+#>finds if states have a murder rate of less than .71
+library(dslabs)
+murder_rate <- murders$total / murders$population * 100000
+ind <- murder_rate < 0.71
+murders$state[ind]
