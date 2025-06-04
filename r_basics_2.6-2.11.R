@@ -119,3 +119,28 @@ match(c("New York", "Florida", "Texas"), murders$state)
 #> [1] 33 10 44
 which(murders$state %in% c("New York", "Florida", "Texas"))
 #> [1] 10 33 44
+
+
+#>2.10.1 plot
+#>plot of total murders versus population
+x <- murders$population / 10^6
+y <- murders$total
+plot(x, y)
+#>with() gives quick plot that avoids accessing variables twice
+#>with() uses murders column names in the plot function
+with(murders, plot(population, total))
+
+#>2.10.2 histogram
+#>graphical summary of murder rates
+x <- with(murders, total / population * 100000)
+hist(x)
+
+#>2.10.3 boxplot
+#> region comparison
+murders$rate <- with(murders, total / population * 100000)
+boxplot(rate~region, data = murders)
+
+#>2.10.4 image
+#>image() displays the values in a matrix using color
+x <- matrix(1:120, 12, 10)
+image(x)
