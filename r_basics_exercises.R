@@ -93,7 +93,8 @@ table(state.region)
 #>in January for Beijing, Lagos, Paris, Rio de Janeiro, San Juan, and Toronto, 
 #>which are 35, 88, 42, 84, 81, and 30 degrees Fahrenheit. Call the object temp.
 #>13. Now create a vector with the city names and call the object city.
-#>14. Use the names function and the objects defined in the previous exercises to associate the temperature data with its corresponding city.
+#>14. Use the names function and the objects defined in the previous exercises to
+#> associate the temperature data with its corresponding city.
 cities <- c("beijing", "lagos", "paris", "rio de janeiro", "san juan", "toronto")
 temp <- c(35, 88, 42, 84, 81, 30)
 names(cities) <- temp
@@ -102,3 +103,14 @@ cities
 #>"beijing"          "lagos"          "paris" "rio de janeiro"       "san juan" 
 #>30 
 #>"toronto"
+
+#>15. Use the [ and : operators to access the temperature of the first three cities
+#> on the list.
+cities[1:3]
+#>       35        88        42 
+#>"beijing"   "lagos"   "paris" 
+
+#>16. Use the [ operator to access the temperature of Paris and San Juan.
+cities[c(3,5)]
+#>42         81 
+#>"paris" "san juan" 
