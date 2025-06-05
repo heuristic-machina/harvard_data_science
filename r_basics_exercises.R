@@ -92,4 +92,13 @@ table(state.region)
 #>12. Use the function c to create a vector with the average high temperatures 
 #>in January for Beijing, Lagos, Paris, Rio de Janeiro, San Juan, and Toronto, 
 #>which are 35, 88, 42, 84, 81, and 30 degrees Fahrenheit. Call the object temp.
-#>
+#>13. Now create a vector with the city names and call the object city.
+#>14. Use the names function and the objects defined in the previous exercises to associate the temperature data with its corresponding city.
+cities <- c("beijing", "lagos", "paris", "rio de janeiro", "san juan", "toronto")
+temp <- c(35, 88, 42, 84, 81, 30)
+names(cities) <- temp
+cities
+#>35               88               42               84               81 
+#>"beijing"          "lagos"          "paris" "rio de janeiro"       "san juan" 
+#>30 
+#>"toronto"
