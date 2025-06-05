@@ -159,3 +159,11 @@ class(a<-1L)
 #>[1] "integer"
 class(a<-1)
 #>[1] "numeric"
+
+#>23. Define the following vector:
+x <- c("1", "3", "5")
+#>and coerce it to get integers.
+x <- c("1", "3", "5")
+y <- as.integer(x)
+y
+#>[1] 1 3 5
