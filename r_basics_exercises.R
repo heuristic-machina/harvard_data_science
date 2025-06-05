@@ -38,3 +38,38 @@ log10(sqrt(100))
 #>5.d
 #>exp(log(x, base = 2))
 #>is 0 not 2
+
+#>6. Make sure the US murders dataset is loaded. Use the function str to examine
+#> the structure of the murders object. Which of the following best describes the
+#> variables represented in this data frame?
+#> 
+#> The state name, the abbreviation of the state name, the state’s region, and 
+#> the state’s population and total number of murders for 2010.
+
+#> 7. What are the column names used by the data frame for these five variables?
+#> state, abb, region, population, total
+
+#> 8.Use the accessor $ to extract the state abbreviations and assign them to 
+#> the object a. What is the class of this object?
+a <- murders$abb
+a
+#>[1] "AL" "AK" "AZ" "AR" "CA" "CO" "CT" "DE" "DC" "FL" "GA" "HI" "ID" "IL" "IN" "IA" "KS"
+#>[18] "KY" "LA" "ME" "MD" "MA" "MI" "MN" "MS" "MO" "MT" "NE" "NV" "NH" "NJ" "NM" "NY" "NC"
+#>[35] "ND" "OH" "OK" "OR" "PA" "RI" "SC" "SD" "TN" "TX" "UT" "VT" "VA" "WA" "WV" "WI" "WY"
+class(a)
+#>[1] "character"
+
+#>9. Now use the square brackets to extract the state abbreviations and assign them 
+#>to the object b. Use the identical function to determine if a and b are the same.
+#>
+b <- murders[, 2]
+b
+#>[1] "AL" "AK" "AZ" "AR" "CA" "CO" "CT" "DE" "DC" "FL" "GA" "HI" "ID" "IL" "IN" "IA" "KS"
+#>[18] "KY" "LA" "ME" "MD" "MA" "MI" "MN" "MS" "MO" "MT" "NE" "NV" "NH" "NJ" "NM" "NY" "NC"
+#>[35] "ND" "OH" "OK" "OR" "PA" "RI" "SC" "SD" "TN" "TX" "UT" "VT" "VA" "WA" "WV" "WI" "WY"
+a == b
+#>[1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+#>[18] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+#>[35] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+
+#>
