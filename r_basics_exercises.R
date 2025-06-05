@@ -126,7 +126,7 @@ seq(1, 100, 2)
 #>[1]  1  3  5  7  9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45 47 49 51 53 55
 #>[29] 57 59 61 63 65 67 69 71 73 75 77 79 81 83 85 87 89 91 93 95 97 99
 
-#>Create a vector of numbers that starts at 6, does not pass 55, and adds numbers
+#>19.Create a vector of numbers that starts at 6, does not pass 55, and adds numbers
 #>in increments of 4/7: 6, 6 + 4/7, 6 + 8/7, and so on. How many numbers does the
 #>list have? Hint: use seq and length.
 seq(6, 55, 4/7)
@@ -143,3 +143,19 @@ seq(6, 55, 4/7)
 #>[81] 51.714286 52.285714 52.857143 53.428571 54.000000 54.571429
 length(seq(6, 55, 4/7))
 #>[1] 86
+
+#>20.What is the class of the following object a <- seq(1, 10, 0.5)?
+class(seq(1, 10, 0.5))
+#>[1] "numeric"
+
+#>21. What is the class of the following object a <- seq(1, 10)?
+class(seq(1, 10))
+#>[1] "integer"
+
+#>22. The class of class(a<-1) is numeric, not integer. R defaults to numeric 
+#>and to force an integer, you need to add the letter L. Confirm that the class
+#>of 1L is integer.
+class(a<-1L)
+#>[1] "integer"
+class(a<-1)
+#>[1] "numeric"
