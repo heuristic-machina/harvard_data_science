@@ -74,4 +74,22 @@ a == b
 identical(a,b)
 #>[1] TRUE
 
+#>10. With one line of code, use the functions levels and length to determine the 
+#>number of regions defined by this dataset.
+x <- length(levels(murders$region))
+x
+#>[1] 4
+
+#>11. The function table takes a vector and returns the frequency of each element.
+#>You can quickly see how many states are in each region by applying this function.
+#>Use this function in one line of code to create a table of number of states per
+#> region.
+table(state.region)
+#.state.region
+#>Northeast         South North Central          West 
+#>9            16            12            13 
+
+#>12. Use the function c to create a vector with the average high temperatures 
+#>in January for Beijing, Lagos, Paris, Rio de Janeiro, San Juan, and Toronto, 
+#>which are 35, 88, 42, 84, 81, and 30 degrees Fahrenheit. Call the object temp.
 #>
