@@ -167,3 +167,38 @@ x <- c("1", "3", "5")
 y <- as.integer(x)
 y
 #>[1] 1 3 5
+
+#>24. For exercises 24-31 we will use the US murders dataset. Make sure you load
+#>it prior to starting. Use the $ operator to access the population size data 
+#>and store it as the object pop. Then use the sort function to redefine pop so
+#>that it is sorted. Finally, use the [ operator to report the smallest 
+#>population size.
+pop <- murders$population
+sort(pop)
+#>[1]   563626   601723   625741   672591   710231   814180   897934   989415  1052567
+#>[10]  1316470  1328361  1360301  1567582  1826341  1852994  2059179  2700551  2763885
+#>[19]  2853118  2915918  2967297  3046355  3574097  3751351  3831074  4339367  4533372
+#>[28]  4625364  4779736  5029196  5303925  5686986  5773552  5988927  6346105  6392017
+#>[37]  6483802  6547629  6724540  8001024  8791894  9535483  9883640  9920000 11536504
+#>[46] 12702379 12830632 19378102 19687653 25145561 37253956
+which.min(sort(pop))
+#>[1] 1
+
+#>25. Now instead of the smallest population size, find the index of the entry 
+#>with the smallest population size. Hint: use order instead of sort.
+order(pop)
+#>[1] 51  9 46 35  2 42  8 27 40 30 20 12 13 28 49 32 29 45 17  4 25 16  7 37 38 18 19 41
+#>[29]  1  6 24 50 21 26 43  3 15 22 48 47 31 34 23 11 36 39 14 33 10 44  5
+
+#>26. We can actually perform the same operation as in the previous exercise using 
+#>the function which.min. Write one line of code that does this.
+which.min(murders$population)
+#>[1] 29
+
+#>27. Now we know how small the smallest state is and we know which row represents
+#>it. Which state is it? Define a variable states to be the state names from the
+#>murders data frame. Report the name of the state with the smallest population.
+i <- which.min(murders$population)
+states <- murders$state
+states[i]
+#>[1] "Wyoming"
