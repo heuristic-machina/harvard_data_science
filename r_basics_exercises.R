@@ -202,3 +202,126 @@ i <- which.min(murders$population)
 states <- murders$state
 states[i]
 #>[1] "Wyoming"
+
+#>28. You can create a data frame using the data.frame function.
+#>Use the rank function to determine the population rank of each state from smallest 
+#>population size to biggest. Save these ranks in an object called ranks, then create 
+#>a data frame with the state name and its rank. Call the data frame my_df.
+states <- murders$state
+ranks <- rank(murders$population)
+my_df <- data.frame(states= states, ranks = ranks)
+my_df
+#>states ranks
+#>1               Alabama    29
+#>2                Alaska     5
+#>3               Arizona    36
+#>4              Arkansas    20
+#>5            California    51
+#>6              Colorado    30
+#>7           Connecticut    23
+#>8              Delaware     7
+#>9  District of Columbia     2
+#>10              Florida    49
+#>11              Georgia    44
+#>12               Hawaii    12
+#>13                Idaho    13
+#>14             Illinois    47
+#>15              Indiana    37
+#>16                 Iowa    22
+#>17               Kansas    19
+#>18             Kentucky    26
+#>19            Louisiana    27
+#>20                Maine    11
+#>21             Maryland    33
+#>22        Massachusetts    38
+#>23             Michigan    43
+#>24            Minnesota    31
+#>25          Mississippi    21
+#>26             Missouri    34
+#>27              Montana     8
+#>28             Nebraska    14
+#>29               Nevada    17
+#>30        New Hampshire    10
+#>31           New Jersey    41
+#>32           New Mexico    16
+#>33             New York    48
+#>34       North Carolina    42
+#>35         North Dakota     4
+#>36                 Ohio    45
+#>37             Oklahoma    24
+#>38               Oregon    25
+#>39         Pennsylvania    46
+#>40         Rhode Island     9
+#>41       South Carolina    28
+#>42         South Dakota     6
+#>43            Tennessee    35
+#>44                Texas    50
+#>45                 Utah    18
+#>46              Vermont     3
+#>47             Virginia    40
+#>48           Washington    39
+#>49        West Virginia    15
+#>50            Wisconsin    32
+#>51              Wyoming     1
+
+#>29. Repeat the previous exercise, but this time order my_df so that the states
+#> are ordered from least populous to most populous. Hint: create an object ind 
+#> that stores the indexes needed to order the population values. Then use the 
+#> bracket operator [ to re-order each column in the data frame.
+
+ind <- order(murders$population)
+my_df <- data.frame(states = states[ind], ranks = ranks[ind])
+my_df
+
+#>states ranks
+#>1               Wyoming     1
+#>2  District of Columbia     2
+#>3               Vermont     3
+#>4          North Dakota     4
+#>5                Alaska     5
+#>6          South Dakota     6
+#>7              Delaware     7
+#>8               Montana     8
+#>9          Rhode Island     9
+#>10        New Hampshire    10
+#>11                Maine    11
+#>12               Hawaii    12
+#>13                Idaho    13
+#>14             Nebraska    14
+#>15        West Virginia    15
+#>16           New Mexico    16
+#>17               Nevada    17
+#>18                 Utah    18
+#>19               Kansas    19
+#>20             Arkansas    20
+#>21          Mississippi    21
+#>22                 Iowa    22
+#>23          Connecticut    23
+#>24             Oklahoma    24
+#>25               Oregon    25
+#>26             Kentucky    26
+#>27            Louisiana    27
+#>28       South Carolina    28
+#>29              Alabama    29
+#>30             Colorado    30
+#>31            Minnesota    31
+#>32            Wisconsin    32
+#>33             Maryland    33
+#>34             Missouri    34
+#>35            Tennessee    35
+#>36              Arizona    36
+#>37              Indiana    37
+#>38        Massachusetts    38
+#>39           Washington    39
+#>40             Virginia    40
+#>41           New Jersey    41
+#>42       North Carolina    42
+#>43             Michigan    43
+#>44              Georgia    44
+#>45                 Ohio    45
+#>46         Pennsylvania    46
+#>47             Illinois    47
+#>48             New York    48
+#>49              Florida    49
+#>50                Texas    50
+#>51           California    51
