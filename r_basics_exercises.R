@@ -325,3 +325,12 @@ my_df
 #>49              Florida    49
 #>50                Texas    50
 #>51           California    51
+
+#>29. Repeat the previous exercise, but this time order my_df so that the states
+#> are ordered from least populous to most populous. Hint: create an object ind 
+#> that stores the indexes needed to order the population values. Then use the 
+#> bracket operator [ to re-order each column in the data frame.
+
+my_df <- data.frame(states = states[ind], ranks = ranks[ind])
+my_df
+#>same output as question 28
