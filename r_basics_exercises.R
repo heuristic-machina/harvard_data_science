@@ -333,3 +333,34 @@ my_df
 
 my_df <- data.frame(states = states[ind], ranks = ranks[ind])
 my_df
+
+#>30. The na_example vector represents a series of counts. You can quickly 
+#>examine the object using:
+str(na_example)
+#>int [1:1000] 2 1 3 2 1 3 1 4 3 2 ...
+#>However, when we compute the average with the function mean, we obtain an NA:
+
+mean(na_example)
+#> [1] NA
+
+#>The is.na function returns a logical vector that tells us which entries are NA. 
+#>Assign this logical vector to an object called ind and determine how many NAs 
+#>does na_example have.
+
+library(dslabs)
+data(na_example)
+str(na_example)
+#>int [1:1000] 2 1 3 2 1 3 1 4 3 2 ...
+ind <- is.na(na_example)
+sum(ind)
+#>[1] 145
+
+#>31. Now compute the average again, but only for the entries that are not NA. 
+#>Hint: remember the ! operator, which turns FALSE into TRUE and vice versa.
+sum(!ind)
+#>[1] 855
+mean(na_example[!ind])
+#>2.301754
+
+
+
