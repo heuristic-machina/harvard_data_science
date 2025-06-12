@@ -362,5 +362,19 @@ sum(!ind)
 mean(na_example[!ind])
 #>2.301754
 
+#>32.Remake the data frame from question 28, but add a line that converts 
+#>the temperature from Fahrenheit to Celsius.
 
+temp <- c(35, 88, 42, 84, 81, 30)
+city <- c("Beijing", "Lagos", "Paris", "Rio de Janeiro", 
+            +           "San Juan", "Toronto")
+#>overwrite temp converting to celsius
+city_temps
+#>name temperature
+#>1        Beijing    1.666667
+#>2          Lagos   31.111111
+#>3          Paris    5.555556
+#>4 Rio de Janeiro   28.888889
+#>5       San Juan   27.222222
+#>6        Toronto   -1.111111
 
