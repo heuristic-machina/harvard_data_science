@@ -407,3 +407,10 @@ low
 #>determine the indices of murder_rate associated with values lower than 1.
 which(low)
 #>[1] 12 13 16 20 24 30 35 38 42 45 46 51
+
+#>37. Use the results from the previous exercise to report the names of the states
+#> with murder rates lower than 1.
+murders$state[which(low)]
+#> [1] "Hawaii"        "Idaho"         "Iowa"          "Maine"         "Minnesota"    
+#>[6] "New Hampshire" "North Dakota"  "Oregon"        "South Dakota"  "Utah"         
+#>[11] "Vermont"       "Wyoming"  
