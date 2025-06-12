@@ -393,3 +393,12 @@ sum(1/x^2)
 murder_rate <- murders$total/murders$population*100000
 mean(murder_rate)
 #>[1] 2.779125
+
+#>35.Using the murder_rate from question 24, create a logical vector named low 
+#>that tells us which entries of murder_rate are lower than 1.
+low <- murder_rate < 1
+low
+#>[1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE FALSE
+#>[15] FALSE  TRUE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE
+#>[29] FALSE  TRUE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE
+#>[43] FALSE FALSE  TRUE  TRUE FALSE FALSE FALSE FALSE  TRUE
