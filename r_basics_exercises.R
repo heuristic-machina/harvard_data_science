@@ -333,4 +333,3 @@ my_df
 
 my_df <- data.frame(states = states[ind], ranks = ranks[ind])
 my_df
-#>same output as question 28
