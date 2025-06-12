@@ -378,3 +378,11 @@ city_temps
 #>5       San Juan   27.222222
 #>6        Toronto   -1.111111
 
+#>33. What is the following sum 1 + (1/2^2) + (1/3^2) + ...(1/100^2)? (Should be
+#>close to (pi^2/6) Euler)
+
+#>define x using sequence
+x <- seq(1, 100)
+#>sum the equation
+sum(1/x^2)
+#>[1] 1.634984
