@@ -402,3 +402,8 @@ low
 #>[15] FALSE  TRUE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE FALSE FALSE FALSE FALSE
 #>[29] FALSE  TRUE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE
 #>[43] FALSE FALSE  TRUE  TRUE FALSE FALSE FALSE FALSE  TRUE
+
+#>36. Now use the results from the previous exercise and the function which to 
+#>determine the indices of murder_rate associated with values lower than 1.
+which(low)
+#>[1] 12 13 16 20 24 30 35 38 42 45 46 51
