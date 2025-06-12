@@ -386,3 +386,10 @@ x <- seq(1, 100)
 #>sum the equation
 sum(1/x^2)
 #>[1] 1.634984
+
+#>34. Compute the per 100,000 murder rate for each state and store it in the 
+#>object murder_rate. Then compute the average murder rate for the US using the 
+#>function mean. What is the average?
+murder_rate <- murders$total/murders$population*100000
+mean(murder_rate)
+#>[1] 2.779125
