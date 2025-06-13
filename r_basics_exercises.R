@@ -394,7 +394,7 @@ murder_rate <- murders$total/murders$population*100000
 mean(murder_rate)
 #>[1] 2.779125
 
-#>35.Using the murder_rate from question 24, create a logical vector named low 
+#>35.Using the murder_rate from question 34, create a logical vector named low 
 #>that tells us which entries of murder_rate are lower than 1.
 low <- murder_rate < 1
 low
@@ -413,4 +413,23 @@ which(low)
 murders$state[which(low)]
 #> [1] "Hawaii"        "Idaho"         "Iowa"          "Maine"         "Minnesota"    
 #>[6] "New Hampshire" "North Dakota"  "Oregon"        "South Dakota"  "Utah"         
-#>[11] "Vermont"       "Wyoming"  
+#>[11] "Vermont"       "Wyoming" 
+
+#>38. Now extend the code from the exercise to report the states in the Northeast
+#> with murder rates lower than 1. Hint: use the previously defined logical vector
+#>low and the logical operator &. 
+ind <- low & murders$region=='Northeast'
+murders$state[ind]
+#>[1] "Maine"         "New Hampshire" "Vermont" 
+
+#>39. In a previous exercise we computed the murder rate for each state and the
+#>average of these numbers. How many states are below the average?
+
+library(dslabs)
+data(murders)
+murder_rate <- murders$total/murders$population*100000
+avg <- mean(murder_rate)
+avg
+#>[1] 2.779125
+sum(murder_rate < avg)
+#>[1] 27
