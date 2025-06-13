@@ -433,3 +433,14 @@ avg
 #>[1] 2.779125
 sum(murder_rate < avg)
 #>[1] 27
+
+#>40. Use the match function to identify the states with abbreviations AK, MI,
+#>and IA. Hint: start by defining an index of the entries of murders$abb that 
+#>match the three abbreviations, then use the [ operator to extract the states.
+
+abbs <- c("AK", "MI", "IA")
+ind <- match(c("AK", "MI", "IA"), murders$abb)
+ind
+#> [1]  2 23 16
+
+#>
