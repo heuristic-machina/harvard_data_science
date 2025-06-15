@@ -70,3 +70,6 @@ compute_s_n <- function(n) {
   sum(x^2)
 }
 compute_s_n(10)
+#>[1] 385
+
+#>
