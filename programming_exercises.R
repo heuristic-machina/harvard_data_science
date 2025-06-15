@@ -72,4 +72,22 @@ compute_s_n <- function(n) {
 compute_s_n(10)
 #>[1] 385
 
+#>3.6.8 Define an empty numerical vector s_n of size 25 using s_n <- vector
+#>("numeric", 25) and store in the results of S1, S2, ...S25 using a for-loop.
 #>
+#>
+#>define function and store in compute_s_n
+compute_s_n <- function(n){
+  x <- 1:n
+  sum(x^2)
+}
+#>
+#> create an empty vector to store results
+s_n <- vector("numeric", 25)
+#>
+#>assign values to n and s_n:
+for (i in 25) {
+  s_n[i] <- compute_s_n(i)
+}
+#>create the plot
+plot(n, s_n)
