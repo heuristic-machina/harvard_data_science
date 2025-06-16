@@ -89,7 +89,26 @@ s_n <- vector("numeric", 25)
 for (i in 25) {
   s_n[i] <- compute_s_n(i)
 }
-
-#
 #>create the plot
 plot(n, s_n)
+
+#>3.6.9 9. Repeat exercise 8, but this time use sapply.
+s_n <- sapply(n, compute_s_n)
+plot(n, s_n)
+
+#>3.6.10 create the plot sn vs.n.  Use points defined by n = 1,...,25.
+#>same plots from 3.6.8-3.6.9
+plot(n, s_n)
+
+#3.6.11 Confirm that the formula for this sum is Sn = n(n + 1)(2n + 1)/6.
+
+#>sum of squares grows roughly like n^3
+#>proof using induction
+#>Base case (n=1)
+#>S1 = 1^2 = 1
+#>using the formula:
+#>S1 = 1 * (1 + 1) * (2 X 1 + 1) / 6
+#>S1 = 1 * 2 * 3 / 6 = 1
+#>
+identical(s_n, n*(n+1)*(2*n+1)/6)
+#>[1] TRUE
