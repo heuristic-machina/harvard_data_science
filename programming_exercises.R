@@ -89,5 +89,7 @@ s_n <- vector("numeric", 25)
 for (i in 25) {
   s_n[i] <- compute_s_n(i)
 }
+
+#
 #>create the plot
 plot(n, s_n)
