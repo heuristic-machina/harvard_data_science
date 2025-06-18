@@ -42,3 +42,10 @@ filter(murders, rank <=5)
 no_south <- filter(murders, region!='South')
 nrow(no_south)
 #>[1] 51
+
+#>4.11.10
+#>Create a new data frame called murders_nw with only the states from the 
+#>Northeast and the West. How many states are in this category?
+murders_nw <- filter(murders, region %in% c('Northeast', 'West'))
+nrow(murders_nw)
+#>[1] 22
