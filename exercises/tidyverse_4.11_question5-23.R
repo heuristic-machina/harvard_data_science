@@ -47,5 +47,15 @@ nrow(no_south)
 #>Create a new data frame called murders_nw with only the states from the 
 #>Northeast and the West. How many states are in this category?
 murders_nw <- filter(murders, region %in% c('Northeast', 'West'))
+#>
 nrow(murders_nw)
 #>[1] 22
+
+#>#>4.11.11
+#>11. Suppose you want to live in the Northeast or West and want the murder rate
+#> to be less than 1.  Create a table called my_states that contains rows for 
+#> states satisfying both the conditions.  Use select to show only the state name,
+#>the rate, and the rank.
+my_states <- filter(murders, region %in% c('Northeast', 'West'), rate < 1)
+my_states
+select(my_states, state, rate, rank)
