@@ -34,3 +34,11 @@ select(murders, state, abb)
 #>The columns have already been added from the above exercises.
 #>filter() is for manipulating row data.   
 filter(murders, rank <=5)
+
+#>4.11.9
+#>Create a new data frame called no_south that removes states from the South region. How 
+#>many states are in this category? You can use the function nrow for this.
+#>nrow and ncol return number of rows and columns respectively
+no_south <- filter(murders, region!='South')
+nrow(no_south)
+#>[1] 51
