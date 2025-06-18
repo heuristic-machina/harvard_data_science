@@ -30,7 +30,6 @@ filter(new_dataframe, rate <= .71)
 #>4        North Dakota   North Central  0.5947151
 #>5        Vermont        Northeast      0.3196211
 
-
 #>helper functions
 #>example shows where() helper function selecting all numeric columns
 new_dataframe <- select(murders, where(is.numeric))
@@ -41,4 +40,35 @@ names(new_dataframe)
 #>starts_with() example
 new_dataframe <- select(murders, starts_with('r'))
 names(new_dataframe)
-#>[1] "region" "rate"  
+#>[1] "region" "rate"
+
+#>4.2.4 Transforming variables
+#>mutate() transforms variables
+mutate(murders, population = log10(population))
+#>used with across() can transform several variables:
+mutate(murders, across(c(population, total), log10))
+#>helper function applying transformation to all numeric variables
+mutate(murders, across(where(is.numeric), log10))
+#>helper function applying transformation to all character variables
+mutate(murders, across(where(is.character), tolower))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
