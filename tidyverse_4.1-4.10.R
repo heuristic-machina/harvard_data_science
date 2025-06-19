@@ -52,12 +52,41 @@ mutate(murders, across(where(is.numeric), log10))
 #>helper function applying transformation to all character variables
 mutate(murders, across(where(is.character), tolower))
 
+#>4.3 The Pipe
+#>combines helper functions for more concise processing
+murders |> select(state, region, rate) |> filter(rate <= 0.71) 
+#>           state        region              rate
+#>1          Iowa         North Central       0.6893484
+#>2  North Dakota         North Central       0.5947151
+#>3        Hawaii         West 0.5145920
+#>4 New Hampshire         Northeast 0.3798036
+#>5       Vermont         Northeast 0.3196211
 
 
+#>4.4 Summarizing data
+#>height dataframe example
+#>summarize()
+library(dplyr)
+library(dslabs)
+s <- heights |> filter(sex =='Female') |> summarize(average = mean(height), standard_deviation
+                                                    = sd(height))
+#>new dataframe s created
+s
+#>   average              standard_deviation
+#>   1 64.93942           3.760656
+#>   
+#>accessor $
+s$average
+#>1 64.93942           
+s$standard_deviation
+#>3.760656
 
 
-
-
+#>murders dataframe example
+#>find the murder rate for the entire US using summarize() accounting for small & large states
+us_murder_rate <- murders |> summarize(rate = sum(total)/sum(population)*100000)
+#>      rate
+#>      1 3.034555
 
 
 
