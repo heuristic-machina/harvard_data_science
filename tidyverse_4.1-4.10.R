@@ -114,6 +114,25 @@ heights |> summarize(median_min_max(height))
 #>1   68.5    50      82.67717
 
 
+#>4.4.3 Group then summarize with group_by()
+#> using group_by() followed by summarize() to compare data categorically
+heights |> group_by(sex) |> summarize(average = mean(height), standard_deviation = sd(height))
+#> A tibble: 2 × 3
+#>sex       average          standard_deviation
+#><fct>     <dbl>              <dbl>
+#>1 Female    64.9               3.76
+#>2 Male      69.3               3.61
+#>
+#>another example using the murders database
+murders |> group_by(region) |> summarize(median_min_max(rate))
+#> A tibble: 4 × 4
+#>region        median   min   max
+#><fct>          <dbl> <dbl> <dbl>
+#>1 Northeast       1.80 0.320  3.60
+#>2 South           3.40 1.46  16.5 
+#>3 North Central   1.97 0.595  5.36
+#>4 West            1.29 0.515  3.63
+#> 
 
 
 
