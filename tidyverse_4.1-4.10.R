@@ -88,14 +88,30 @@ us_murder_rate <- murders |> summarize(rate = sum(total)/sum(population)*100000)
 #>      rate
 #>      1 3.034555
 
+#>4.4.2 Multiple summaries
+#>retrieving 3 summaries from the same variable example
+heights |> summarize(median = median(height), min = min(height), max = max(height))
+#>    median  min     max
+#>1   68.5    50      82.67717
+#>
+#>achieving same result above using helper functions quantile() and reframe()
+#>quantile() returns median, min, and max
+#>summarize() expects one value per row so instead we use reframe() to satisfy quantile()
+heights |> reframe(quantiles = quantile(height, c(0.5, 0, 1))) 
+#>  quantiles
+#>1  68.50000
+#>2  50.00000
+#>3  82.67717
+#>
+#>a defined function will return a data frame with columns per summary (2 step process below)
+median_min_max <- function(x){
+  qs <- quantile(x, c(0.5, 0, 1))
+  data.frame(median = qs[1], min = qs[2], max = qs[3])
+}
 
-
-
-
-
-
-
-
+heights |> summarize(median_min_max(height))
+#>    median  min     max
+#>1   68.5    50      82.67717
 
 
 
