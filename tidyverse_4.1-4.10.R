@@ -134,5 +134,16 @@ murders |> group_by(region) |> summarize(median_min_max(rate))
 #>4 West            1.29 0.515  3.63
 #> 
 
-
+#>4.4.4 Extracting variables with pull
+#>use pull() to return numeric data type instead of data.frame that dplyr functions return
+#>dply example returning data.frame class type
+class(us_murder_rate)
+#>[1] "data.frame"
+#>
+#>alternatively using pull() for numeric data class that can be used in function calculation(s)
+us_murder_rate <- murders |> summarize(rate = sum(total)/sum(population)*1000000) |> pull(rate)
+us_murder_rate
+#>[1] 30.34555
+class(us_murder_rate)
+#>[1] "numeric"
 
