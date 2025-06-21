@@ -147,3 +147,11 @@ us_murder_rate
 class(us_murder_rate)
 #>[1] "numeric"
 
+
+#>4.5 Sorting
+#>arrange()
+murders |> arrange(desc(rate))
+#>4.5.1 Nested sorting
+#>Using additional columns to break ties
+#>ordered by region then ordered by rate
+murders |> arrange(region, rate) |> head()
