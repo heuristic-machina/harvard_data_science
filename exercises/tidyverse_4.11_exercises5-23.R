@@ -89,3 +89,32 @@ ref
 #>[1] NA
 class(ref)
 #>[1] "numeric"
+
+#>4.11.15
+#>Find min and max from exercise 14 switching out summarize() arguments
+ref <- NHANES %>% filter(AgeDecade == " 20-29" & Gender == "female") %>% summarize(
+  minbp=min(BPSysAve, na.rm = TRUE), maxbp = max(BPSysAve, na.rm = TRUE))
+ref
+# A tibble: 1 × 2
+#     minbp maxbp
+#     <int> <int>
+#  1    84   179
+
+#>4.11.16
+#>common data science operation splitting data table into groups then computing summary stats
+#>for each group.  Filter by gender then group_by age groups for average and standard deviation
+NHANES |> filter(Gender == 'female') |> group_by(AgeDecade) |> summarize(
+  avg = mean(BPSysAve, na.rm = TRUE), stn_dev = sd(BPSysAve, na.rm = TRUE))
+# A tibble: 9 × 4
+# Groups:   AgeDecade [9]
+#   AgeDecade na.rm   avg stn_dev
+#   <fct>     <lgl> <dbl>   <dbl>
+# 1 " 0-9"    TRUE   100.    9.07
+# 2 " 10-19"  TRUE   104.    9.46
+# 3 " 20-29"  TRUE   108.   10.1 
+# 4 " 30-39"  TRUE   111.   12.3 
+# 5 " 40-49"  TRUE   115.   14.5 
+# 6 " 50-59"  TRUE   122.   16.2 
+# 7 " 60-69"  TRUE   127.   17.1 
+# 8 " 70+"    TRUE   134.   19.8 
+# 9  NA       TRUE   142.   22.9 
