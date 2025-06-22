@@ -197,6 +197,16 @@ log(8, base = 2)
 2 %>% log(8, base = .)
 #all the above are equivalent
 
-#>purr package
+#>4.9 purr package
 #>return objects of a specified type or return an error if not possible
 #>map(), map_dbl(), map_df()
+
+#>4.10 tidyverse conditionals
+#>4.10.1 case_when()
+x <- c(-2, -1, 0, 1, 2)
+case_when(x < 0 ~ "Negative", 
+          x > 0 ~ "Positive", 
+          TRUE  ~ "Zero")
+#> [1] "Negative" "Negative" "Zero"     "Positive" "Positive"
+#> 4.10.2 between()
+between(x, a, b) 
