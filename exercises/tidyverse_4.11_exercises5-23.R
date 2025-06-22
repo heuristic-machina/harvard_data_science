@@ -51,7 +51,7 @@ murders_nw <- filter(murders, region %in% c('Northeast', 'West'))
 nrow(murders_nw)
 #>[1] 22
 
-#>#>4.11.11
+#>4.11.11
 #>11. Suppose you want to live in the Northeast or West and want the murder rate
 #> to be less than 1.  Create a table called my_states that contains rows for 
 #> states satisfying both the conditions.  Use select to show only the state name,
@@ -59,3 +59,33 @@ nrow(murders_nw)
 my_states <- filter(murders, region %in% c('Northeast', 'West'), rate < 1)
 my_states
 select(my_states, state, rate, rank)
+
+#>4.11.12
+#>Repeat the previous exercise, but now instead of creating a new object, show the
+#>result and only include the state, rate, and rank columns. Use a pipe |> to do 
+#>this in just one line.
+my_states |> select(state, rate, rank)
+
+#>4.11.13
+#>For exercises 13-19, we will be using the data from the survey collected by
+#> the United States National Center for Health Statistics (NCHS). This center has
+#>conducted a series of health and nutrition surveys since the 1960’s. Starting 
+#>in 1999, about 5,000 individuals of all ages have been interviewed every year 
+#>and they complete the health examination component of the survey. Part of the 
+#>data is made available via the NHANES package. Once you install the NHANES 
+#>package, you can load the data like this:
+install.packages('NHANES')
+NHANES
+#>returns tibble: 10,000 x 76 dataframe
+ref <- tab |> summarize(average = mean(BPSysAve, na.re = TRUE), standard_deviation 
+                        = sd(BPSysAve, na.rm = TRUE))
+#>4.11.14
+#>Using a pipe, assign the average to a numeric variable ref_avg. Hint: Use the code
+#>from the previous exercise and then pull.
+ref <- NHANES %>% filter(AgeDecade == " 20-29" & Gender == "female") %>% summarize(
+  average = mean(BPSysAve, na.re = TRUE), standard_deviation = sd(
+    BPSysAve, na.rm = TRUE)) %>% .$average
+ref
+#>[1] NA
+class(ref)
+#>[1] "numeric"
