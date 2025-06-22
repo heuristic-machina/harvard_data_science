@@ -130,3 +130,38 @@ NHANES |> filter(Gender == 'male') |> group_by(AgeDecade, na.rm = TRUE) |> summa
 #> average systolic blood pressure.
 NHANES |> filter(Gender == 'male',AgeDecade == " 40-49") |> group_by(Race1) |> summarize(
   avg = mean(BPSysAve, na.rm = TRUE), stn_dev = sd(BPSysAve, na.rm = TRUE)) |> arrange(avg)
+
+#>4.11.19
+#>murders data frame is tidy format
+
+#>4.11.20
+#>Use as_tibble to convert the murders data table into a tibble and save it in an 
+#>object called murders_tibble
+murders_tibble <- as_tibble(murders)
+class(murders_tibble)
+#[1] "tbl_df"     "tbl"        "data.frame"
+
+#4.11.21
+#Use the group_by function to convert murders into a tibble that is grouped by region.
+group_by(murders_tibble, region)
+
+#4.11.22
+#Write tidyverse code that is equivalent to this code:
+exp(mean(log(murders$population)))
+# Write it using the pipe so that each function is called without arguments. Use the 
+# dot operator to access the population. Hint: The code should start with murders |>.
+murders |> _$population |> log() |> mean() |> exp()
+
+#4.11.23
+#Use the map_df to create a data frame with three columns named n, s_n, and s_n_2. 
+#The first column should contain the numbers 1 through 100. The second and third 
+#columns should each contain the sum of 1 through n with  n the row number.
+compute_s_n <- function(n){
+  x <- 1:n
+  tibble(sum = sum(x))
+}
+n<-c(seq(1, 100, by=1))
+sno<-map_df(n, compute_s_n)
+snox<-mutate(sno, n)
+compute_s_n_2<-map_df(n, compute_s_n)
+final<-full_join(snox, compute_s_n_2)
