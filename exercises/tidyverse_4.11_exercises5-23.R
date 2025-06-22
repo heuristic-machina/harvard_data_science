@@ -118,3 +118,15 @@ NHANES |> filter(Gender == 'female') |> group_by(AgeDecade) |> summarize(
 # 7 " 60-69"  TRUE   127.   17.1 
 # 8 " 70+"    TRUE   134.   19.8 
 # 9  NA       TRUE   142.   22.9 
+
+#>4.11.17
+#repeat exercise 16 for the male group
+NHANES |> filter(Gender == 'male') |> group_by(AgeDecade, na.rm = TRUE) |> summarize(
+  avg = mean(BPSysAve, na.rm = TRUE), stn_dev = sd(BPSysAve, na.rm = TRUE))
+
+#>4.11.18
+#>For males between the ages of 40-49, compare systolic blood pressure across race
+#>as reported in the Race1 variable. Order the resulting table from lowest to highest
+#> average systolic blood pressure.
+NHANES |> filter(Gender == 'male',AgeDecade == " 40-49") |> group_by(Race1) |> summarize(
+  avg = mean(BPSysAve, na.rm = TRUE), stn_dev = sd(BPSysAve, na.rm = TRUE)) |> arrange(avg)
