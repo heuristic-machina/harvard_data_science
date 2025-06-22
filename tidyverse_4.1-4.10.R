@@ -176,3 +176,23 @@ murders |> slice_min(rate, n=5)
 #>3        Hawaii  HI          West    1360301     7 0.5145920   49
 #>4  North Dakota  ND North Central     672591     4 0.5947151   48
 #>5          Iowa  IA North Central    3046355    21 0.6893484   47
+
+#>4.6 Tibbles
+#>the dplyr manipulation verbs (select, filter, mutate, and arrange) preserve the
+#>class of the input: if they receive a regular data frame they return a regular
+#>data frame, while if they receive a tibble they return a tibble
+murders |> group_by(region) |> class()
+#>[1] "grouped_df" "tbl_df"     "tbl"        "data.frame"
+
+#>4.7 Tibbles vs data frames
+#>tibbles give informative warnings
+#>tibbles can have more complex objects such as lists and functions
+#>4.7.1 creating tibble
+#>tibble() and as_tibble()
+
+#>4.8 the placeholder
+#>when wanting to pass argument to right side that is not the first argument as used in |>
+log(8, base = 2)
+2 |> log(8, base = _)
+2 %>% log(8, base = .)
+#all the above are equivalent
