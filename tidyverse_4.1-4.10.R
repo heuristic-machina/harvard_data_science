@@ -151,7 +151,28 @@ class(us_murder_rate)
 #>4.5 Sorting
 #>arrange()
 murders |> arrange(desc(rate))
+#>
 #>4.5.1 Nested sorting
 #>Using additional columns to break ties
 #>ordered by region then ordered by rate
 murders |> arrange(region, rate) |> head()
+#>
+#>4.5.2 top n
+#>behavior same like head() that takes the first 6 results
+#>slice_max(x, n=# of rows) returns specified top n
+murders |> slice_max(rate, n=5)
+#>          state abb        region population total      rate rank
+#>1 District of Columbia  DC         South     601723    99 16.452753    1
+#>2            Louisiana  LA         South    4533372   351  7.742581    2
+#>3             Missouri  MO North Central    5988927   321  5.359892    3
+#>4             Maryland  MD         South    5773552   293  5.074866    4
+#>5       South Carolina  SC         South    4625364   207  4.475323    5
+#>
+#>slice_min() returns the least rates or whichever variable is specified
+murders |> slice_min(rate, n=5)
+#>          state abb        region population total      rate rank
+#>1       Vermont  VT     Northeast     625741     2 0.3196211   51
+#>2 New Hampshire  NH     Northeast    1316470     5 0.3798036   50
+#>3        Hawaii  HI          West    1360301     7 0.5145920   49
+#>4  North Dakota  ND North Central     672591     4 0.5947151   48
+#>5          Iowa  IA North Central    3046355    21 0.6893484   47
