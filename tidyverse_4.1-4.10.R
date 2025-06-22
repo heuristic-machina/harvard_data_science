@@ -196,3 +196,7 @@ log(8, base = 2)
 2 |> log(8, base = _)
 2 %>% log(8, base = .)
 #all the above are equivalent
+
+#>purr package
+#>return objects of a specified type or return an error if not possible
+#>map(), map_dbl(), map_df()
