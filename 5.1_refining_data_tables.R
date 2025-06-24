@@ -18,3 +18,8 @@ murders_dt[, .(state, region)]
 murders_dt[, rate := total / population * 100000]
 #adding multiple columns with quotes
 murders_dt[, ":="(rate = total / population * 100000, rank = rank(population))]
+
+#5.1.3 reference vs copy
+#example1 := changes by reference
+#example2 copy() keeps original
+#example3 data.frame() creates copy or use setDT() to convert large datasets 
