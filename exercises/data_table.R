@@ -20,7 +20,7 @@ murders[, .(state, abb)]
 #based on the rank column
 murders[rank >= 47]
 
-#5Create a new data frame called no_south that removes states from the South 
+#5 Create a new data frame called no_south that removes states from the South 
 #region. How many states are in this category? You can use the function nrow for this.
 no_south <- murders[region != 'South']
 nrow(no_south)

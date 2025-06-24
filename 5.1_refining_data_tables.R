@@ -30,3 +30,19 @@ murders_dt[rate <= 0.7]
 #[] selects column name & db does not need to be first arg as in filter() syntax
 #select() and filter() becomes more succinct in the following:
 murders_dt[rate <= 0.7, .(state, rate)]
+
+#5.2 summarizing data
+#quicker way to subset and summarize data
+s <- heights_dt[sex == "Female", .(avg = mean(height), sd = sd(height))]
+
+#5.2.1 multiple summaries
+median_min_max <- function(x){
+  qs <- quantile(x, c(0.5, 0, 1))
+  data.frame(median = qs[1], minimum = qs[2], maximum = qs[3])
+}
+#place function call in the .() data.table
+heights_dt[, .(median_min_max(height))]
+
+#5.2.2 group then summarize
+#dplyr equivalent to data.table is 'by'
+heights_dt[, .(avg = mean(height), sd = sd(height), by = sex)]
