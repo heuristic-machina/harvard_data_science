@@ -22,4 +22,11 @@ murders_dt[, ":="(rate = total / population * 100000, rank = rank(population))]
 #5.1.3 reference vs copy
 #example1 := changes by reference
 #example2 copy() keeps original
-#example3 data.frame() creates copy or use setDT() to convert large datasets 
+#example3 data.frame() creates copy or use setDT() to convert large datasets
+
+#5.1.4 row-wise subsetting
+#similar to dplyr's filter()
+murders_dt[rate <= 0.7]
+#[] selects column name & db does not need to be first arg as in filter() syntax
+#select() and filter() becomes more succinct in the following:
+murders_dt[rate <= 0.7, .(state, rate)]
