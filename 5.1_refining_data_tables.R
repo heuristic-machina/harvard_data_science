@@ -46,3 +46,10 @@ heights_dt[, .(median_min_max(height))]
 #5.2.2 group then summarize
 #dplyr equivalent to data.table is 'by'
 heights_dt[, .(avg = mean(height), sd = sd(height), by = sex)]
+
+#5.3 sorting
+murders_dt[order(population)]
+#decreasing argument
+murders_dt[order(population, decreasing = TRUE)] 
+#nested ordering
+murders_dt[order(region, rate)] 
