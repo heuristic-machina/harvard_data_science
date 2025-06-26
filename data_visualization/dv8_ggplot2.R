@@ -66,3 +66,24 @@ p5 <- p4 +
 #ggthemes
 library(ggthemes)
 p6 <- p5 + theme_economist()
+
+#8.13 putting it all together
+library(ggthemes)
+library(ggrepel)
+
+r <- murders |> 
+  summarize(rate = sum(total) /  sum(population) * 10^6) |>
+  pull(rate)
+
+murders |> 
+  ggplot(aes(population/10^6, total)) +   
+  geom_abline(intercept = log10(r), lty = 2, color = "red") +
+  geom_point(aes(col = region), size = 3) +
+  geom_text_repel(aes(label = abb)) + 
+  scale_x_log10() +
+  scale_y_log10() +
+  labs(title = "US Gun Murders in 2010",
+       x = "Populations in millions (log scale)", 
+       y = "Total number of murders (log scale)",
+       color = "Region") +
+  theme_economist()
