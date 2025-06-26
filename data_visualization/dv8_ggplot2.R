@@ -31,3 +31,33 @@ murders |> ggplot(aes(population/10^6, total)) +
 #8.8 categories as colors
 murders |> ggplot(aes(population/10^6, total)) +
   geom_point(aes(color = region), size = 3) 
+
+#8.9 improving and testing plots
+p0 <- murders |> ggplot(aes(population/10^6, total))
+#scatter plot layer
+p1 <- p0 + geom_point(aes(color = region), size = 3)
+#labels modifying nudge for upcoming logarithmic application
+p2 <- p1 + geom_text(aes(label = abb), nudge_x = 0.1)
+
+#8.10 scales
+#log scale
+p3 <- p2 + scale_x_log10() + scale_y_log10()
+
+#8.11 annotations
+#labs() permits adding title, subtitle, caption
+p4 <- p3 + labs(title = 'US Gun Murders in 2010',
+                x = 'Population in millions (log scale)',
+                y = 'Total number of murders (log scale)',
+                color = 'Region')
+
+#avg murder rate uses y = rx, where y and x are the axes
+#in log-scale: log(y) = log(r) + log(x), a line with slope 1 and intercept log(r)
+r <- murders |>
+  summarize(rate = sum(total)/sum(population)*10^6) |>
+              pull(rate)
+
+#geom_abline() supplies intercept(a) and slope(b)
+#default line has slope 1 and intercept 0
+#define intercept
+p5 <- p4 +
+  geom_abline(intercept = log10(r), lty = 2, color = 'red')
