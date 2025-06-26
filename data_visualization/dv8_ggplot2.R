@@ -87,3 +87,13 @@ murders |>
        y = "Total number of murders (log scale)",
        color = "Region") +
   theme_economist()
+
+#8.14 geometries
+#8.14.1 barplots geom_bar() vs. geom_col()
+murders |> ggplot(aes(region)) + geom_bar()
+
+#when a table already present using geom_col()
+tab <- murders |> 
+  count(region) |> 
+  mutate(proportion = n/sum(n))
+tab |> ggplot(aes(region, proportion)) + geom_col()
