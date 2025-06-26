@@ -61,3 +61,8 @@ r <- murders |>
 #define intercept
 p5 <- p4 +
   geom_abline(intercept = log10(r), lty = 2, color = 'red')
+
+#8.12 add-on packages
+#ggthemes
+library(ggthemes)
+p6 <- p5 + theme_economist()
