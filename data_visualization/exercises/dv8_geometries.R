@@ -25,3 +25,14 @@ h + geom_histogram(binwidth=1)
 
 #21 render smooth density in one line
 heights |> ggplot(aes(height)) + geom_density()
+
+#22 ggplot(aes(group)) function for examining two groups
+heights |> ggplot(aes(height, group = sex)) + geom_density()
+
+#23 ggplot(aes(color)) behaves similarly to group
+heights |> ggplot(aes(height, color = sex)) + geom_density()
+
+#24 fill feature
+heights |> ggplot(aes(height, fill = sex)) + geom_density()
+#blend out overlap
+heights |> ggplot(aes(height, fill = sex)) + geom_density(alpha=0.2)
