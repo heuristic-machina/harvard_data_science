@@ -12,3 +12,16 @@ murders |> ggplot(aes(population, total, label=abb, color=region)) + geom_label(
 #14 change the x and y axes to log10 to account for the skewed population distribution
 p <- murders |> ggplot(aes(population, total, label=abb, color=region)) + geom_label()
 p + scale_x_log10() + scale_y_log10()
+
+#15 add a title
+p + scale_x_log10() + scale_y_log10() + ggtitle('Gun murder data')
+
+#18-20 assign heights data to ggplot object
+#assign height to x values through aes
+h <- heights |> ggplot(aes(x=height))
+h + geom_histogram()
+#correcting for binwidth
+h + geom_histogram(binwidth=1)
+
+#21 render smooth density in one line
+heights |> ggplot(aes(height)) + geom_density()
