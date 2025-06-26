@@ -107,3 +107,6 @@ heights |> filter(sex == 'Female') |>
 #8.14.3 density plots
 #geom_density()
 heights |> filter(sex == 'Female') |> ggplot(aes(height)) + geom_density(fill = 'blue')
+
+#8.14.4 boxplots
+heights |> ggplot(aes(sex, height)) + geom_boxplot()
