@@ -97,3 +97,13 @@ tab <- murders |>
   count(region) |> 
   mutate(proportion = n/sum(n))
 tab |> ggplot(aes(region, proportion)) + geom_col()
+
+#8.14.2 histogram 
+#geom_histogram()
+heights |> filter(sex == 'Female') |>
+  ggplot(aes(height)) +
+  geom_histogram(binwidth = 1, fill = 'blue', col = 'black')
+
+#8.14.3 density plots
+#geom_density()
+heights |> filter(sex == 'Female') |> ggplot(aes(height)) + geom_density(fill = 'blue')
