@@ -40,3 +40,24 @@ asiafert <- gapminder |> filter(continent == 'Asia') |>
 oceanfert <- gapminder |> filter(continent == 'Oceania') |>
   ggplot(aes(year, fertility)) +
   geom_point() + ggtitle('Oceania Fertility 50 years')
+
+#geom(line() for tracking single series (1 country below))
+us <- gapminder |> 
+  +     filter(country == "United States") |> 
+  +     ggplot(aes(year, fertility)) +
+  +     geom_line() + ggtitle('US Fertility Trend')
+
+#geom_line comparing 2 countries using col argument to differentiate lines
+countries <- c("South Korea","Germany")
+skor_germ <- gapminder |> filter(country %in% countries & !is.na(fertility)) |> 
+  ggplot(aes(year,fertility, col = country)) +
+  geom_line() + ggtitle('Germany & S Korean Fertility Trends')
+
+#label lines with geom_textpath()
+install.packages('geomtextpath')
+library(geomtextpath)
+labline <- gapminder |> 
+  +     filter(country %in% countries) |> 
+  +     ggplot(aes(year, life_expectancy, col = country, label = country)) +
+  +     geom_textpath() +
+  +     theme(legend.position = "none")
