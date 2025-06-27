@@ -17,3 +17,26 @@ gapminder |> filter(year %in% years) |>
   ggplot(aes(life_expectancy, infant_mortality, col = continent)) +
   geom_point() + 
   facet_wrap(~year)
+
+#10.4 time series plot
+#geom_point for each continent
+#americas
+amerfert <- gapminder |> filter(continent == 'Americas') |>
+  ggplot(aes(year, fertility)) +
+  geom_point() + ggtitle('Americas Fertility 50 years')
+#europe
+eurofert <- gapminder |> filter(continent == 'Europe') |>
+  ggplot(aes(year, fertility)) +
+  geom_point() + ggtitle('Europe Fertility 50 years')
+#africa
+afrifert <- gapminder |> filter(continent == 'Africa') |>
+  ggplot(aes(year, fertility)) +
+  geom_point() + ggtitle('Africa Fertility 50 years')
+#asia
+asiafert <- gapminder |> filter(continent == 'Asia') |>
+  ggplot(aes(year, fertility)) +
+  geom_point() + ggtitle('Asia Fertility 50 years')
+#oceania
+oceanfert <- gapminder |> filter(continent == 'Oceania') |>
+  ggplot(aes(year, fertility)) +
+  geom_point() + ggtitle('Oceania Fertility 50 years')
