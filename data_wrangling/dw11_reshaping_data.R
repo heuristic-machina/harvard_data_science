@@ -56,7 +56,7 @@ select(pwide_data, country, `1960`:`1967`)
 #2 South Korea   6.16   5.99   5.79   5.57   5.36   5.16   4.99   4.85
 
 
-#11.3 seperating variables
+#11.3 separating variables
 path <- system.file("extdata", package = "dslabs")
 
 filename <- "life-expectancy-and-fertility-two-countries-example.csv"
@@ -128,6 +128,8 @@ dat
 #11.4 reshaping with data.table
 path <- system.file("extdata", package = "dslabs")
 filename <- file.path(path, "fertility-two-countries-example.csv")
+
+#11.4.1 pivot_longer() comparison with melt()
 #data.table melt behaves similarly to tidyverse pivot_longer()
 library(data.table)
 dt_wide_dat <- fread(filename)
@@ -142,3 +144,7 @@ dt_tidy_dat
 #3: South Korea     V2      6.16
 #4:     country     V3   1961.00
 #5:     Germany     V3      2.44
+
+#11.4.2 pivot_wider comparison with dcast()
+#following code reverts 11.4.1 code to the original data table
+dt_dcast <- dcast(dt_tidy_dat, formula = ... ~ year, value.var = 'fertility')
