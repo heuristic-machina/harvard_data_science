@@ -54,3 +54,74 @@ select(pwide_data, country, `1960`:`1967`)
 #<chr>           <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
 #1 Germany       2.41   2.44   2.47   2.49   2.49   2.48   2.44   2.37
 #2 South Korea   6.16   5.99   5.79   5.57   5.36   5.16   4.99   4.85
+
+
+#11.3 seperating variables
+path <- system.file("extdata", package = "dslabs")
+
+filename <- "life-expectancy-and-fertility-two-countries-example.csv"
+filename <-  file.path(path, filename)
+
+raw_dat <- read_csv(filename)
+select(raw_dat, 1:5)
+#> # A tibble: 2 × 5
+#>   country     `1960_fertility` `1960_life_expectancy` `1961_fertility`
+#>   <chr>                  <dbl>                  <dbl>            <dbl>
+#> 1 Germany                 2.41                   69.3             2.44
+#> 2 South Korea             6.16                   53.0             5.99
+#> # ℹ 1 more variable: `1961_life_expectancy` <dbl>
+
+#lengthen the data
+dat <- raw_dat |> pivot_longer(-country)
+head(dat)
+#> # A tibble: 6 × 3
+#>   country name                 value
+#>   <chr>   <chr>                <dbl>
+#> 1 Germany 1960_fertility        2.41
+#> 2 Germany 1960_life_expectancy 69.3 
+#> 3 Germany 1961_fertility        2.44
+#> 4 Germany 1961_life_expectancy 69.8 
+#> 5 Germany 1962_fertility        2.47
+#> # ℹ 1 more row
+
+dat$name[1:5]
+#> [1] "1960_fertility"       "1960_life_expectancy" "1961_fertility"      
+#> [4] "1961_life_expectancy" "1962_fertility"
+
+#> problem: each observation is split into 2 rows instead of 1 row 
+#> solution: separate variable names into each column (widen data)
+#> start with separating out the year into it's own column
+#> too_many = 'merge' for names differing '_' underscores
+dat |> separate_wider_delim(name, delim = "_", 
+                            names = c("year", "name"), 
+                            too_many = "merge")
+#> # A tibble: 224 × 4
+#>   country year  name            value
+#>   <chr>   <chr> <chr>           <dbl>
+#> 1 Germany 1960  fertility        2.41
+#> 2 Germany 1960  life_expectancy 69.3 
+#> 3 Germany 1961  fertility        2.44
+#> 4 Germany 1961  life_expectancy 69.8 
+#> 5 Germany 1962  fertility        2.47
+#> # ℹ 219 more rows
+#> 
+#> pivot_wider() used for variable name columns and mutate to get year as 
+#> integer, must run together as below:
+dat <- dat |> 
+  separate_wider_delim(name, delim = "_", 
+                       names = c("year", "name"), 
+                       too_many = "merge") |>
+  pivot_wider() |>
+  mutate(year = as.integer(year))
+
+dat
+#> # A tibble: 112 × 4
+#>   country  year fertility life_expectancy
+#>   <chr>   <int>     <dbl>           <dbl>
+#> 1 Germany  1960      2.41            69.3
+#> 2 Germany  1961      2.44            69.8
+#> 3 Germany  1962      2.47            70.0
+#> 4 Germany  1963      2.49            70.1
+#> 5 Germany  1964      2.49            70.7
+#> # ℹ 107 more rows 
+ 
