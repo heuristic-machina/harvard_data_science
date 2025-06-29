@@ -41,4 +41,16 @@ new_tidy_data |>
   ggplot(aes(year, fertility, color = country)) + 
   geom_point()
 
+#11.2 pivot_wider()
+#inverse of pivot_longer()
+#takes a tidy data frame and widens it usually as an intermediary step
+#uses names_from() and values_from for the column args
+pwide_data <- new_tidy_data |> 
+  pivot_wider(names_from = year, values_from = fertility)
 
+select(pwide_data, country, `1960`:`1967`)
+## A tibble: 2 × 9
+#country        `1960` `1961` `1962` `1963` `1964` `1965` `1966` `1967`
+#<chr>           <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+#1 Germany       2.41   2.44   2.47   2.49   2.49   2.48   2.44   2.37
+#2 South Korea   6.16   5.99   5.79   5.57   5.36   5.16   4.99   4.85
