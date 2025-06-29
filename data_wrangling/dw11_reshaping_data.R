@@ -148,3 +148,11 @@ dt_tidy_dat
 #11.4.2 pivot_wider comparison with dcast()
 #following code reverts 11.4.1 code to the original data table
 dt_dcast <- dcast(dt_tidy_dat, formula = ... ~ year, value.var = 'fertility')
+
+#11.4.3 data.table separating variables tstrsplit()
+#somewhat complicated
+#https://rafalab.dfci.harvard.edu/dsbook-part-1/wrangling/reshaping-data.html
+
+#11.5 janitor package
+#examining/cleaning column names, removing empty/duplicate rows,
+#& converting data types
