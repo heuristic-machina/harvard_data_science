@@ -124,4 +124,21 @@ dat
 #> 4 Germany  1963      2.49            70.1
 #> 5 Germany  1964      2.49            70.7
 #> # ℹ 107 more rows 
- 
+
+#11.4 reshaping with data.table
+path <- system.file("extdata", package = "dslabs")
+filename <- file.path(path, "fertility-two-countries-example.csv")
+#data.table melt behaves similarly to tidyverse pivot_longer()
+library(data.table)
+dt_wide_dat <- fread(filename)
+
+dt_tidy_dat <- melt(dt_wide_dat, measure.vars = 2:ncol(dt_wide_dat),
+                    variable.name = 'year', value.name = 'fertility')
+dt_tidy_dat
+#V1   year fertility
+#<char> <fctr>     <num>
+#1:     country     V2   1960.00
+#2:     Germany     V2      2.41
+#3: South Korea     V2      6.16
+#4:     country     V3   1961.00
+#5:     Germany     V3      2.44
