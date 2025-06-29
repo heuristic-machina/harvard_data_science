@@ -61,3 +61,5 @@ labline <- gapminder |>
   +     ggplot(aes(year, life_expectancy, col = country, label = country)) +
   +     geom_textpath() +
   +     theme(legend.position = "none")
+
+#10.5 data transformations
