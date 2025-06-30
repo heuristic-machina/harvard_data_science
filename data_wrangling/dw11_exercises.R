@@ -31,3 +31,21 @@ co2_tidy <- gather(co2_wide, month, co2, -year)
 co2_tidy |> ggplot(aes(month, co2, color = year)) + geom_line()
 #Rewrite your code to make sure the month column is numeric. Then make the plot.
 co2_tidy %>% ggplot(aes(as.numeric(month), co2, color = year)) + geom_line()
+
+#3 CO2 measures increase monotonically from 1959 to 1997
+
+#4  Now load the admissions data set, which contains admission information for 
+#men and women across six majors and keep only the admitted percentage column:
+load(admissions)
+dat <- admissions |> select(-applicants)
+
+p_wide_dat <- dat |> pivot_wider(names_from = gender, values_from = admitted)
+# A tibble: 6 × 3
+#major   men women
+#<chr> <dbl> <dbl>
+#1 A        62    82
+#2 B        63    68
+#3 C        37    34
+#4 D        33    35
+#5 E        28    24
+#6 F         6     7
