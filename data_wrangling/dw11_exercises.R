@@ -1,7 +1,9 @@
 #11.6 Exercises
 
 #1Run the following command to define the co2_wide object:
-
+library(tidyverse)
+library(dslabs)
+co2
 co2_wide <- data.frame(matrix(co2, ncol = 12, byrow = TRUE)) |> 
   setNames(1:12) |>
   mutate(year = as.character(1959:1997))
@@ -24,3 +26,8 @@ co2_tidy <- gather(co2_wide, month, co2, -year)
 #3   1961     1 316.73
 #4   1962     1 317.78
 #5   1963     1 318.58
+
+#2. Plot CO2 versus month with a different curve for each year using this code:
+co2_tidy |> ggplot(aes(month, co2, color = year)) + geom_line()
+#Rewrite your code to make sure the month column is numeric. Then make the plot.
+co2_tidy %>% ggplot(aes(as.numeric(month), co2, color = year)) + geom_line()
