@@ -49,3 +49,13 @@ p_wide_dat <- dat |> pivot_wider(names_from = gender, values_from = admitted)
 #4 D        33    35
 #5 E        28    24
 #6 F         6     7
+
+#5 Wrangle Admissions data majors into four observations: admitted_men, 
+#admitted_women, applicants_men, and  applicants_women.  This is a 2-step process:
+#pivot_longer() followed by pivot_wider()
+
+#Use the pivot_longer function to create a test data frame with a column 
+#containing the type of observation: admitted or applicants. Call the new 
+#columns name and value.
+test_dat <- admissions |>
+  pivot_longer(admitted:applicants, names_to='name', values_to='value')
