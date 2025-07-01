@@ -18,7 +18,7 @@ co2_wide <- data.frame(matrix(co2, ncol = 12, byrow = TRUE)) |>
 #the column with the CO2 measurements co2 and call the month column month. 
 #Call the resulting object co2_tidy.
 
-co2_tidy <- gather(co2_wide, month, co2, -year)
+co2_tidy <- co2_wide |> pivot_longer(-year, names_to='month', values_to='co2')
 # co2_tidy
 #year month    co2
 #1   1959     1 315.42
