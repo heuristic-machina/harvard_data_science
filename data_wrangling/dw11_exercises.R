@@ -59,3 +59,23 @@ p_wide_dat <- dat |> pivot_wider(names_from = gender, values_from = admitted)
 #columns name and value.
 test_dat <- admissions |>
   pivot_longer(admitted:applicants, names_to='name', values_to='value')
+# A tibble: 6 × 4
+#major gender name       value
+#<chr> <chr>  <chr>      <dbl>
+#1 A     men    admitted      62
+#2 A     men    applicants   825
+#3 B     men    admitted      63
+#4 B     men    applicants   560
+#5 C     men    admitted      37
+#6 C     men    applicants   325
+
+#6 Use unite() function to create new column called column_name
+td2 <- unite(test_dat, col_name, c(name, gender))
+# A tibble: 6 × 3
+#major col_name       value
+#1 A     admitted_men      62
+#2 A     applicants_men   825
+#3 B     admitted_men      63
+#4 B     applicants_men   560
+#5 C     admitted_men      37
+#6 C     applicants_men   325
