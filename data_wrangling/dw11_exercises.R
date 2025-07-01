@@ -79,3 +79,13 @@ td2 <- unite(test_dat, col_name, c(name, gender))
 #4 B     applicants_men   560
 #5 C     admitted_men      37
 #6 C     applicants_men   325
+
+#7. Now use the pivot_wider function to generate the tidy data with four 
+#variables for each major.
+four_col <-td2 |> pivot_wider(names_from = col_name, values_from = value)
+# A tibble: 6 × 5
+#major admitted_men applicants_men admitted_women applicants_women
+#<chr>        <dbl>          <dbl>          <dbl>            <dbl>
+#1 A               62            825             82              108
+#2 B               63            560             68               25
+#3 C               37            325             34              593
