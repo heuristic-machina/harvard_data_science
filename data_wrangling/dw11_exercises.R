@@ -89,3 +89,15 @@ four_col <-td2 |> pivot_wider(names_from = col_name, values_from = value)
 #1 A               62            825             82              108
 #2 B               63            560             68               25
 #3 C               37            325             34              593
+
+#8. Now use the pipe to write a line of code that turns admissions to the table
+#produced in the previous exercise.
+one_line <- admissions |> 
+  mutate(admitted_men = gender == 'men' & admitted, 
+         applicants_men = gender == 'men' & applicants, 
+         admitted_women = gender == 'women' & admitted, 
+         applicants_women = gender == 'women' & applicants) |>
+  select(admitted_men, applicants_men, admitted_women,applicants_women) |>
+  group_by('major')
+#this code provided the structure but needs reworking to get cell values instead
+#of boolean
