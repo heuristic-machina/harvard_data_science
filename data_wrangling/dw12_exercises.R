@@ -64,7 +64,7 @@ yearly_avg <- co2_wide |> group_by(year) |> summarize(yearly_avg = mean(co2))
 #5  1963       319.
 #6  1964       319.
 
-#44. Now use the left_join function to add the yearly average to the co2_wide 
+#4. Now use the left_join function to add the yearly average to the co2_wide 
 #dataset. Then compute the residuals: observed co2 measure - yearly average.
 
 co2_residuals <- co2_wide |> left_join(yearly_avg, by='year') |>
@@ -74,3 +74,11 @@ co2_residuals <- co2_wide |> left_join(yearly_avg, by='year') |>
 #   <int> <dbl> <dbl>      <dbl>     <dbl>
 #1  1959     1  315.       316.    -0.406
 #2  1959     2  316.       316.     0.484
+
+#5. Make a plot of the seasonal trends by year but only after 
+#removing the year effect.
+ggplot(co2_residuals, aes(x = month, y = residuals, color = factor(year))) +
+  geom_smooth(se = FALSE) +
+  scale_x_continuous(breaks = 1:12, labels = month.abb) +
+  labs(x = "Month", y = "Residual CO2 Level", color = "Year") +
+  theme_bw()
