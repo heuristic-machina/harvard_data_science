@@ -16,3 +16,8 @@ ggplot(pr_death_counts, aes(x=deaths, y=date)) + geom_point() + labs(x = 'Deaths
 
 #using line
 ggplot(pr_death_counts, aes(x=deaths, y=date)) + geom_line() + labs(x = 'Deaths', y = 'Date')
+
+#5. Repeat the plot but use the day of the year on the x-axis instead of date.
+day_of_year <- yday(pr_death_counts$date)
+ggplot(pr_death_counts, aes(x = deaths, y = day_of_year)) + geom_line() +
+  labs(x= "Day of Year", y = "Deaths")
