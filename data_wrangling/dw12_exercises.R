@@ -24,6 +24,22 @@ ex1 <- left_join(top, People, by='playerID') |>
 #4  42 doziebr01     Brian      Dozier
 #5  42 encared01     Edwin Encarnacion
 
+
+#2.2. Now use the Salaries data frame to add each player’s salary to the 
+#table you created in exercise 1. Note that salaries are different every year 
+#so make sure to filter for the year 2016, then use right_join. This time show 
+#first name, last name, team, HR, and salary.
+
+#updated data frame ex1 for the yearID column to complete the above prompt:
+ex1 <- left_join(top, People, by='playerID') |>
+  select(HR, playerID, yearID, nameFirst, nameLast)
+
+#the final query
+tws_ex2 <- ex1 |>
+  filter(yearID == 2016) |>
+  right_join(select(Salaries, playerID, yearID, teamID, salary), by = c("playerID", "yearID")) |>
+  select(nameFirst, nameLast, teamID, HR, salary)
+
 #3. In a previous exercise, we created a tidy version of the co2 dataset:
 
 co2_wide <- data.frame(matrix(co2, ncol = 12, byrow = TRUE)) |> 
@@ -47,3 +63,14 @@ yearly_avg <- co2_wide |> group_by(year) |> summarize(yearly_avg = mean(co2))
 #4  1962       318.
 #5  1963       319.
 #6  1964       319.
+
+#44. Now use the left_join function to add the yearly average to the co2_wide 
+#dataset. Then compute the residuals: observed co2 measure - yearly average.
+
+co2_residuals <- co2_wide |> left_join(yearly_avg, by='year') |>
+  mutate(residuals=co2-yearly_avg)
+# A tibble: 6 × 5
+#   year  month   co2 yearly_avg residuals
+#   <int> <dbl> <dbl>      <dbl>     <dbl>
+#1  1959     1  315.       316.    -0.406
+#2  1959     2  316.       316.     0.484
