@@ -47,3 +47,25 @@ head(tab_ex3)
 # 2 1.    New York Yankees      $228,835,490 $7,151,109
 # 3 2.    Los Angeles Dodgers   $216,597,577 $7,468,882
 # 4 3.    Philadelphia Phillies $165,385,714 $6,125,397
+
+#6.We have learned that the first and last entries of nodes are not payroll 
+#tables. Redefine nodes so that these two are removed.
+
+tab_ex1[[22]] <- NULL
+tab_ex1[[1]] <- NULL
+
+#alternative way
+tab_ex1 <- tab_ex1[2:(length(tab_ex1) - 1)]
+
+#7.We saw in the previous analysis that the first table node is not actually a 
+#table. This happens sometimes in html because tables are used to make text look
+#a certain way, as opposed to storing numeric values. Remove the first component
+#and then use sapply and html_table to convert each node in nodes into a table. 
+#Note that in this case, sapply will return a list of tables. You can also use 
+#lapply to assure that a list is applied.
+
+#sapply()
+nodes_tables_simp <- nodes |> sapply(html_table)
+
+#lapply()
+nodes_tables <- nodes |> lapply(html_table)
