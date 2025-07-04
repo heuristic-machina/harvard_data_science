@@ -78,3 +78,50 @@ nodes_bind <- bind_rows(nodes_tables, .id = 'id')
 #in nodes.
 tab1 <- nodes_tables[[10]]
 tab2 <- nodes_tables[[19]]
+
+#10. Use a full_join function to combine these two tables. Before you do this 
+#you will have to fix the missing header problem. You will also need to make the
+#names match.
+
+clean_table <- function(df) {
+  colnames(df) <- df[1, ]
+  df <- df[-1, ]
+  df <- tibble::as_tibble(df)
+  return(df)
+}
+
+clean_table(tab1)
+# A tibble: 30 × 3
+#Team                   Payroll      Average   
+#<chr>                  <chr>        <chr>     
+#1 N.Y. Yankees        $201,449,289 $7,748,050
+#2 New York Mets       135,773,988  4,849,071
+
+clean_table(tab2)
+# A tibble: 30 × 3
+#Team        Payroll     Average   
+#<chr>       <chr>       <chr>     
+#1 NY Yankees  $92,538,260 $3,190,974
+#2 Los Angeles $88,124,286 $3,263,862
+
+names(tab1)
+#[1] "X1" "X2" "X3"
+names(tab2)
+#[1] "X1" "X2" "X3"
+full_join(tab1, tab2, by='X1')
+# A tibble: 36 × 5
+#X1                  X2.x         X3.x       X2.y        X3.y      
+#<chr>               <chr>        <chr>      <chr>       <chr>     
+#1 Team                Payroll      Average    Payroll     Average   
+#2 N.Y. Yankees        $201,449,289 $7,748,050 NA          NA        
+#3 New York Mets       135,773,988  4,849,071  NA          NA        
+
+#11. After joining the tables, you see several NAs. This is because some teams 
+#are in one table and not the other. Use the anti_join function to get a better
+#idea of why this is happening.
+anti_join(tab1, tab2, by='X1')
+# A tibble: 5 × 3
+#X1                  X2           X3        
+#<chr>               <chr>        <chr>     
+#1 N.Y. Yankees        $201,449,289 $7,748,050
+#2 New York Mets       135,773,988  4,849,071 
