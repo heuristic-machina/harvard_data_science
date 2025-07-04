@@ -110,8 +110,7 @@ anti_join(tab1, tab2, by='Team')
 
 #Here we can do it “by hand” as follows:
   
-  tab_1 <- tab_1 |>
-  mutate(Team = ifelse(Team == "N.Y. Yankees", "NY Yankees", Team))
+tab_1 <- tab_1 |> mutate(Team = ifelse(Team == "N.Y. Yankees", "NY Yankees", Team))
 
 #Now join the tables and show only Oakland and the Yankees and the payroll columns.
 
@@ -124,3 +123,21 @@ joined_tables <- full_join(tab1, tab2, by='Team') |> filter(Team =='NY Yankees')
 #Oakland
 joined_tables <- full_join(tab1, tab2, by='Team') |> filter(Team =='Oakland')
 
+
+#13 Advanced: extract the titles of the movies that won Best Picture from IMDB
+
+#google search url
+url <- 'https://www.imdb.com/search/title/?groups=best_picture_winner&sort=year,desc'
+h_ex15 <- read_html(url_ex15)
+
+#access page source with combo key 'ctrl + u'
+#data not in table
+#accessed inspector instead and found titles in h3 element
+
+h3_ex15 <- h_ex15 |> html_nodes('h3')
+html_text(h3_ex15[[1]])
+#[1] "1. Anora"
+
+titles <- html_text(h3_ex15)
+#[1] "1. Anora"                             "2. Oppenheimer"                       "3. Everything Everywhere All at Once"
+#[4] "4. CODA"                              "5. Nomadland"                         "6. Parasite"
