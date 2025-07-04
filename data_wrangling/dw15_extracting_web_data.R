@@ -83,45 +83,44 @@ tab2 <- nodes_tables[[19]]
 #you will have to fix the missing header problem. You will also need to make the
 #names match.
 
-clean_table <- function(df) {
-  colnames(df) <- df[1, ]
-  df <- df[-1, ]
-  df <- tibble::as_tibble(df)
-  return(df)
-}
+#tab1
+colnames(tab1)<- c('Team', 'Payroll', 'Average')
+tab1 <- tab1[-1, ]
 
-clean_table(tab1)
-# A tibble: 30 × 3
-#Team                   Payroll      Average   
-#<chr>                  <chr>        <chr>     
-#1 N.Y. Yankees        $201,449,289 $7,748,050
-#2 New York Mets       135,773,988  4,849,071
+#tab2
+colnames(tab2)<- c('Team', 'Payroll', 'Average')
+tab1 <- tab1[-1, ]
 
-clean_table(tab2)
-# A tibble: 30 × 3
-#Team        Payroll     Average   
-#<chr>       <chr>       <chr>     
-#1 NY Yankees  $92,538,260 $3,190,974
-#2 Los Angeles $88,124,286 $3,263,862
-
-names(tab1)
-#[1] "X1" "X2" "X3"
-names(tab2)
-#[1] "X1" "X2" "X3"
-full_join(tab1, tab2, by='X1')
-# A tibble: 36 × 5
-#X1                  X2.x         X3.x       X2.y        X3.y      
-#<chr>               <chr>        <chr>      <chr>       <chr>     
-#1 Team                Payroll      Average    Payroll     Average   
-#2 N.Y. Yankees        $201,449,289 $7,748,050 NA          NA        
-#3 New York Mets       135,773,988  4,849,071  NA          NA        
+full_join(tab1, tab2, by='Team')
+    
 
 #11. After joining the tables, you see several NAs. This is because some teams 
 #are in one table and not the other. Use the anti_join function to get a better
 #idea of why this is happening.
-anti_join(tab1, tab2, by='X1')
+anti_join(tab1, tab2, by='Team')
 # A tibble: 5 × 3
 #X1                  X2           X3        
 #<chr>               <chr>        <chr>     
 #1 N.Y. Yankees        $201,449,289 $7,748,050
 #2 New York Mets       135,773,988  4,849,071 
+
+#12. We see see that one of the problems is that Yankees are listed as both N.Y.
+#Yankees and NY Yankees. In the next section, we will learn efficient approaches
+#to fixing problems like this.
+
+#Here we can do it “by hand” as follows:
+  
+  tab_1 <- tab_1 |>
+  mutate(Team = ifelse(Team == "N.Y. Yankees", "NY Yankees", Team))
+
+#Now join the tables and show only Oakland and the Yankees and the payroll columns.
+
+#no returned data  
+joined_tables <- full_join(tab1, tab2, by='Team') |> filter(Team =='Oakland' & Team == 'NY Yankees')  
+
+#Yankees  
+joined_tables <- full_join(tab1, tab2, by='Team') |> filter(Team =='NY Yankees')
+
+#Oakland
+joined_tables <- full_join(tab1, tab2, by='Team') |> filter(Team =='Oakland')
+
