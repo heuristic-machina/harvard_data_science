@@ -69,3 +69,12 @@ nodes_tables_simp <- nodes |> sapply(html_table)
 
 #lapply()
 nodes_tables <- nodes |> lapply(html_table)
+
+#8. Look through the resulting tables. Are they all the same? Could we just 
+#join them with bind_rows?
+nodes_bind <- bind_rows(nodes_tables, .id = 'id')
+
+#9 Create two tables, call them tab_1 and tab_2 using the 10th and 19th tables
+#in nodes.
+tab1 <- nodes_tables[[10]]
+tab2 <- nodes_tables[[19]]
