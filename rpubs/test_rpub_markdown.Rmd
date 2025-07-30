@@ -1,0 +1,47 @@
+---
+title: "test for rpubs markdown"
+output: html_document
+date: "2025-07-29"
+---
+
+Follow along first markdown document
+
+
+```{r}
+library(datasets)
+data(airquality)
+summary(airquality)
+```
+
+Pairs plot of the data
+
+```{r}
+pairs(airquality)
+```
+
+Regression model of ozone on some predictors
+
+```{r}
+fit <- lm(Ozone ~ Solar.R + Wind + Temp, data = airquality)
+summary(fit)
+```
+
+
+Unordered list
+
+* Item one
+* Item two
+
+Ordered list
+
+1. First item
+2. Second item
+
+
+
+
+
+
+
+
+
