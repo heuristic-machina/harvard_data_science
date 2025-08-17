@@ -60,169 +60,107 @@ numbers <- c("Ace", "Deuce", "Three", "Four", "Five", "Six", "Seven",
                +              "Eight", "Nine", "Ten", "Jack", "Queen", "King")
 deck <- expand.grid(number = numbers, suit = suits)
 
-R version 4.5.0 (2025-04-11 ucrt) -- "How About a Twenty-Six"
-Copyright (C) 2025 The R Foundation for Statistical Computing
-Platform: x86_64-w64-mingw32/x64
 
-R is free software and comes with ABSOLUTELY NO WARRANTY.
-You are welcome to redistribute it under certain conditions.
-Type 'license()' or 'licence()' for distribution details.
 
-Natural language support but running in an English locale
-
-R is a collaborative project with many contributors.
-Type 'contributors()' for more information and
-'citation()' on how to cite R or R packages in publications.
-
-Type 'demo()' for some demos, 'help()' for on-line help, or
-'help.start()' for an HTML browser interface to help.
-Type 'q()' to quit R.
-
-> beads <- rep(c('red', 'blue'), times = c(2,3))
-> beads
-[1] "red"  "red"  "blue" "blue" "blue"
-> sample(beads, 1)
-[1] "blue"
-> B <- 10000
-> events <- replicate(B, sample(beads, 1))
-> tab <- table(events)
-> tab
+beads <- rep(c('red', 'blue'), times = c(2,3))
+beads
+#[1] "red"  "red"  "blue" "blue" "blue"
+sample(beads, 1)
+#[1] "blue"
+B <- 10000
+events <- replicate(B, sample(beads, 1))
+tab <- table(events)
+tab
 events
-blue  red 
-6094 3906 
-> prop.table(tab)
+#blue  red 
+#6094 3906 
+prop.table(tab)
 events
-blue    red 
-0.6094 0.3906 
-> set.seed(1986)
-> ?set.seed
->  sample(beads, 5)
-[1] "red"  "blue" "blue" "blue" "red" 
->  sample(beads, 5)
-[1] "red"  "red"  "blue" "blue" "blue"
->  sample(beads, 5)
-[1] "blue" "red"  "blue" "red"  "blue"
-> events <- sample(beads, B, replace = True)
-Error: object 'True' not found
+#blue    red 
+#0.6094 0.3906 
+set.seed(1986)
+?set.seed
+sample(beads, 5)
+#[1] "red"  "blue" "blue" "blue" "red" 
+sample(beads, 5)
+#[1] "red"  "red"  "blue" "blue" "blue"
+sample(beads, 5)
+#[1] "blue" "red"  "blue" "red"  "blue"
 
-> events <- sample(beads, B, replace = TRUE)
-> prop.table(table(events))
+events <- sample(beads, B, replace = TRUE)
+prop.table(table(events))
 events
-blue    red 
-0.6017 0.3983 
-> number <- 'Three'
-> suit <- 'Hearts'
-> paste(number, suit)
-[1] "Three Hearts"
-> letters[1:5]
-[1] "a" "b" "c" "d" "e"
-> as.character(1:5)
-[1] "1" "2" "3" "4" "5"
-> suits <- c("Diamonds", "Clubs", "Hearts", "Spades")
-> numbers <- c("Ace", "Deuce", "Three", "Four", "Five", "Six", "Seven", 
+#blue    red 
+#0.6017 0.3983 
+number <- 'Three'
+suit <- 'Hearts'
+paste(number, suit)
+#[1] "Three Hearts"
+letters[1:5]
+#[1] "a" "b" "c" "d" "e"
+as.character(1:5)
+#[1] "1" "2" "3" "4" "5"
+suits <- c("Diamonds", "Clubs", "Hearts", "Spades")
+numbers <- c("Ace", "Deuce", "Three", "Four", "Five", "Six", "Seven", 
                +              "Eight", "Nine", "Ten", "Jack", "Queen", "King")
-> deck <- expand.grid(number = numbers, suit = suits)
-> deck <- paste(deck$number, deck$suit)
-> deck
-[1] "Ace Diamonds"   "Deuce Diamonds" "Three Diamonds" "Four Diamonds" 
-[5] "Five Diamonds"  "Six Diamonds"   "Seven Diamonds" "Eight Diamonds"
-[9] "Nine Diamonds"  "Ten Diamonds"   "Jack Diamonds"  "Queen Diamonds"
-[13] "King Diamonds"  "Ace Clubs"      "Deuce Clubs"    "Three Clubs"   
-[17] "Four Clubs"     "Five Clubs"     "Six Clubs"      "Seven Clubs"   
-[21] "Eight Clubs"    "Nine Clubs"     "Ten Clubs"      "Jack Clubs"    
-[25] "Queen Clubs"    "King Clubs"     "Ace Hearts"     "Deuce Hearts"  
-[29] "Three Hearts"   "Four Hearts"    "Five Hearts"    "Six Hearts"    
-[33] "Seven Hearts"   "Eight Hearts"   "Nine Hearts"    "Ten Hearts"    
-[37] "Jack Hearts"    "Queen Hearts"   "King Hearts"    "Ace Spades"    
-[41] "Deuce Spades"   "Three Spades"   "Four Spades"    "Five Spades"   
-[45] "Six Spades"     "Seven Spades"   "Eight Spades"   "Nine Spades"   
-[49] "Ten Spades"     "Jack Spades"    "Queen Spades"   "King Spades"   
-> kings <- paste('King', suits)
-> mean(deck %in% kings)
-[1] 0.07692308
-> library(gtools)
-Error in library(gtools) : there is no package called ‘gtools’
+deck <- expand.grid(number = numbers, suit = suits)
+deck <- paste(deck$number, deck$suit)
+deck
+#[1] "Ace Diamonds"   "Deuce Diamonds" "Three Diamonds" "Four Diamonds" 
+#[5] "Five Diamonds"  "Six Diamonds"   "Seven Diamonds" "Eight Diamonds"
+#[9] "Nine Diamonds"  "Ten Diamonds"   "Jack Diamonds"  "Queen Diamonds"
+#[13] "King Diamonds"  "Ace Clubs"      "Deuce Clubs"    "Three Clubs"   
+#[17] "Four Clubs"     "Five Clubs"     "Six Clubs"      "Seven Clubs"   
+#[21] "Eight Clubs"    "Nine Clubs"     "Ten Clubs"      "Jack Clubs"    
+#[25] "Queen Clubs"    "King Clubs"     "Ace Hearts"     "Deuce Hearts"  
+#[29] "Three Hearts"   "Four Hearts"    "Five Hearts"    "Six Hearts"    
+#[33] "Seven Hearts"   "Eight Hearts"   "Nine Hearts"    "Ten Hearts"    
+#[37] "Jack Hearts"    "Queen Hearts"   "King Hearts"    "Ace Spades"    
+#[41] "Deuce Spades"   "Three Spades"   "Four Spades"    "Five Spades"   
+#[45] "Six Spades"     "Seven Spades"   "Eight Spades"   "Nine Spades"   
+#[49] "Ten Spades"     "Jack Spades"    "Queen Spades"   "King Spades"   
+kings <- paste('King', suits)
+mean(deck %in% kings)
+#[1] 0.07692308
+install.packages('gtools')
+library(gtools)
 
-> install.packages('gtools')
-WARNING: Rtools is required to build R packages but is not currently installed. Please download and install the appropriate version of Rtools before proceeding:
-  
-  https://cran.rstudio.com/bin/windows/Rtools/
-  Installing package into ‘C:/Users/rayan/AppData/Local/R/win-library/4.5’
-(as ‘lib’ is unspecified)
-trying URL 'https://cran.rstudio.com/bin/windows/contrib/4.5/gtools_3.9.5.zip'
-Content type 'application/zip' length 368373 bytes (359 KB)
-downloaded 359 KB
 
-package ‘gtools’ successfully unpacked and MD5 sums checked
-
-The downloaded binary packages are in
-C:\Users\rayan\AppData\Local\Temp\Rtmp6X9SpC\downloaded_packages
-> library(gtools)
-Warning message:
-  package ‘gtools’ was built under R version 4.5.1 
-
-> permutations(3, 2)
+permutations(3, 2)
 #[,1] [,2]
 #[2,]    1    3
 #[3,]    2    1
 #[4,]    2    3
 #[5,]    3    1
 #[6,]    3    2
-> deck <- expand.grid(number = numbers, suit = suits)
-> deck
-number     suit
-1     Ace Diamonds
-2   Deuce Diamonds
-3   Three Diamonds
-4    Four Diamonds
-5    Five Diamonds
-6     Six Diamonds
-7   Seven Diamonds
-8   Eight Diamonds
-9    Nine Diamonds
-10    Ten Diamonds
-11   Jack Diamonds
-12  Queen Diamonds
-13   King Diamonds
-14    Ace    Clubs
-15  Deuce    Clubs
-16  Three    Clubs
-17   Four    Clubs
-18   Five    Clubs
-19    Six    Clubs
-20  Seven    Clubs
-21  Eight    Clubs
-22   Nine    Clubs
-23    Ten    Clubs
-24   Jack    Clubs
-25  Queen    Clubs
-26   King    Clubs
-27    Ace   Hearts
-28  Deuce   Hearts
-29  Three   Hearts
-30   Four   Hearts
-31   Five   Hearts
-32    Six   Hearts
-33  Seven   Hearts
-34  Eight   Hearts
-35   Nine   Hearts
-36    Ten   Hearts
-37   Jack   Hearts
-38  Queen   Hearts
-39   King   Hearts
-40    Ace   Spades
-41  Deuce   Spades
-42  Three   Spades
-43   Four   Spades
-44   Five   Spades
-45    Six   Spades
-46  Seven   Spades
-47  Eight   Spades
-48   Nine   Spades
-49    Ten   Spades
-50   Jack   Spades
-51  Queen   Spades
-52   King   Spades
+deck <- expand.grid(number = numbers, suit = suits)
+deck
+#number     suit
+#1     Ace Diamonds
+#2   Deuce Diamonds
+#3   Three Diamonds
+#4    Four Diamonds
+#5    Five Diamonds
+#6     Six Diamonds
+#7   Seven Diamonds
+#8   Eight Diamonds
+#9    Nine Diamonds
+#10    Ten Diamonds
+#11   Jack Diamonds
+#12  Queen Diamonds
+#13   King Diamonds
+#14    Ace    Clubs
+#15  Deuce    Clubs
+#16  Three    Clubs
+#17   Four    Clubs
+#18   Five    Clubs
+#19    Six    Clubs
+#20  Seven    Clubs
+#21  Eight    Clubs
+#22   Nine    Clubs
+#23    Ten    Clubs
+#24   Jack    Clubs
+#25  Queen    Clubs
 
 deck <- paste(deck$number, deck$suit)
 deck
