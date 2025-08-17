@@ -266,3 +266,22 @@ mean(first_card %in% kings & second_card %in% kings) /
   mean(first_card %in% kings)
 #> [1] 0.0588
 
+
+#Black jack example using combinations() where order does not matter
+#Natural 21 where getting an Ace and a face card
+aces <- paste('Ace', suits)
+facecard <- c('King', 'Queen', 'Jack', 'Ten')
+facecard <- expand.grid(number = facecard, suit = suits)
+facecard <- paste(facecard$number, facecard$suit)
+hands <- combinations(52, 2, v = deck)
+hands
+#1326 returned results
+
+#use mean() to find probability
+#this line shows aces as the first card because of how combination() enumerates results
+mean(hands[,1] %in% aces & hands[,2] %in% facecard)
+#[1] 0.04826546
+#alternatively an or statement could be used
+mean(hands[,1] %in% aces & hands[,2] %in% facecard) | (hands[,2] %in% aces & hands[,1] %in% facecard)
+#[1] 0.04826546
+
