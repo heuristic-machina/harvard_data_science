@@ -223,3 +223,28 @@ mean(hands[,1] %in% aces & hands[,2] %in% facecard)
 mean(hands[,1] %in% aces & hands[,2] %in% facecard) | (hands[,2] %in% aces & hands[,1] %in% facecard)
 #[1] 0.04826546
 
+#3.4.1 Monte Carlo example
+#using the sample() method without replacement to keep track of Natural 21s obtained
+hand <- sample(deck, 2)
+hand
+#[1] "Four Diamonds"  "Queen Diamonds"
+
+#check for black jack combinations
+(hand[1] %in% aces & hand[2] %in% facecard) | (hand[2] %in% aces & hand[1] %in% facecard)
+#[1] FALSE
+#repeat 10,000 times deducing approximation of Natural 21
+
+#formulate function of the above steps
+blackjack <- function(){
+  hand <- sample(deck, 2)
+  (hand[1] %in% aces & hand[2] %in% facecard) |
+    (hand[2] %in% aces & hand[1] %in% facecard)
+  }
+blackjack()
+#> [1] FALSE
+ 
+#>now play the game 10,000 times
+B <- 10000
+results <- replicate(B, blackjack())
+mean(results)
+#[1] 0.0468
