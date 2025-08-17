@@ -319,3 +319,27 @@ results <- replicate(B, {
 mean(result)
 #[1] 0.3371
 })
+
+#11 Two teams, A and B, are playing a seven game series. Team A is better 
+#than team B and has a p > 0.5 chance of winning each game. Given a value p, the 
+#probability of winning the series for the underdog team B can be computed with 
+#the following function based on a Monte Carlo simulation:
+
+prob_win <- function(p){
+  B <- 10000
+  result <- replicate(B, {
+    b_win <- sample(c(1,0), 7, replace = TRUE, prob = c(1 - p, p))
+    sum(b_win)>=4
+  })
+  mean(result)
+}
+#Use the function sapply to compute the probability, call it Pr, of winning for 
+#p <- seq(0.5, 0.95, 0.025). Then plot the result.
+
+Pr <- sapply(n, prob_win)
+plot(n, Pr)
+Pr
+#[1] 0.5054 0.4441 0.3933 0.3400 0.2846 0.2402 0.2043 0.1596 0.1306 0.0981 
+#[11] 0.0743 0.0499 0.0306 0.0221 0.0128 0.0066 0.0029 0.0013 0.0001
+mean(Pr)
+#[1] 0.1579368
