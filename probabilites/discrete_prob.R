@@ -268,5 +268,18 @@ compute_prob <- function (n, B=10000){
 #use sapply(input object, function to apply input data)
 #sapply is r's more efficient loop method returning simplified output by default
 n <- seq(1,60)
-prob <- sapply(n, compute_prob)
 library(tidyverse)
+prob <- sapply(n, compute_prob)
+plot(n, prob)
+
+#Using multiplication rule instead of monte carlo
+#Multiplication rule faster approach of computing probability not occurring
+# 1 x 364/365 x 363/365 ... 365 - n + 1 /365 is the formula for unique bdays for the sample
+#the function
+exact_prob <- function(n){
+     prob_unique <- seq(365, 365 - n + 1)/365
+     1 - prod(prob_unique)
+  }
+eprob <- sapply(n, exact_prob)
+plot(n, prob)
+lines(n, eprob, col = 'red')
