@@ -283,3 +283,39 @@ exact_prob <- function(n){
 eprob <- sapply(n, exact_prob)
 plot(n, prob)
 lines(n, eprob, col = 'red')
+
+#exercise 3.7.9
+#9. Two teams, say the Cavs and the Warriors, are playing a seven game championship series. 
+#The first to win four games, therefore, wins the series. The teams are equally 
+#good so they each have a 50-50 chance of winning each game. If the Cavs lose the
+#first game, what is the probability that they win the series?
+
+#games remaining
+n <- 6
+#chances cavs will lose(0) or win(1)
+outcomes <- c(0,1)
+#repeat outcomes for list of length n
+l <- rep(list(outcomes), n)
+#get all possible outcome combinations
+possibilities <- expand.grid(l)
+possibilities
+#64 obs. of 6 variables
+#boolean logic for each row if greater than or equal to 4
+results <- rowSums(possibilities)>=4
+results
+#logi [1:64]
+#find probability of cavs winning 4 games
+mean(results)
+#[1] 0.34375
+
+#10. Confirm the results of the previous question with a Monte Carlo simulation.
+B <- 10000
+#random sampling
+set.seed(1)
+#simulate series where cav wins are greater or equal to 4
+results <- replicate(B, {
+  cav_wins <- sample(c(0,1), 6, replace = TRUE)
+  sum(cav_wins) >= 4
+mean(result)
+#[1] 0.3371
+})
