@@ -248,3 +248,25 @@ B <- 10000
 results <- replicate(B, blackjack())
 mean(results)
 #[1] 0.0468
+
+#3.5.2 Birthday example
+#check if at least 2 people share the same bday with a sampling set of 50
+#any() duplicated() replicate()
+B <- 10000
+same_birthday <- function(n){
+  bdays <- sample(1:365, n, replace = TRUE)
+  any(duplicated(bdays))
+  }
+results <- replicate(B, same_birthday(50))
+mean(results)
+#[1] 0.9684
+#create look up table to visualize how the high probability 0.9684 increases as n increases
+compute_prob <- function (n, B=10000){
+  results <- replicate(B, same_birthday(n))
+  mean(results)
+}
+#use sapply(input object, function to apply input data)
+#sapply is r's more efficient loop method returning simplified output by default
+n <- seq(1,60)
+prob <- sapply(n, compute_prob)
+library(tidyverse)
