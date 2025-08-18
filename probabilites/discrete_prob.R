@@ -284,7 +284,25 @@ eprob <- sapply(n, exact_prob)
 plot(n, prob)
 lines(n, eprob, col = 'red')
 
-#exercise 3.7.9
+#exercises 3.7
+
+#7-8. 
+#Two teams, let’s say the Celtics and the Cavs, are playing a seven game
+# series. The Cavs are a better team and have a 60% chance of winning each game. 
+#What is the probability that the Celtics will win at least one game?
+#Create a Monte Carlo simulation to confirm your answer to the previous problem. 
+#Use B <- 10000 simulations. 
+#Hint: use the following code to generate the results of the first four games:
+celtic_wins <- sample(c(0,1), 4, replace = TRUE, prob = c(0.6, 0.4))
+
+#coded answer with monte carlo series of 10000
+celtic_wins <- replicate(10000, {
+     win_once <- sample(c(0,1), 4, replace = TRUE, prob = c(0.6, 0.4))
+     any(win_once==1)
+ })
+mean(celtic_wins)
+#[1] 0.8698
+
 #9. Two teams, say the Cavs and the Warriors, are playing a seven game championship series. 
 #The first to win four games, therefore, wins the series. The teams are equally 
 #good so they each have a 50-50 chance of winning each game. If the Cavs lose the
