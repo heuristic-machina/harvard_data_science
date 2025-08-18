@@ -343,3 +343,24 @@ Pr
 #[11] 0.0743 0.0499 0.0306 0.0221 0.0128 0.0066 0.0029 0.0013 0.0001
 mean(Pr)
 #[1] 0.1579368
+
+#12. Repeat the exercise above, but now keep the probability fixed at p <- 0.75 
+# and compute the probability for different series lengths: best of 1 game, best
+# of 3 games, best of 5 games,… Specifically, N <- seq(1, 25, 2). 
+#Hint: use the function below.
+prob_win <- function(N, p=0.75){
+  B <- 10000
+  result <- replicate(B, {
+    b_win <- sample(c(1,0), N, replace = TRUE, prob = c(1-p, p))
+    sum(b_win)>=(N+1)/2
+  })
+  mean(result)
+}
+N <- seq(1, 25, by=2)
+Pr <- sapply(N, prob_win)
+Pr
+#1] 0.2508 0.1521 0.1045 0.0698 0.0507 0.0352 0.0252 0.0151 0.0106 0.0090 
+#0.0073 0.0041 0.0034
+mean(Pr)
+#[1] 0.05675385
+plot(N, Pr)
