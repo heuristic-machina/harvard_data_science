@@ -68,3 +68,20 @@ ev_S <- B*(pg*17 + png*-1)
 #7 What is the standard error of S?
 se_S <- sqrt(1000)*abs(17--1)*sqrt(pg*png)
 #[1] 127.1028
+
+#8. What is the probability that you end up winning money? 
+#Hint: Use the Central Limit Theorem CLT.
+
+mu <- n*(pg*17-1*(png))
+mu
+#[1] -52.631
+
+#CLT standard error=sqrt(n)*abs(b-a)*sqrt(pg*png)
+clt_se <- sqrt(1000)*abs(17--1)*sqrt(pg*png)
+clt_se
+#[1] 127.103
+
+#percentage greater than or to the right of pnorm
+#probability of winning
+1-pnorm(0, mu, clt_se)
+#[1] 0.3394053
