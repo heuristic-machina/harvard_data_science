@@ -271,3 +271,23 @@ ev_more_loans <- n*(loss_per_foreclosure*p + x*(1-p))
 ev_more_loans
 #expected profit
 #[1] 14184320
+
+#30 Confirm with monte carlo
+p <- 0.04
+x <- 0.05*180000
+profit <- replicate(B, {
+  new_p <- 0.04 + sample(seq(-0.01, 0.01, length = 100), 1)
+  draws <- sample( c(x, loss_per_foreclosure), n, 
+                   prob=c(1-new_p, new_p), replace = TRUE) 
+  sum(draws)
+})
+mean(profit) 
+#[1] 14129311
+
+mean(profit<0)
+#[1] 0.3459
+
+#32.
+#probability of losing more than $10 million 
+mean(profit < -10000000) 
+#[1] 0.2403
