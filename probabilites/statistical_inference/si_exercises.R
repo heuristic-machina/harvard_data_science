@@ -58,3 +58,9 @@ B <- 1000
 S <- sample(c(17, -1), B, replace = TRUE, prob = c(pg, png))
 sum(S)
 #[1] -10
+
+#6What is the expected value of S?
+# EV = product number of bets times the piai of each probability pi
+# ai is the payout of each pi
+B*(pg*17 + png*-1)
+#[1] -52.63158
