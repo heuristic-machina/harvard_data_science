@@ -216,7 +216,7 @@ se_1000_loans<- sqrt(n)*abs(loss_per_foreclosure)*sqrt(p*(1-p))
 se_1000_loans
 #[1] 885437.7
 
-#23second half-25 Mitigate risk and set chance of losing money, 
+#23second half-26 Mitigate risk and set chance of losing money, 
 #x to be 1 in 100,#Hint:  Pr(S<0)=0.01.
 
 #calculating interest rate for 1% probability of losing money
@@ -241,3 +241,15 @@ ev_total_loans <- n*ev_per_loan
 ev_total_loans
 #[1] 2124198
 
+#27 Double check 23-26 using monte carlo
+B<-100000
+profit<- replicate(B,{
+  one_percent_p<- sample(c(x, loss_per_foreclosure), n, replace=TRUE, prob = c(1-p,p))
+  sum(one_percent_p)
+})
+mean(profit)
+#[1] 2122739
+
+#probability of losing money
+mean(profit<0)
+#[1] 0.01297
