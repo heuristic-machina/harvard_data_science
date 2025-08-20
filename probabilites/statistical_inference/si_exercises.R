@@ -108,3 +108,84 @@ mean(S)
 #[1] -52.3324
 sd(S)
 #[1] 126.9762
+
+#10. Now check your answer to 8 using the Monte Carlo result.
+mean(S>0)
+#[1] 0.3391
+
+#11. The Monte Carlo result and the CLT approximation are 
+#close, but not that close. What could account for this?
+
+#The CLT does not work as well when the probability of 
+#success is small. In this case, it was 1/19. If we make 
+#the number of roulette plays bigger, they will match better.
+
+#12. Now create a random variable Y that is your average 
+#winnings per bet, after playing off your winnings after 
+#betting on green 1,000 times.
+set.seed(1)
+n<-1000
+pg<-1/19
+png<-1-pg
+X<-sample(c(-1, 17), n, replace=TRUE, prob=c(png,pg))
+Y<-mean(X)
+Y
+#[1] -0.01
+
+#13. What is the expected value of Y?
+ev_Y <- pg*17+png*-1
+#[1] -0.05263158
+
+#14. What is the standard error of Y?
+n<-1000
+se<-abs(-1-17)*sqrt(png*pg)/(sqrt(n))
+#[1] 0.1271028
+
+#15. What is the probability that you end 
+#up with winnings per game that are positive? 
+#Hint: use the CLT.
+avg<-17*pg-1*png
+se<-1/(sqrt(n))*(17--1)*sqrt(png*pg)
+1-pnorm(0, avg, se)
+#[1] 0.3394053
+
+#16. Create a Monte Carlo simulation that 
+#generates 2,500 outcomes of Y. Compute 
+#the average and standard deviation of 
+#the resulting list to confirm the results
+# of 6 and 7. Start your code by setting 
+#the seed to 1 with set.seed(1).
+set.seed(1)
+g<-2
+b<-18
+r<-18
+pg<-g/(g+b+r)
+png<-1-pg
+bet<-2500
+n<-10^3
+roulette_winnings <- function(n){
+  X <- sample(c(17, -1), n, replace=TRUE, prob=c(pg, png))
+  sum(X)
+}
+Y<-replicate(bet, roulette_winnings(n))
+mean(Y)
+#[1] -54.3376
+sd(Y)
+#[1] 125.9509
+
+#17. Now check your answer to 8 using the Monte Carlo result.
+mean(Y>0)
+#[1] 0.3372
+
+#18. The Monte Carlo result and the CLT approximation are 
+#now much closer. What could account for this?
+#The CLT works better when the sample size is larger. 
+#We increased from 1,000 to 2,500.
+
+#19 Bank Interest Rates
+n<-1000
+loss_per_foreclosure<--200000
+p<-0.02
+defaults<-sample(c(0,1), n, replace=TRUE, prob=c(1-p, p))
+sum(defaults*loss_per_foreclosure)
+#[1] -5e+06
