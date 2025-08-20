@@ -85,3 +85,26 @@ clt_se
 #probability of winning
 1-pnorm(0, mu, clt_se)
 #[1] 0.3394053
+
+#9. Create a Monte Carlo simulation that generates 
+#1,000 outcomes of S. Compute the average and 
+#standard deviation of the resulting list to confirm 
+#the results of 6 and 7. Start your code by setting 
+#the seed to 1 with set.seed(1)
+set.seed(1)
+g<-2
+b<-18
+r<-18
+pg<-g/(g+b+r)
+png<-1-pg
+bet<-10^4
+n<-10^3
+roulette_winnings <- function(n){
+  X <- sample(c(17, -1), n, replace=TRUE, prob=c(pg, png))
+  sum(X)
+}
+S<-replicate(bet, roulette_winnings(n))
+mean(S)
+#[1] -52.3324
+sd(S)
+#[1] 126.9762
