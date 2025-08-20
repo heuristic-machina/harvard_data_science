@@ -27,5 +27,23 @@ sum(X)
 #[1] 26
 #probability of landing on red
 pr <- sample(c(1, -1), 10, replace = TRUE, prob = c(9/19, 10/19))
-sum(pr)
-#[1] 6
+mean(pr)
+#[1] 0.6
+
+#3. Compute the expected value of X.
+#monte carlo approximation
+B <- 10^6
+X <- sample(c(17, -1), B, replace = TRUE, prob = c(pg, png))
+mean(X)
+#[1] -0.051832
+
+#maths instead of monte carlo comparison
+y <- 17*pg + (-1*png)
+y
+#[1] -0.05263158
+
+#4. Compute the standard error of X.  
+#Note: store computation in se_pg instead of 'X"
+se_pg <- abs(17 - -1) * sqrt(pg*png)
+se_pg
+#[1] 4.019344
