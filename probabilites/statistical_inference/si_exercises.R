@@ -47,3 +47,14 @@ y
 se_pg <- abs(17 - -1) * sqrt(pg*png)
 se_pg
 #[1] 4.019344
+
+#5. Now create a random variable S that is the 
+#sum of your winnings after betting on green 
+#1000 times. Hint: change the argument size 
+#and replace in your answer to exercise 2. 
+#Start your code by setting the seed to 1 with set.seed(1).
+set.seed(1)
+B <- 1000
+S <- sample(c(17, -1), B, replace = TRUE, prob = c(pg, png))
+sum(S)
+#[1] -10
