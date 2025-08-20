@@ -253,3 +253,21 @@ mean(profit)
 #probability of losing money
 mean(profit<0)
 #[1] 0.01297
+
+#28 An employee thinks selling more loans and off-setting risk of 
+#using law of large numbers with higher probability of default and x.
+more_loans<-loss_per_foreclosure*.04 + 9000*(.96)
+more_loans
+#[1] 640
+
+#29. How much do we need to increase n by to assure the probability of 
+#losing money is still less than 0.01?
+z <- qnorm(0.01)
+l <- loss_per_foreclosure
+n <- ceiling((z^2*(x-l)^2*p*(1-p))/(l*p + x*(1-p))^2)
+n 
+#[1] 22163
+ev_more_loans <- n*(loss_per_foreclosure*p + x*(1-p))
+ev_more_loans
+#expected profit
+#[1] 14184320
