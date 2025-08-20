@@ -62,5 +62,9 @@ sum(S)
 #6What is the expected value of S?
 # EV = product number of bets times the piai of each probability pi
 # ai is the payout of each pi
-B*(pg*17 + png*-1)
+ev_S <- B*(pg*17 + png*-1)
 #[1] -52.63158
+
+#7 What is the standard error of S?
+se_S <- sqrt(1000)*abs(17--1)*sqrt(pg*png)
+#[1] 127.1028
