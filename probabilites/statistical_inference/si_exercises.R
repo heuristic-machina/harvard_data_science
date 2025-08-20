@@ -182,10 +182,62 @@ mean(Y>0)
 #The CLT works better when the sample size is larger. 
 #We increased from 1,000 to 2,500.
 
-#19 Bank Interest Rates
+#19-23(first half) Bank Interest Rates: 2% customers default on loans.  Bank gives out
+#n=1000 loans for $180,000.  The bank loses $200,000 per foreclosure.
+#Find expected profit S for bank
 n<-1000
 loss_per_foreclosure<--200000
 p<-0.02
 defaults<-sample(c(0,1), n, replace=TRUE, prob=c(1-p, p))
 sum(defaults*loss_per_foreclosure)
 #[1] -5e+06
+
+#monte carlo
+#sample shows either does not lose money or customer defaults and loses money
+B<-10000
+losses<-replicate(B, {
+  defaults<-sample(c(0,1), n, replace=TRUE, prob=c(1-p, p))
+  sum(defaults*loss_per_foreclosure)
+})
+
+#plot
+data.frame(losses_in_millions = losses/10^6) %>% 
+  ggplot(aes(losses_in_millions)) +
+  geom_histogram(binwidth = 0.6, col = 'green')
+
+#random variable
+#expected value of 1000 loans
+ev_1000_loans<- n*(p*loss_per_foreclosure + (1-p)*0)
+ev_1000_loans
+#[1] -4e+06
+#-$4million
+#standard error of 1000 loans
+se_1000_loans<- sqrt(n)*abs(loss_per_foreclosure)*sqrt(p*(1-p))
+se_1000_loans
+#[1] 885437.7
+
+#23second half-25 Mitigate risk and set chance of losing money, 
+#x to be 1 in 100,#Hint:  Pr(S<0)=0.01.
+
+#calculating interest rate for 1% probability of losing money
+l<-loss_per_foreclosure
+z<-qnorm(0.01)
+x<- -l*(n*p - z*sqrt(n*p*(1-p)))/ (n*(1-p) + z*sqrt(n*p*(1-p)))
+#required profit when loan is not a foreclosure
+x
+#[1] 6249.181
+
+#interest rate
+x/180000
+#[1] 0.03471767
+
+#profit per loan expected value
+ev_per_loan <- loss_per_foreclosure*p + x*(1-p)
+ev_per_loan
+#[1] 2124.198
+
+#expected value over n loans
+ev_total_loans <- n*ev_per_loan
+ev_total_loans
+#[1] 2124198
+
