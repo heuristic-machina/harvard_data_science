@@ -28,3 +28,13 @@ ev_sn
 se_rand_x<-sqrt((p*(1-p)*1/25))
 se_rand_x
 #[1] 0.03919184
+
+#5. Write a line of code that gives you the standard error se 
+#for the problem above for several values of p, specifically 
+#for p <- seq(0, 1, length=100). Make a plot of se versus p.
+p<- seq(0, 1, length=100)
+se<-sqrt(p*(1-p)/25)
+plot(p, se)
+
+#6. Copy the code above and put it inside a for-loop to make 
+#the plot for N=25, N=100, and N=1000.
