@@ -36,9 +36,27 @@ pnorm(0.01/se)-pnorm(-0.01/se)
 #the function take_sample.
 
 take_sample<- function(p, N){
-  x<-sample(c(1,0), N, replace=TRUE, prob=c(p, 1-p))
+  x<-sample(c(1,0), size=N, replace=TRUE, prob=c(p, 1-p))
   mean(x)
 }
-#arbitrary p and N
-take_sample(.48, 1000)
-#[1] 0.479
+
+#2. Now assume p <- 0.45 and that your sample size 
+#is N=100. Take a sample 10,000 times and save the
+#vector of mean(X)-p into an object called errors. 
+#Hint: use the function you wrote for exercise 1 
+#to write this in one line of code.
+p<-0.45
+N<-100
+errors<-replicate(10000, take_sample(p, N)-p)
+
+#3. The vector errors contains, for each simulated 
+#sample, the difference between the actual p and 
+#our estimate X. We refer to this difference as 
+#the error. Compute the average and make a histogram
+# of the errors generated in the Monte Carlo simulation 
+#and select which of the following best describes their 
+#distributions: mean(errors) hist(errors).
+mean(errors)
+#[1] 0.00049
+hist(errors)
+
