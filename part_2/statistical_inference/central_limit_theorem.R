@@ -140,3 +140,13 @@ plot(n, se)
 p<-0.45
 N<-100
 errors<-replicate(10000, take_sample(p, N)-p)
+qqnorm(errors)
+qqline(errors)
+
+#12. If p=.45 and n=100 as in exercise 2, use the CLT 
+#to estimate the probability that X>0.5. Assume you know 
+#p=45 for this calculation.
+p<-.45
+n<-100
+1-pnorm(0.5, p, sqrt(p*(1-p)/n))
+#[1] 0.1574393
