@@ -90,3 +90,16 @@ n<-100
 se_rvx<- sqrt(p*(1-p)/n)
 se_rvx
 #[1] 0.04974937
+
+#7. In practice, we don’t know p,so we construct an estimate
+#of the theoretical prediction based by plugging in X for
+#p. Compute this estimate. Set the seed at 1 with set.seed(1).
+
+set.seed(1)
+n<-100
+p<-.45
+x<-sample(c(1,0), size=n, replace = TRUE, prob = c(p, 1-p))
+sub_x<-mean(x)
+estimate<-sqrt(sub_x*(1-sub_x)/n)
+estimate
+#[1] 0.04983974
