@@ -150,3 +150,14 @@ p<-.45
 n<-100
 1-pnorm(0.5, p, sqrt(p*(1-p)/n))
 #[1] 0.1574393
+
+#13. Assume you are in a practical situation and you 
+#don’t know p. Take a sample of size n=100 and obtain 
+#a sample average of X=0.51. What is the CLT approximation
+# for the probability that your error is equal to or larger than 0.01?
+
+n<-100
+X<-0.51
+se_rX<-sqrt(X*(1-X)/n)
+1-pnorm(0.01, 0, se_rX) + pnorm(0.01, 0, se_rX)
+#[1] 1
