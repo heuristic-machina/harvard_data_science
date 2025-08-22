@@ -103,3 +103,24 @@ sub_x<-mean(x)
 estimate<-sqrt(sub_x*(1-sub_x)/n)
 estimate
 #[1] 0.04983974
+
+#8. Note how close the standard error estimates obtained
+# from the Monte Carlo simulation (exercise 5), the 
+#theoretical prediction (exercise 6), and the estimate 
+#of the theoretical prediction (exercise 7) are. The 
+#theory is working and it gives us a practical approach
+# to knowing the typical error we will make if we predict p
+#with X. Another advantage that the theoretical result 
+#provides is that it gives an idea of how large a sample 
+#size is required to obtain the precision we need. Earlier,
+#we learned that the largest standard errors occur for p=0.5.
+#Create a plot of the largest standard error for n ranging 
+#from 100 to 5,000. Based on this plot, how large does the
+# sample size have to be to have a standard error of about 1%?
+
+n<-seq(100, 5000, length=100)
+p<-.5
+se<-sqrt(p*(1-p)/n)
+plot(n, se)
+
+#The sample size of 2500 shows a standard error of about 1%
