@@ -35,3 +35,10 @@ pnorm(0.01/se)-pnorm(-0.01/se)
 #Democrats are 1s and Republicans are 0s. Call 
 #the function take_sample.
 
+take_sample<- function(p, N){
+  x<-sample(c(1,0), N, replace=TRUE, prob=c(p, 1-p))
+  mean(x)
+}
+#arbitrary p and N
+take_sample(.48, 1000)
+#[1] 0.479

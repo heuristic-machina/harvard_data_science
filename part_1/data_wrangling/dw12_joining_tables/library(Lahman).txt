@@ -1,0 +1,14 @@
+library(Lahman)
+
+# join the Salaries data frame to add the salary of each player
+top_with_salary <- top %>%
+  filter(yearID == 2016) %>%
+  right_join(select(Salaries, playerID, yearID, teamID, salary), by = c("playerID", "yearID")) %>%
+  select(nameFirst, nameLast, teamID, HR, salary)
+
+top_with_salary %>% as_tibble()
+
+tws_ex2 <- ex1 %>%
+  filter(yearID == 2016) %>%
+  right_join(select(Salaries, playerID, yearID, teamID, salary), by = c("playerID", "yearID")) %>%
+  select(nameFirst, nameLast, teamID, HR, salary)
