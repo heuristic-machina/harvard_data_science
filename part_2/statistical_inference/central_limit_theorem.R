@@ -124,3 +124,19 @@ se<-sqrt(p*(1-p)/n)
 plot(n, se)
 
 #The sample size of 2500 shows a standard error of about 1%
+
+#9. For sample size n=100, the Central Limit Theorem tells 
+#us that the distribution of X is:
+#approximately normal with expected value p and standard error
+#sqrt(p*(1-p)/n)
+
+#10. Based on the answer from exercise 8, the error X-p is:
+#approximately normal with expected value 0 and standard error
+#sqrt(p*(1-p)/n)
+
+#11. To corroborate your answer to exercise 9, make a qq-plot
+# of the errors you generated in exercise 2 to see if they
+# follow a normal distribution.
+p<-0.45
+N<-100
+errors<-replicate(10000, take_sample(p, N)-p)
