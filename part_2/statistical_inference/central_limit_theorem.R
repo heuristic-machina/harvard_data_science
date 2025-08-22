@@ -60,3 +60,33 @@ mean(errors)
 #[1] 0.00049
 hist(errors)
 
+#The errors are symmetrically distributed around 0
+
+#4 The error X-p is a random variable. In practice, 
+#the error is not observed because we do not know p.
+#Here, we observe it since we constructed the simulation. 
+#What is the average size of the error if we define 
+#the size by taking the absolute value |X-p|?
+
+mean(abs(errors))
+#1] 0.039886
+
+#5. The standard error is related to the typical size
+#of the error we make when predicting. For mathematical
+#reasons related to the Central Limit Theorem, we 
+#actually use the standard deviation of errors, rather 
+#than the average of the absolute values, to quantify 
+#the typical size. What is this standard deviation of 
+#the errors?
+sqrt(mean(errors^2))
+#[1] 0.05016453
+
+#6. The theory we just learned tells us what this 
+#standard deviation is going to be because it is the
+# standard error of X. What does theory tell us is
+# the standard error of X for a sample size of 100?
+p<-.45
+n<-100
+se_rvx<- sqrt(p*(1-p)/n)
+se_rvx
+#[1] 0.04974937
