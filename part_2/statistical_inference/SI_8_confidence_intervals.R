@@ -43,3 +43,18 @@ z=qnorm(1-alpha/2)
 z=qnorm(1-0.025)
 z=qnorm(0.975)
 #[1] 1.959964
+
+#8.1 Monte Carlo simulation
+install.packages('dplyr')
+library('dplyr')
+#mean, std error, 95% confidence interval including p95% of time
+n<-1000
+b<-10000
+conf_int<-replicate(b, {
+  x<-sample(c(0,1), n, replace=TRUE, prob=c(1-p, p))
+  x_hat<-mean(x)
+  se_hat<-sqrt(x_hat*(1 - x_hat)/n)
+  between(p, x_hat - 1.96*se_hat, x_hat + 1.96*se_hat)
+  })
+mean(conf_int)
+#[1] 0.9496
