@@ -58,3 +58,38 @@ conf_int<-replicate(b, {
   })
 mean(conf_int)
 #[1] 0.9496
+
+#8.2 Exercises
+library(dslabs)
+library(tidyverse)
+#filter polls ending 1 week before election
+polls<- polls_us_election_2016 |> filter(enddate >= '2016-10-31' & state='US')
+
+#1 For the first poll, obtain sample size and estimated Clinton percentage
+# with:
+N<-polls$samplesize[1]
+x_hat<-polls$rawpoll_clinton[1]/100
+#Assuming there are only two candidates, construct a 95% confidence
+#interval for the election night proportion p
+library(magrittr)
+data('polls_us_election_2016')
+se_hat<-sqrt(x_hat*(1-x_hat)/N)
+x_hat + c(-1, 1)*pnorm(0.975)*se_hat
+#[1] 0.4611527 0.4788473
+
+#2.Now use dplyr to add a confidence interval as two columns, call 
+#them lower and upper, to the object poll. Then use select to show the 
+#pollster, enddate, x_hat, lower, upper variables. Hint: define temporary
+# columns x_hat and se_hat.
+
+polls %>% mutate(x_hat=polls$rawpoll_clinton/100, se_hat=sqrt(x_hat*(1-x_hat)/samplesize),
+                 lower=x_hat-pnorm(0.975)*se_hat, upper=x_hat+pnorm(0.975)*se_hat, 
+                 hit=lower<=0.482 & upper>=0.482) %>% 
+  select(pollster, enddate, x_hat, lower, upper, hit) %>% 
+  summarize(mean(hit))
+#  mean(hit)
+#1 0.1857143
+
+#3.The final tally for the popular vote was Clinton 48.2% and Trump 
+#46.1%. Add a column, call it hit, to the previous table stating if the 
+#confidence interval included the true proportion p=0.482 or not.
