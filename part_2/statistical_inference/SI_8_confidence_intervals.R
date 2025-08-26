@@ -98,3 +98,9 @@ polls %>% mutate(x_hat=polls$rawpoll_clinton/100,
                  lower=x_hat-pnorm(0.975)*se_hat, upper=x_hat+pnorm(0.975)*se_hat,
                  hit=lower<=0.482& upper>=0.482) %>%
   select(pollster, enddate, x_hat, lower, upper, hit) 
+
+#4For the table you just created, what proportion of confidence intervals
+# included p?
+
+#taking answer from #2 mean(hit)=0.1857143 from 0.50 confidence interval
+#gives confidence interval of .314
