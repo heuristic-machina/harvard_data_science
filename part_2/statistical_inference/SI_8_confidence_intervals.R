@@ -104,3 +104,8 @@ polls %>% mutate(x_hat=polls$rawpoll_clinton/100,
 
 #taking answer from #2 mean(hit)=0.1857143 from 0.50 confidence interval
 #gives confidence interval of .314
+
+#5 If these confidence intervals are constructed correctly, and the 
+#theory holds up, what proportion should include p? 
+
+#.95 of confidence intervals include the true proportion
