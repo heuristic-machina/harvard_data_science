@@ -93,3 +93,8 @@ polls %>% mutate(x_hat=polls$rawpoll_clinton/100, se_hat=sqrt(x_hat*(1-x_hat)/sa
 #3.The final tally for the popular vote was Clinton 48.2% and Trump 
 #46.1%. Add a column, call it hit, to the previous table stating if the 
 #confidence interval included the true proportion p=0.482 or not.
+polls %>% mutate(x_hat=polls$rawpoll_clinton/100,
+                 se_hat=sqrt(x_hat*(1-x_hat)/samplesize),
+                 lower=x_hat-pnorm(0.975)*se_hat, upper=x_hat+pnorm(0.975)*se_hat,
+                 hit=lower<=0.482& upper>=0.482) %>%
+  select(pollster, enddate, x_hat, lower, upper, hit) 
