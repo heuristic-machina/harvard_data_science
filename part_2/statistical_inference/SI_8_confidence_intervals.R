@@ -63,7 +63,8 @@ mean(conf_int)
 library(dslabs)
 library(tidyverse)
 #filter polls ending 1 week before election
-polls<- polls_us_election_2016 |> filter(enddate >= '2016-10-31' & state='US')
+polls<- polls_us_election_2016 |> 
+  filter(enddate >= '2016-10-31' & state='US')
 
 #1 For the first poll, obtain sample size and estimated Clinton percentage
 # with:
@@ -82,8 +83,10 @@ x_hat + c(-1, 1)*pnorm(0.975)*se_hat
 #pollster, enddate, x_hat, lower, upper variables. Hint: define temporary
 # columns x_hat and se_hat.
 
-polls %>% mutate(x_hat=polls$rawpoll_clinton/100, se_hat=sqrt(x_hat*(1-x_hat)/samplesize),
-                 lower=x_hat-pnorm(0.975)*se_hat, upper=x_hat+pnorm(0.975)*se_hat, 
+polls %>% mutate(x_hat=polls$rawpoll_clinton/100, 
+                 se_hat=sqrt(x_hat*(1-x_hat)/samplesize),
+                 lower=x_hat-pnorm(0.975)*se_hat, 
+                 upper=x_hat+pnorm(0.975)*se_hat, 
                  hit=lower<=0.482 & upper>=0.482) %>% 
   select(pollster, enddate, x_hat, lower, upper, hit) %>% 
   summarize(mean(hit))
@@ -95,7 +98,8 @@ polls %>% mutate(x_hat=polls$rawpoll_clinton/100, se_hat=sqrt(x_hat*(1-x_hat)/sa
 #confidence interval included the true proportion p=0.482 or not.
 polls %>% mutate(x_hat=polls$rawpoll_clinton/100,
                  se_hat=sqrt(x_hat*(1-x_hat)/samplesize),
-                 lower=x_hat-pnorm(0.975)*se_hat, upper=x_hat+pnorm(0.975)*se_hat,
+                 lower=x_hat-pnorm(0.975)*se_hat, 
+                 upper=x_hat+pnorm(0.975)*se_hat,
                  hit=lower<=0.482& upper>=0.482) %>%
   select(pollster, enddate, x_hat, lower, upper, hit) 
 
@@ -109,3 +113,24 @@ polls %>% mutate(x_hat=polls$rawpoll_clinton/100,
 #theory holds up, what proportion should include p? 
 
 #.95 of confidence intervals include the true proportion
+
+#6 A much smaller proportion of the polls than expected produce 
+#confidence intervals containing p. If you look closely at the
+# table, you will see that most polls that fail to include p
+#are underestimating. The reason for this is undecided voters, 
+#individuals polled that do not yet know who they will vote for
+# or do not want to say. Because, historically, undecideds divide
+# evenly between the two main candidates on election day, it is 
+#more informative to estimate the spread or the difference between 
+#the proportion of two candidates d, which in this election was 
+#0.482−0.461=0.021. Assume that there are only two parties and 
+#that d=2p−1, redefine polls as below and re-do exercise 1, but 
+#for the difference.
+polls <- polls_us_election_2016 %>% filter(enddate >= "2016-10-31" & state == "U.S.") %>% mutate(d_hat=rawpoll_clinton/100-rawpoll_trump/100)
+N<-polls$samplesize[1]
+d_hat<-polls$d_hat[1]
+x_hat<-(d_hat+1)/2
+se_hat<-2*sqrt(x_hat*(1-x_hat)/N)
+ci<-c(d_hat-qnorm(0.975)*se_hat, d_hat+qnorm(0.975)*se_hat)
+se_hat
+## [1] 0.02120683
