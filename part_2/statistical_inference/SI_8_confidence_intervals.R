@@ -142,3 +142,14 @@ polls %>% mutate(x_hat=(d_hat+1)/2,
                  upper=d_hat+pnorm(0.975)*se_hat,
                  hit=lower<=0.021 & upper>=0.021) %>%
   select(pollster, enddate, d_hat, lower, upper, hit)
+
+#8 Now repeat exercise 4, but for the difference.
+polls %>% mutate(x_hat=(d_hat+1)/2,
+                 se_hat=2*sqrt(x_hat*(1-x_hat)/samplesize),
+                 lower=d_hat-pnorm(0.975)*se_hat,
+                 upper=d_hat+pnorm(0.975)*se_hat,
+                 hit=lower<=0.021 & upper>=0.021) %>%
+  select(pollster, enddate, x_hat, lower, upper, hit) %>%
+  summarize(mean(hit))
+##   mean(hit)
+## 1 0.5428571
