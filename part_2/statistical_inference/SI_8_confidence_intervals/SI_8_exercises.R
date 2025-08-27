@@ -162,3 +162,10 @@ polls %>% mutate(error=d_hat-0.021) %>%
   ggplot(aes(pollster, error)) + 
   geom_point() + 
   theme(axis.text.x=element_text(angle=90, hjust=1))
+
+#10 Redo the plot that you made for exercise 9, but only for pollsters that 
+#took five or more polls.
+polls %>% mutate(error=d_hat-0.021) %>%
+  group_by(pollster) %>% filter(n() >= 5) %>%
+  ggplot(aes(pollster, error)) +
+  geom_point() + theme(axis.text.x=element_text(angle=90, hjust=1))
