@@ -153,3 +153,12 @@ polls %>% mutate(x_hat=(d_hat+1)/2,
   summarize(mean(hit))
 ##   mean(hit)
 ## 1 0.5428571
+
+#9 Although the proportion of confidence intervals goes up substantially,
+# it is still lower than 0.95. In the next chapter, we learn the reason
+# for this. To motivate this, make a plot of the error, the difference
+# between each poll’s estimate and the actual d=0.021. Stratify by pollster.
+polls %>% mutate(error=d_hat-0.021) %>% 
+  ggplot(aes(pollster, error)) + 
+  geom_point() + 
+  theme(axis.text.x=element_text(angle=90, hjust=1))
