@@ -89,3 +89,58 @@ hist(pvals)
 #null pvals are uniformly distributed between 0 and 1
 #the peak closest to 0 is where the alternative hypothesis live along
 #with some potential false positives
+
+#3. Demonstrate, mathematically, why we see the histogram we see in exercise 
+# Hint: To compute the p-value, we need to calculate a test statistic, Z.
+# We can approximate Z using the CLT, which tells us that Z approximately 
+#follows a standard normal distribution. The p-value is calculated as: 
+# p = 2{1 - phi(|z|)}  where: z is the observed value of Z and phi(z) 
+#is the CDF of the standard normal distribution (pnorm(z) in R). To 
+#understand the distribution of the p-values, consider the probability 
+#that the p-value is less than or equal to some threshold alpha between
+# 0 and 1: Pr(p <= alpha) = Pr({2{1 - phi(|z|)} <= alpha. Remember that 
+#p follows a uniform distribution if Pr(p <= alpha) = a.
+
+#answered in 1 & 2
+
+#4 Generate a sample of size N=1000 from an urn model with 52% blue
+# beads:
+N <- 1000 
+theta <- 0.52
+x <- rbinom(N, 1, theta)
+
+#Compute a p-value to test if theta=0.5. Repeat this 10,000 times 
+#and report how often the p-value is larger than 0.05? Note that 
+#you are computing 1 - power.
+
+x_hat<-mean(x)
+x_hat
+#[1] 0.502
+se<-sqrt(x_hat*(1-x_hat)/N)
+#[1] 0.01581126
+z <- (x_hat - theta) / se
+z
+#[1] -1.138429
+p_value <- 2 *(1-pnorm(abs(z)))
+p_value
+#[1] 0.2549414
+
+#Finding how often less than 0.05
+set.seed(2)
+
+M <- 1000
+N <- 10000
+p0 <- 0.52
+p1 <- 0.5                      # try 0.505, 0.51, 0.52, etc.
+
+pvals <- replicate(M, {
+  k <- rbinom(1, N, p1)
+  phat <- k / N
+  se <- sqrt(phat * (1 - phat) / N)
+  z <- (phat - p0) / se
+  2 * (1 - pnorm(abs(z)))
+})
+
+mean(pvals < 0.01)                 # estimated power at p1
+
+#[1] 0.969
