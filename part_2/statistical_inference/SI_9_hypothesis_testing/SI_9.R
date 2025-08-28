@@ -144,3 +144,52 @@ pvals <- replicate(M, {
 mean(pvals < 0.01)                 # estimated power at p1
 
 #[1] 0.969
+
+#5 Repeat exercise for but for the following values:
+values <- expand.grid(N = c(25, 50, 100, 500, 1000), 
+                      theta = seq(0.51 ,0.75, 0.01))
+
+
+set.seed(123)
+
+# Parameters
+M <- 10000   # number of simulations per combo
+p0 <- 0.5    # null hypothesis proportion
+
+# Value grid
+values <- expand.grid(
+  N = c(25, 50, 100, 500, 1000),
+  theta = seq(0.51, 0.75, 0.01)
+)
+
+# Function to estimate power
+estimate_power <- function(N, theta, M, p0) {
+  pvals <- replicate(M, {
+    k <- rbinom(1, N, theta)
+    phat <- k / N
+    se <- sqrt(phat * (1 - phat) / N)
+    z <- (phat - p0) / se
+    2 * (1 - pnorm(abs(z)))
+  })
+  mean(pvals < 0.05)  # power = proportion of p-values < alpha
+}
+
+# Apply to all combos
+values$power <- mapply(estimate_power, values$N, values$theta,
+                       MoreArgs = list(M = M, p0 = p0))
+
+# Load ggplot2
+library(ggplot2)
+
+# Plot
+ggplot(values, aes(x = N, y = power, color = factor(theta), group = theta)) +
+  geom_line() +
+  geom_point(size = 0.7) +
+  labs(
+    title = "Power Curves for Various Effect Sizes",
+    subtitle = paste0("Null hypothesis p0 = ", p0, ", α = 0.05, ", M, " simulations each"),
+    x = "Sample Size (N)",
+    y = "Estimated Power",
+    color = expression(theta)
+  ) +
+  theme_minimal()
