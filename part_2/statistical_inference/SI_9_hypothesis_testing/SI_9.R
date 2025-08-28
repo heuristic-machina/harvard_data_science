@@ -82,3 +82,10 @@ pvals <- replicate(M, {
 
 mean(pvals < 0.01)                 # estimated power at p1
 #[1] 0.054
+
+#2 Make a histogram of the p-values you generated in exercise 1.
+hist(pvals)
+#c. The p-values are uniformly distributed.
+#null pvals are uniformly distributed between 0 and 1
+#the peak closest to 0 is where the alternative hypothesis live along
+#with some potential false positives
