@@ -75,3 +75,18 @@ mean(result)
 # these quantiles for different degrees of freedom for the 
 #t-distribution. Use this to motivate the sample size of 30 
 #rule of thumb.
+
+#qt() quantiles of t-distribution
+#qnorm() quantiles of normal distribution
+
+#using the sample size of 50 from this exercise set, the degrees
+#of freedom is 49
+#95% confidence interval of two tails
+qt(0.025, 49)
+#1] -2.009575
+#running with a n=30 sample
+qt(0.025, 29)
+#[1] -2.04523
+#for the sample 50
+qnorm(.70, .69, 3.6)
+#[1] 2.577842
