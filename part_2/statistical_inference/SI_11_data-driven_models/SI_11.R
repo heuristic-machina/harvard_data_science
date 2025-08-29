@@ -32,3 +32,28 @@ sd(X)
 
 #It is a random variable with an expected value mu and standard
 #error sd/sqrt(samplesize)
+
+#4. So, how is this useful? We are going to use an oversimplified
+# yet illustrative example. Suppose we want to know the average
+# height of our male students, but we can only measure 50 of the
+# 708. We will use X as our estimate. We know from the answer to
+# exercise 3 that the standard error of our estimate X-mu is 
+#sd/sqrt(samplesize). We want to compute this, but we don’t know 
+#sd. Based on what is described in this section, show your estimate of 
+#sd.
+
+sd_X<-sd(X)
+se_hat_X<-sd_X/sqrt(n)
+se_hat_X
+#[1] 0.4846145
+
+
+#5. Now that we have an estimate of sd, let’s call our estimate 
+#s. Construct a 95% confidence interval for mu.
+ci<-c(qnorm(0.025, mean(X), se_hat_X), qnorm(0.975, mean(X), se_hat_X))
+ci
+#[1] 69.52310 71.42276
+
+#6. Now run a Monte Carlo simulation in which you compute 
+#10,000 confidence intervals as you have just done. What 
+#proportion of these intervals include mu?
