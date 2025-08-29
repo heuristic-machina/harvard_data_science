@@ -86,4 +86,35 @@ standard_error <- sd(quantile_vals)
 
 # Output
 cat("Expected value of 75th quantile:", expected_value, "\n")
+#Expected value of 75th quantile: 0.6645913 
 cat("Standard error:", standard_error, "\n")
+#Standard error: 0.1345276 
+
+#2. In practice, we can’t run a Monte Carlo simulation because
+# we don’t know if rnorm is being used to simulate the data. 
+#Use the bootstrap to estimate the standard error using just 
+#the initial sample y. Use 10 bootstrap samples.
+# Original sample
+set.seed(42)
+y <- rnorm(100, 0, 1)
+
+# Bootstrap parameters
+B <- 10
+boot_quantiles <- numeric(B)
+
+# Bootstrap loop
+set.seed(123)  # For reproducibility
+for (i in 1:B) {
+  boot_sample <- sample(y, size = length(y), replace = TRUE)
+  boot_quantiles[i] <- quantile(boot_sample, 0.75)
+}
+
+# Estimate standard error
+boot_se <- sd(boot_quantiles)
+
+# Output results
+cat("Bootstrap estimates of 75th quantile:\n", round(boot_quantiles, 4), "\n")
+#Bootstrap estimates of 75th quantile:
+#  0.8465 0.7088 0.8497 0.8063 0.6538 0.6616 0.9207 0.6517 0.6538 0.6448 
+cat("Estimated standard error from bootstrap:", round(boot_se, 4), "\n")
+#Estimated standard error from bootstrap: 0.105 
