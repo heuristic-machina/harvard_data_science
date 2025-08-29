@@ -118,3 +118,28 @@ cat("Bootstrap estimates of 75th quantile:\n", round(boot_quantiles, 4), "\n")
 #  0.8465 0.7088 0.8497 0.8063 0.6538 0.6616 0.9207 0.6517 0.6538 0.6448 
 cat("Estimated standard error from bootstrap:", round(boot_se, 4), "\n")
 #Estimated standard error from bootstrap: 0.105 
+
+#3. Redo exercise 12, but with 10,000 bootstrap samples.
+# Original sample
+set.seed(42)
+y <- rnorm(100, 0, 1)
+
+# Bootstrap parameters
+B <- 10000
+boot_quantiles <- numeric(B)
+
+# Bootstrap loop
+set.seed(123)  # For reproducibility
+for (i in 1:B) {
+  boot_sample <- sample(y, size = length(y), replace = TRUE)
+  boot_quantiles[i] <- quantile(boot_sample, 0.75)
+}
+
+# Estimate standard error
+boot_se <- sd(boot_quantiles)
+
+# Output results
+median(boot_quantiles)
+#[1] 0.6615581
+cat("Estimated standard error from bootstrap:", round(boot_se, 4), "\n")
+#Estimated standard error from bootstrap: 0.09 
