@@ -57,3 +57,21 @@ ci
 #6. Now run a Monte Carlo simulation in which you compute 
 #10,000 confidence intervals as you have just done. What 
 #proportion of these intervals include mu?
+x_mu<-mean(x)
+set.seed(1)
+n<-50
+b<-10^4
+result<-replicate(b, {
+  X<-sample(x, n, replace = T)
+  sd_X<-sd(X)
+  se_hat_X<-sd_X/sqrt(n)
+  interval<-c(qnorm(0.025, mean(X), se_hat_X), qnorm(0.075, mean(X), se_hat_X))
+  between(x_mu, interval[1], interval[2])
+})
+mean(result)
+#[1] 0.0542
+
+#7. Use the qnorm and qt functions to generate quantiles. Compare
+# these quantiles for different degrees of freedom for the 
+#t-distribution. Use this to motivate the sample size of 30 
+#rule of thumb.
