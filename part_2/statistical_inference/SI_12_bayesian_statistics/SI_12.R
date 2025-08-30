@@ -111,3 +111,12 @@ estimate<- B * mu + (1 - B) * Y
 ci <- c(estimate - qnorm(0.975) * se, estimate + qnorm(0.975) * se)
 ci
 #[1] -195.9937  195.9991
+
+#11. According to this analysis, what was the probability that Trump 
+#wins Florida?
+
+#using pnorm function where spread < 0, in Trump's favor
+estimate<- B * mu + (1 - B) * Y
+se<- sqrt(1 / (1 / sigma^2) +(1 / tau^2))
+pnorm(0, mean=estimate, sd=se)
+#[1] 0.4999891
