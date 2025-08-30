@@ -94,3 +94,20 @@ B <- sigma^2 / (sigma^2 + tau^2)
 #as is expected from inferring from the observed dataset
 1 / ((1 / sigma^2) +(1 / tau^2))
 #[1] 3.42579e-05
+
+#10. Using the fact that the posterior distribution is normal,
+# create an interval that has a 95% probability of occurring
+# centered at the posterior expected value. Note that we call
+# these credible intervals.
+mu <- 0
+tau <- 0.01
+sigma <- results$se
+Y <- results$avg
+B <- sigma^2 / (sigma^2 + tau^2)
+se<- sqrt(1 / (1 / sigma^2) +(1 / tau^2))
+
+#95% credible interval
+estimate<- B * mu + (1 - B) * Y
+ci <- c(estimate - qnorm(0.975) * se, estimate + qnorm(0.975) * se)
+ci
+#[1] -195.9937  195.9991
