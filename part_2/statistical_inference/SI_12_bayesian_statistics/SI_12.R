@@ -65,7 +65,32 @@ results
 #avg          se
 #1 0.004154545 0.007218692
 
-#7. Now assume a Bayesian model that sets the prior distribution
-# for Florida’s election night spread mu to follow a normal 
-#distribution with expected value theta and standard deviation 
-#tao. What are the interpretations of theta and tao?
+#8 The CLT tells us that our estimate of the spread mu_hat
+#has normal distribution with expected value mu and standard
+#deviation sigma calculated in exercise 6. Use the formulas we 
+#provided for the posterior distribution to calculate the expected
+# value of the posterior distribution if we set theta=0 and
+#tao=0.01.
+mu<-0
+tau<-0.01
+#store se from results
+sigma<-results$se
+#store average from results
+Y<-results$avg
+#store sigma tao relationship
+B<-sigma^2/(sigma^2+tau^2)
+#expected value of posterior distribution
+B*mu + (1 - B) * Y
+
+#9. Now compute the standard deviation of the posterior 
+#distribution.
+#the defined variables above for quick view
+mu <- 0
+tau <- 0.01
+sigma <- results$se
+Y <- results$avg
+B <- sigma^2 / (sigma^2 + tau^2)
+#standard error of posterior distribution is incredibly small
+#as is expected from inferring from the observed dataset
+1 / ((1 / sigma^2) +(1 / tau^2))
+#[1] 3.42579e-05
