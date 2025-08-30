@@ -70,14 +70,14 @@ results
 #deviation sigma calculated in exercise 6. Use the formulas we 
 #provided for the posterior distribution to calculate the expected
 # value of the posterior distribution if we set theta=0 and
-#tao=0.01.
+#tau=0.01.
 mu<-0
 tau<-0.01
 #store se from results
 sigma<-results$se
 #store average from results
 Y<-results$avg
-#store sigma tao relationship
+#store sigma tau relationship
 B<-sigma^2/(sigma^2+tau^2)
 #expected value of posterior distribution
 B*mu + (1 - B) * Y
@@ -120,3 +120,38 @@ estimate<- B * mu + (1 - B) * Y
 se<- sqrt(1 / (1 / sigma^2) +(1 / tau^2))
 pnorm(0, mean=estimate, sd=se)
 #[1] 0.4999891
+
+#12. Now use sapply function to change the prior variance 
+#from seq(0.005, 0.05, len = 100) and observe how the 
+#probability changes by making a plot.
+
+#We had set the prior variance τ to 0.01, reflecting that
+# these races are often close.  Change the prior variance 
+#to include values ranging from 0.005 to 0.05 and observe
+# how the probability of Trump winning Florida changes by 
+#making a plot.
+mu <- 0
+sigma <- results$se
+Y <- results$avg
+
+#redefining taus
+taus <- seq(0.005, .05, len=100)
+# Create a function called `p_calc` that generates `B` and calculates the probability of the spread being less than 0
+p_calc <- function(taus) {
+  B <- sapply(taus, function(i) (sigma^2 / (sigma^2 + i^2)))
+  se <- sapply(taus, function(i) sqrt( 1/ (1/sigma^2 + 1/i^2)))
+  exp_value = sapply(B, function(i) (1 - i) * Y)
+  pnorm(0, mean=exp_value, sd=se)
+}
+
+# Create a vector called `ps` by applying the function `p_calc`
+# across values in `taus`
+ps <- p_calc(taus)
+
+# Plot `taus` on the x-axis and `ps` on the y-axis
+# plot(taus, ps)
+trump_percentage <- data.frame(taus, ps)
+trump_percentage %>%
+  ggplot(aes(taus, ps)) +
+  geom_line() +
+  ggtitle('Trumps winning chances')
