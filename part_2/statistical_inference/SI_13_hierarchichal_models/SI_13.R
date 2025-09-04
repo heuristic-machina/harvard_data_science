@@ -198,3 +198,15 @@ p_hits %>% mutate(state=reorder(state,proportion_hits)) %>%
 # of the polls had the signs wrong. Make a histogram of the errors. What
 # is the median of these errors?
 hist(resids$error)
+median(resids$error)
+#[1] 0.037
+
+#9. We see that at the state level, the median error was 3% in favor of
+# Clinton. The distribution is not centered at 0, but at 0.03. This is
+# the general bias we described in the section above. Create a boxplot
+# to see if the bias was general to all states or it affected some states
+# differently. Use filter(grade %in% c(“A+”,“A”,“A-”,“B+”) | is.na(grade)))
+# to only include pollsters with high grades.
+resids %>% filter(grade %in% c("A+","A","A-","B+")|is.na(grade)) %>%
+  mutate(state= reorder(state, error)) %>%
+  ggplot(aes(state, error)) + geom_boxplot() + geom_point()
