@@ -139,10 +139,10 @@ p_hits_state_bar
 #and define a column hit that is true if the signs are the same. Hint: 
 #use the function sign. Call the object resids.
 
-resids <- cis %>%
+cis <- cis %>%
   mutate(state=as.character(state))%>%
   left_join(add, by="state")
-head(resids)
+head(cis)
 #           state  startdate    enddate                pollster grade spread
 #1     New Mexico 2016-11-06 2016-11-06                Zia Poll  <NA>   0.02
 #2       Virginia 2016-11-03 2016-11-04   Public Policy Polling    B+   0.05
@@ -158,3 +158,22 @@ head(resids)
 #4  0.004774064  0.1152259363        -0.007
 #5 -0.069295191  0.0692951912        -0.036
 #6 -0.086553820  0.0265538203        -0.051
+
+resids<-cis%>%
+  mutate(error=spread-ci_data$actual_spread, 
+         hit=sign(spread)==sign(ci_data$actual_spread))
+tail(resids)
+#           state  startdate    enddate                pollster grade  spread
+#807         Utah 2016-10-04 2016-11-06                  YouGov     B -0.0910
+#808         Utah 2016-10-25 2016-10-31 Google Consumer Surveys     B -0.0121
+#809 South Dakota 2016-10-28 2016-11-02                   Ipsos    A- -0.1875
+#810   Washington 2016-10-21 2016-11-02                   Ipsos    A-  0.0838
+#811         Utah 2016-11-01 2016-11-07 Google Consumer Surveys     B -0.1372
+#812       Oregon 2016-10-21 2016-11-02                   Ipsos    A-  0.0905
+#           lower       upper   error  hit
+#807 -0.1660704570 -0.01592954  0.0890 TRUE
+#808 -0.1373083389  0.11310834  0.1679 TRUE
+#809 -0.3351563485 -0.03984365  0.1105 TRUE
+#810 -0.0004028265  0.16800283 -0.0782 TRUE
+#811 -0.2519991224 -0.02240088  0.0428 TRUE
+#812 -0.0019261469  0.18292615 -0.0195 TRUE
