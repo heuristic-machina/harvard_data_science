@@ -53,8 +53,8 @@ cis <- polls %>%
   select(state, startdate, enddate, pollster, grade, spread, lower, upper)
 
 #2. You can add the final result to the cis table you just created using 
-#the right_join function like this.  #Now determine how often the 95% #
-add<-results_us_election_2016 |> 
+#the right_join function like this.  #Now determine how often the 95% 
+#Now determine how often the 95% confidence interval includes the actual result.
   mutate(actual_spread=clinton/100-trump/100) |> 
   select(state, actual_spread)
 cis_data<-cis %>% 
@@ -63,3 +63,35 @@ cis_data<-cis %>%
 p_hits<-cis_data %>% 
   mutate(hit=lower<=actual_spread & upper>=actual_spread) %>% 
   summarize(proportion_hits=mean(hit))
+
+#3. Repeat this, but show the proportion of hits for each pollster. Show only
+#pollsters with more than 5 polls and order them from best to worst. Show the
+#number of polls conducted by each pollster and the FiveThirtyEight grade of 
+#each pollster. Hint: use n=n(), grade=grade[1] in the call to summarize.
+
+add<-results_us_election_2016 %>%
+  mutate(actual_spread=clinton/100-trump/100) %>%
+  select(state, actual_spread)
+ci_data<-cis %>% mutate(state=as.character(state)) %>%
+  left_join(add, by="state")
+p_hits<-ci_data %>%
+  mutate(hit=lower<=actual_spread & upper>=actual_spread) %>%
+  group_by(pollster) %>% filter(n()>=5) %>%
+  summarize(proportion_hits=mean(hit), n=n(), grade=grade[1])
+p_hits
+# A tibble: 13 × 4
+#pollster                                 proportion_hits     n grade
+#<fct>                                              <dbl> <int> <fct>
+#1 Emerson College                                    0.909    11 B    
+#2 Google Consumer Surveys                            0.588   102 B    
+#3 Gravis Marketing                                   0.783    23 B-   
+#4 Ipsos                                              0.807   119 A-   
+#5 Mitchell Research & Communications                 0.8       5 D    
+#6 Public Policy Polling                              0.889     9 B+   
+#7 Quinnipiac University                              1         6 A-   
+#8 Rasmussen Reports/Pulse Opinion Research           0.774    31 C+   
+#9 Remington                                          0.667     9 NA   
+#10 SurveyMonkey                                       0.577   357 C-   
+#11 Trafalgar Group                                    0.778     9 C    
+#12 University of New Hampshire                        0.857     7 B+   
+#13 YouGov                                             0.544    57 B    
