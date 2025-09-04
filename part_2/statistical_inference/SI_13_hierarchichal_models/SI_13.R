@@ -177,3 +177,16 @@ tail(resids)
 #810 -0.0004028265  0.16800283 -0.0782 TRUE
 #811 -0.2519991224 -0.02240088  0.0428 TRUE
 #812 -0.0019261469  0.18292615 -0.0195 TRUE
+
+#7. Create a plot like in exercise 5, but for the proportion of 
+#times the sign of the spread agreed.
+resids<-cis %>% 
+  mutate(error=spread-ci_data$actual_spread, 
+         hit=sign(spread)== sign(ci_data$actual_spread))
+p_hits<-resids %>%
+  group_by(state) %>%
+  summarize(proportion_hits=mean(hit), n=n())
+p_hits %>% mutate(state=reorder(state,proportion_hits)) %>% 
+  ggplot(aes(state, proportion_hits)) +
+  geom_bar(stat="identity") + 
+  coord_flip()
