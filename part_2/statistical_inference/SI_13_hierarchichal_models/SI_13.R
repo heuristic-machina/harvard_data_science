@@ -190,3 +190,11 @@ p_hits %>% mutate(state=reorder(state,proportion_hits)) %>%
   ggplot(aes(state, proportion_hits)) +
   geom_bar(stat="identity") + 
   coord_flip()
+
+#8. In exercise 7, we see that for most states the polls had it
+# right 100% of the time. For only 9 states did the polls miss more
+# than 25% of the time. In particular, notice that in Wisconsin every
+# single poll got it wrong. In Pennsylvania and Michigan more than 90%
+# of the polls had the signs wrong. Make a histogram of the errors. What
+# is the median of these errors?
+hist(resids$error)
