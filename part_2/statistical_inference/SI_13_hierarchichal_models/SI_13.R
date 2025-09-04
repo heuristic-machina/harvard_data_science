@@ -210,3 +210,18 @@ median(resids$error)
 resids %>% filter(grade %in% c("A+","A","A-","B+")|is.na(grade)) %>%
   mutate(state= reorder(state, error)) %>%
   ggplot(aes(state, error)) + geom_boxplot() + geom_point()
+
+#10. Some of these states only have a few polls. Repeat exercise 9, but
+# only include states with 5 good polls or more. Hint: use group_by, filter
+# then ungroup. You will see that the West (Washington, New Mexico, 
+#California) underestimated Hillary’s performance, while the Midwest 
+#(Michigan, Pennsylvania, Wisconsin, Ohio, Missouri) overestimated it. 
+#In our simulation, we did not model this behavior since we added general 
+#bias, rather than a regional bias. Note that some pollsters may now be 
+#modeling correlation between similar states and estimating this correlation
+#from historical data. To learn more about this, you can learn about 
+#random effects and mixed models.
+resids %>% filter(grade %in% c("A+","A","A-","B+") | is.na(grade)) %>%
+  group_by(state) %>% filter(n() >= 5) %>% ungroup() %>%
+  mutate(state=reorder(state, error)) %>%
+  ggplot(aes(state, error)) + geom_boxplot() + geom_point()
