@@ -95,3 +95,41 @@ p_hits
 #11 Trafalgar Group                                    0.778     9 C    
 #12 University of New Hampshire                        0.857     7 B+   
 #13 YouGov                                             0.544    57 B    
+
+
+#4. Repeat exercise 3, but instead of pollster, stratify by state. Note that 
+#here we can’t show grades.
+add<-results_us_election_2016 %>% 
+  mutate(actual_spread=clinton/100-trump/100) %>% 
+  select(state, actual_spread)
+ci_data<-cis %>% 
+  mutate(state=as.character(state)) %>% 
+  left_join(add, by="state")
+p_hits_by_state<-ci_data %>% 
+  mutate(hit=lower<=actual_spread & upper>=actual_spread) %>% 
+  group_by(state) %>% 
+  filter(n()>=5) %>% 
+  summarize(proportion_hits=mean(hit), n=n()) %>% 
+  arrange(desc(proportion_hits))
+p_hits_by_state
+# A tibble: 51 × 3
+#state        proportion_hits     n
+#<chr>                  <dbl> <int>
+#1 Connecticut            1        13
+#2 Delaware               1        12
+#3 Rhode Island           1        10
+#4 New Mexico             0.941    17
+#5 Washington             0.933    15
+#6 Oregon                 0.929    14
+#7 Illinois               0.923    13
+#8 Nevada                 0.923    26
+#9 Maine                  0.917    12
+#10Montana                0.917    12
+
+#5. Make a barplot based on the result of exercise 4. Use coord_flip.
+p_hits_state_bar <- p_hits_by_state %>%
+  mutate(state=reorder(state, proportion_hits)) %>%
+  ggplot(aes(state, proportion_hits)) + 
+  geom_bar(stat='identity') +
+  coord_flip()
+p_hits_state_bar
