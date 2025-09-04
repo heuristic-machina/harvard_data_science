@@ -32,3 +32,21 @@ ggplot(df_long, aes(x=Spread, y=Pollster)) +
        x='Spread',
        y='Pollster') +
   theme_minimal()
+
+#Exercises 13.7
+library(tidyverse)
+library(dslabs)
+polls <- polls_us_election_2016 |> 
+  filter(state != "U.S." & enddate >= "2016-10-31") |> 
+  mutate(spread = rawpoll_clinton/100 - rawpoll_trump/100)
+
+#1. Create this table. Now for each poll use the CLT to create a 95% 
+#confidence interval for the spread reported by each poll. Call the 
+#resulting object cis with columns lower and upper for the limits of 
+#the confidence intervals. Use the select function to keep the columns 
+#state, startdate, end date, pollster, grade, spread, lower, upper.
+cis <- polls %>% mutate(X_hat=(spread+1)/2,
+                        se=2*sqrt(X_hat*(1-X_hat)/samplesize),
+                        lower=spread-qnorm(0.975)*se, 
+                        upper=spread+qnorm(0.975)*se) %>%
+  select(state, startdate, enddate, pollster, grade, spread, lower, upper)
