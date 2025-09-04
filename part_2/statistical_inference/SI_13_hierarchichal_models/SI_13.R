@@ -133,3 +133,28 @@ p_hits_state_bar <- p_hits_by_state %>%
   geom_bar(stat='identity') +
   coord_flip()
 p_hits_state_bar
+
+#6. Add two columns to the cis table by computing, for each poll, 
+#the difference between the predicted spread and the actual spread, 
+#and define a column hit that is true if the signs are the same. Hint: 
+#use the function sign. Call the object resids.
+
+resids <- cis %>%
+  mutate(state=as.character(state))%>%
+  left_join(add, by="state")
+head(resids)
+#           state  startdate    enddate                pollster grade spread
+#1     New Mexico 2016-11-06 2016-11-06                Zia Poll  <NA>   0.02
+#2       Virginia 2016-11-03 2016-11-04   Public Policy Polling    B+   0.05
+#3           Iowa 2016-11-01 2016-11-04        Selzer & Company    A+  -0.07
+#4      Wisconsin 2016-10-26 2016-10-31    Marquette University     A   0.06
+#5 North Carolina 2016-11-04 2016-11-06           Siena College     A   0.00
+#6        Georgia 2016-11-06 2016-11-06 Landmark Communications     B  -0.03
+
+#          lower         upper        actual_spread
+#1 -0.001331221  0.0413312213         0.083
+#2 -0.005634504  0.1056345040         0.054
+#3 -0.139125210 -0.0008747905        -0.094
+#4  0.004774064  0.1152259363        -0.007
+#5 -0.069295191  0.0692951912        -0.036
+#6 -0.086553820  0.0265538203        -0.051
