@@ -111,3 +111,32 @@ head(corb)
 
 dat3 %>% ggplot(aes(singles, mean_singles)) + geom_point()
 dat3 %>% ggplot(aes(bb, mean_bb)) + geom_point()
+
+#4. Now fit a linear model for each metric and use the confint function 
+#to compare the estimates.
+singles<-lm(singles~mean_singles, dat3)
+singles
+#Call:
+#lm(formula = singles ~ mean_singles, data = dat3)
+
+#Coefficients:
+#(Intercept)  mean_singles  
+#0.06206       0.58813 
+
+confint(singles)
+#               2.5 %     97.5 %
+#(Intercept)  0.04747792 0.07664646
+#mean_singles 0.49943734 0.67683074
+
+bb<-lm(bb~mean_bb, dat3)
+bb
+#Call:
+#lm(formula = bb ~ mean_bb, data = dat3)
+
+#Coefficients:
+#(Intercept)   mean_bb  
+#0.01548      0.82905  
+confint(bb)
+#               2.5 %     97.5 %
+#(Intercept) 0.007789552 0.02317953
+#mean_bb     0.748916885 0.90918171
