@@ -29,3 +29,9 @@ dat |> mutate(z_hr = round(scale(hr))) |>
   ggplot() +  
   stat_qq(aes(sample = r)) +
   facet_wrap(~z_hr) 
+
+#facet_wrap(~z_hr) creates separate Q-Q plots based on how far their home 
+#run totals deviate from the average.  This allows the visualization
+#of the r distribution (runs) in relation to homeruns z_hr
+#filter(z_hr %in% -2:3) displays home run totals within 2 standard deviations
+# below to 3 above the mean
