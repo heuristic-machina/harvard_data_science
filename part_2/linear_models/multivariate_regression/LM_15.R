@@ -35,3 +35,18 @@ dat |> mutate(z_hr = round(scale(hr))) |>
 #of the r distribution (runs) in relation to homeruns z_hr
 #filter(z_hr %in% -2:3) displays home run totals within 2 standard deviations
 # below to 3 above the mean
+
+#linear regression in predicting the number of runs scored
+#runs r is the response variable and homeruns hr is the prediction variable
+hr_fit  <- lm(r ~ hr, data = dat)$coef
+p + geom_abline(intercept = hr_fit[[1]], slope = hr_fit[[2]])
+
+hr_fit
+#(Intercept)          hr 
+#2.770363    1.851745 
+
+#the y-intercept of the regression line represents the expected number
+#of runs (2.77) when the number of homeruns is zero of the average team
+
+#the teams that hit 1 more homerun per game than the average team score
+#1.85 (the slope) more runs per game than the average team.  
