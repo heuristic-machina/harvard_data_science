@@ -119,5 +119,17 @@ mdplot<-md |>
 msplot<-ms |> 
   ggplot(aes(mother, son)) + 
   geom_point(alpha=.5)
-#Four scatterplots marking the heights between each parent gender and child gender#.
+#Four scatterplots marking the heights between each parent gender 
+#and child gender#.
 grid.arrange(mdplot, msplot, fdplot, fsplot,nrow=2)
+
+#3. Compute the correlation in heights between mothers and daughters, 
+#mothers and sons, fathers and daughters, and fathers and sons.
+fs |> summarise(r=cor(father, son)) |> pull(r)
+#[1] 0.3923835
+fd |> summarise(r=cor(father, daughter)) |> pull(r)
+#[1] 0.428433
+ms |> summarise(r=cor(mother, son)) |> pull(r)
+#[1] 0.323005
+md |> summarise(r=cor(mother, daughter)) |> pull(r)
+#[1] 0.3051645
