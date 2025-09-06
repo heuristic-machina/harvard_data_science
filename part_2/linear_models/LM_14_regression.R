@@ -59,3 +59,65 @@ galton_heights |>
   ggplot(aes(scale(father), scale(son))) + 
   geom_point(alpha = 0.5) +
   geom_abline(intercept = 0, slope = r) 
+
+#14.16 Exercises
+
+#1. Load the GaltonFamilies data from the HistData. The children in 
+#each family are listed by gender and then by height. Create a dataset 
+#called galton_heights by picking a male and female at random.
+
+library(tidyverse)
+library(HistData)
+library(gridExtra)
+data('GaltonFamilies')
+set.seed(1951)
+galton_heights <- GaltonFamilies
+
+#2. Make a scatterplot for heights between mothers and daughters, 
+#mothers and sons, fathers and daughters, and fathers and sons.
+fs<-filter(galton_heights, gender=="male") |> 
+  select(father, childHeight) |>
+  rename(son = childHeight)
+fd<-filter(galton_heights, gender=="female") |> 
+  select(father, childHeight) |> 
+  rename(daughter=childHeight)
+md<-filter(galton_heights, gender=="female") |> 
+  select(mother, childHeight) |> 
+  rename(daughter=childHeight)
+ms<-filter(galton_heights, gender=="male") |> 
+  select(mother, childHeight) |> 
+  rename(son=childHeight)
+statfs<- fs |> summarize(
+  mean(father), 
+  sd(father), 
+  mean(son), 
+  sd(son))
+statfd<- fd |> summarize(
+  mean(father), 
+  sd(father), 
+  mean(daughter), 
+  sd(daughter))
+statmd<- md |> summarize(
+  mean(mother), 
+  sd(mother), 
+  mean(daughter), 
+  sd(daughter))
+statms<- ms |> summarize(
+  mean(mother), 
+  sd(mother), 
+  mean(son), 
+  sd(son))
+fsplot<-fs |> 
+  ggplot(aes(father, son)) + 
+  geom_point(alpha=0.5)
+fdplot<-fd |> 
+  ggplot(aes(father, daughter)) + 
+  geom_point(alpha=.5)
+mdplot<-md |> 
+  ggplot(aes(mother, daughter)) + 
+  geom_point(alpha=.5)
+msplot<-ms |> 
+  ggplot(aes(mother, son)) + 
+  geom_point(alpha=.5)
+#Four scatterplots marking the heights between each parent gender and child gender#.
+grid.arrange(mdplot, msplot, fdplot, fsplot,nrow=2)
