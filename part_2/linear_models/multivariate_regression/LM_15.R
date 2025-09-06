@@ -49,4 +49,18 @@ hr_fit
 #of runs (2.77) when the number of homeruns is zero of the average team
 
 #the teams that hit 1 more homerun per game than the average team score
-#1.85 (the slope) more runs per game than the average team.  
+#1.85 (the slope) more runs per game than the average team.
+
+#relationship of runs to bases from balls
+bb_slope <- lm(r ~ bb, data = dat)$coef[2]
+bb_slope
+bb 
+#0.7388725
+#adding 2 players with high bases due to balls yeild 1.5 more runs?
+#association is not causation:
+#the assumption of having players with high rates of bases due to balls
+#is confounded with pitchers not wanting to throw strikes to players 
+#with high homerun rates
+dat |> summarise(cor(bb, hr), cor(singles, hr), cor(bb, singles))
+#     cor(bb, hr) cor(singles, hr) cor(bb, singles)
+#1   0.4064585       -0.1862848      -0.05126617
