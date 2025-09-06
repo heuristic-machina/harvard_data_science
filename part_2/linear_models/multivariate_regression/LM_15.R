@@ -64,3 +64,50 @@ bb
 dat |> summarise(cor(bb, hr), cor(singles, hr), cor(bb, singles))
 #     cor(bb, hr) cor(singles, hr) cor(bb, singles)
 #1   0.4064585       -0.1862848      -0.05126617
+
+
+#Exercises
+
+#In these exercises, we will compare the stability of singles and BBs.
+#1. Before we begin, we want to generate two tables. One for 2002 and
+#another for the average of 1999-2001 seasons. We want to define per 
+#plate appearance statistics. Here is how we create the 2017 table, 
+#keeping only players with more than 100 plate appearances:
+
+library(Lahman)
+dat <- Batting |> filter(yearID == 2002) |>
+  mutate(pa = AB + BB, 
+         singles = (H - X2B - X3B - HR)/pa, bb = BB/pa) |>
+  filter(pa >= 100) |>
+  select(playerID, singles, bb)
+
+#Now, compute a similar table, but with rates computed over 1999-2001.
+
+#AB, at bat is the number times of either a hit H or an out
+#Batting average is H/AB
+dat2 <- Batting |> filter(yearID %in% 1999:2001) %>%
+  mutate(pa=AB+BB, singles=(H - X2B - X3B - HR)/pa, bb = BB/pa) %>%
+  filter(pa>=100) %>%
+  group_by(playerID) %>%
+  summarise(mean_singles=mean(singles), mean_bb=mean(bb))
+
+#2. You can use the inner_join function to combine the 2001 data and 
+#averages in the same table. Compute the correlation between 2002 and 
+#the previous seasons for singles and BB:
+dat3 <- inner_join(dat, dat2, by = "playerID")
+cors<-cor(dat3$singles, dat3$mean_singles)
+corb<-cor(dat3$bb, dat3$mean_bb)
+
+head(cors)
+#[1] 0.5509222
+head(corb)
+#[1] 0.7174787
+
+#3. Note that the correlation is higher for BB. To quickly get an 
+#idea of the uncertainty associated with this correlation estimate, 
+#we will fit a linear model and compute confidence intervals for the
+# slope coefficient. However, first make scatterplots to confirm that
+# fitting a linear model is appropriate.
+
+dat3 %>% ggplot(aes(singles, mean_singles)) + geom_point()
+dat3 %>% ggplot(aes(bb, mean_bb)) + geom_point()
