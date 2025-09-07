@@ -339,3 +339,21 @@ ggplot(data=corrOPS, mapping=aes(x=yearID, y=corrR))+
   labs(
     title="Yearly Correlation On-Base-Percentages Vs. Runs Per",
     x="Year", y="Correlation")
+
+#15. Keep in mind that we can rewrite OPS as a weighted average of 
+#BBs, singles, doubles, triples, and HRs. We know that the weights for 
+#doubles, triples, and HRs are 2, 3, and 4 times that of singles. But 
+#what about BB? What is the weight for BB relative to singles? Hint: The 
+#weight for BB relative to singles will be a function of AB and PA.
+
+#AB/PA is the weight for BB to singles
+
+#16. Consider that the weight for BB, AB/PA, will change from team to 
+#team. To assess its variability, compute and plot this quantity for 
+#each team for each year since 1962. Then plot it again, but instead 
+#of computing it for every team, compute and plot the ratio for the 
+#entire year. Then, once you are convinced that there is not much of a 
+#time or team trend, report the overall average.
+
+BBweight<-Teams%>%filter(yearID %in% 1962:2001)%>%mutate(singles=(H-HR-X2B-X3B)/G, BB=BB/G, HR=HR/G, R_per_game=R/G, doubles=X2B/G, triples=X3B/G, PA=BB+AB,BBw=AB/PA)
+ggplot(data=BBweight, mapping=aes(x=yearID, y=BBw)) + geom_point()
