@@ -355,5 +355,19 @@ ggplot(data=corrOPS, mapping=aes(x=yearID, y=corrR))+
 #entire year. Then, once you are convinced that there is not much of a 
 #time or team trend, report the overall average.
 
-BBweight<-Teams%>%filter(yearID %in% 1962:2001)%>%mutate(singles=(H-HR-X2B-X3B)/G, BB=BB/G, HR=HR/G, R_per_game=R/G, doubles=X2B/G, triples=X3B/G, PA=BB+AB,BBw=AB/PA)
+#39 year range for weighted BB
+BBweight<-Teams%>%filter(yearID %in% 1962:2001)%>%
+  mutate(singles=(H-HR-X2B-X3B)/G,
+         BB=BB/G, HR=HR/G, R_per_game=R/G,
+         doubles=X2B/G, triples=X3B/G, PA=BB+AB,BBw=AB/PA)
 ggplot(data=BBweight, mapping=aes(x=yearID, y=BBw)) + geom_point()
+
+#7 year range for weighted BB
+BBweightT<-Teams%>%filter(yearID %in% 1962:1969)%>%
+  mutate(singles=(H-HR-X2B-X3B)/G, BB=BB/G, HR=HR/G,
+         R_per_game=R/G, doubles=X2B/G, 
+         triples=X3B/G, PA=BB+AB,BBw=AB/PA)
+ggplot(data=BBweightT, mapping=aes(x=yearID, y=BBw)) + 
+  geom_point()+
+  labs(title="Baseball Weight of 'A Base on Balls' for all MLB Teams",
+       x="Year", y="Weight of Base on Balls")
