@@ -371,3 +371,8 @@ ggplot(data=BBweightT, mapping=aes(x=yearID, y=BBw)) +
   geom_point()+
   labs(title="Baseball Weight of 'A Base on Balls' for all MLB Teams",
        x="Year", y="Weight of Base on Balls")
+
+#overall average
+overallavg<-mean(BBweight$BBw)
+overallavg
+#[1] 0.9993856
