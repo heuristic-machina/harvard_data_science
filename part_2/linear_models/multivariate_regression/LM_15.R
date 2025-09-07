@@ -203,6 +203,34 @@ tidy(fitmd)
 
 #2 Repeat the exercise above, but compute a confidence interval as well.
 tidyfitmd<-tidy(fitmd, conf.int=TRUE)
+#default conf.int is 95%
+#conf int = spread + or - qnorm(.95)*se or qnorm(.05)*se
+# A tibble: 2 × 7
+#term        estimate std.error statistic  p.value conf.low conf.high
+#<chr>          <dbl>     <dbl>     <dbl>    <dbl>    <dbl>     <dbl>
+#1 (Intercept)   40.8      4.21        9.70 4.62e-18   32.5      49.1  
+#2 daughter       0.364    0.0656      5.55 1.07e- 7    0.234     0.493
 tidyfit<-tidy(fitms, conf.int=TRUE)
 tidyfitfd<-tidy(fitfd, conf.int=TRUE)
 tidyfitfs<-tidy(fitfs, conf.int=TRUE)
+
+#3 Plot the confidence intervals and notice that they overlap, 
+#which implies that the data is consistent with the inheritance of 
+#height being independent of sex.
+
+library(gridExtra)
+library(ggplot2)
+
+SSS<-galton_heights|>
+  pivot_longer(father:mother, names_to="parent",
+               values_to="parentHeight") |>
+  mutate(child=ifelse(gender=="female", "daughter", "son"))|>
+  unite(pair, c("parent", "child")) |>
+  group_by(pair) 
+SSS |>
+  group_by(pair) |>
+  reframe(tidy(lm(parentHeight ~ childHeight), conf.int=TRUE)) |>
+  filter(term=="childHeight") |>
+  select(pair, estimate, conf.low, conf.high) |>
+  ggplot(aes(pair, y=estimate, ymin=conf.low, ymax=conf.high)) +
+  geom_errorbar() + geom_point()
