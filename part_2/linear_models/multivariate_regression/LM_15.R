@@ -376,3 +376,24 @@ ggplot(data=BBweightT, mapping=aes(x=yearID, y=BBw)) +
 overallavg<-mean(BBweight$BBw)
 overallavg
 #[1] 0.9993856
+
+#17 So now we know that the formula for OPS is proportional to 
+#0.91×BB+singles+2×doubles+3×triples+4×HR. Let’s see how these 
+#coefficients compare to those obtained with regression. Fit a regression
+# model to the data after 1962, as done earlier: using per game statistics
+# for each year for each team. After fitting this model, report the 
+#coefficients as weights relative to the coefficient for singles.
+library(purrr)
+library(dplyr)
+
+#Load your basеball data
+jx<-Teams %>% filter(yearID %in% 1962:2001) %>% 
+  mutate(singles=(H-HR-X2B-X3B)/G, BB=BB/G, HR=HR/G, 
+         R_per_game=R/G, doubles=X2B/G, triples=X3B/G, PA=BB+AB)
+OPStabx<-jx%>%mutate(OPS=(BB/PA+(singles+2*doubles+3*triples+4*HR)/AB))
+regmod<-lm(OPS~BB+singles+doubles+triples+HR, data=OPStabx)
+getco<-coef(regmod)
+weight<-getco/getco["singles"]
+print(weight)
+#(Intercept)          BB     singles     doubles     triples          HR 
+#   1.755233    1.707146    1.000000    3.673497    3.462409    4.029015 
