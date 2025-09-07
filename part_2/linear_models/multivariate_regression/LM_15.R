@@ -290,3 +290,37 @@ res<-Teams %>% filter(yearID %in% 1962:2018) %>%
   ungroup()
 res%>%filter(term=="BB") %>% ggplot(aes(yearID, estimate)) + 
   geom_point() + geom_smooth(method="lm")
+
+#12. Advanced. Write a function that takes R, HR, and BB as arguments
+# and fits two linear models: R ~ BB and R~BB+HR. Then use the summary 
+#function to obtain the BB for both models for each year since 1962. 
+#Then plot these against each other as a function of time.
+
+#13 Since the 1980s, sabermetricians have used a summary statistic 
+#different from batting average to evaluate players. They realized 
+#walks were important and that doubles, triples, and HRs, should be 
+#weighed more than singles. As a result, they proposed the following
+# metric: BBPA+Singles+2Doubles+3Triples+4HRAB
+#They called this on-base-percentage plus slugging percentage (OPS). 
+#Although the sabermetricians probably did not use regression, here 
+#we show how this metric is close to what one gets with regression. 
+#1. Compute the OPS for each team in the 2001 season. Then plot Runs 
+#per game versus OPS.
+library(dplyr)
+library(tidyverse)
+library(broom)
+library(magrittr)
+library(Lahman)
+library(ggplot2)
+j<-Teams %>% filter(yearID %in% 2001) %>%
+  mutate(singles=(H-HR-X2B-X3B)/G, 
+         BB=BB/G, 
+         HR=HR/G, 
+         R_per_game=R/G,
+         doubles=X2B/G,
+         triples=X3B/G,
+         PA=BB+AB)
+OPStab<-j %>% mutate(OPS=BB/PA+(singles+2*doubles+3*triples+4*HR)/AB)
+ggplot(data=OPStab, mapping=aes(x=R_per_game, y=OPS)) + geom_point() +
+  labs(title='2001 Baseball On-Base-Percentages Vs. Runs Per Game',
+       x='On-Base-Percentages', y='Runs per Game')
