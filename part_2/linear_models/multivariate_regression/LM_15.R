@@ -271,3 +271,13 @@ tidy(fit, conf.int = TRUE)
 #1 (Intercept)  257.      112.         2.31 0.0314   25.3      489.   
 #2 BB             0.414     0.210      1.97 0.0625   -0.0237     0.852
 #3 HR             1.30      0.431      3.01 0.00673   0.399      2.19 
+
+#10. Now let’s repeat the above for each year since 1962 and make a 
+#plot. Use summarize and the broom package to fit this model for every
+# year since 1962.
+
+res<-Teams %>% filter(yearID %in% 1962:2018) %>%
+  group_by(yearID) %>% do(tidy(lm(R~BB+HR, data=.))) %>%
+  ungroup()
+res%>%filter(term=="BB") %>% ggplot(aes(yearID, estimate)) +
+  geom_point() + geom_smooth(method="lm")
