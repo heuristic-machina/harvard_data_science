@@ -404,3 +404,32 @@ regmod
 #Coefficients:
 #(Intercept)       BB      singles      doubles      triples           HR  
 #0.0002329    0.0002266    0.0001327    0.0004875    0.0004595    0.0005347 
+
+#18. We see that our linear regression model coefficients follow the same
+# general trend as those used by OPS, but with slightly less weight for 
+#metrics other than singles. For each team in years after 1962, compute 
+#the OPS, the predicted runs with the regression model, and compute the 
+#correlation between the two, as well as the correlation with runs per 
+#game.
+#Compute OPS.
+corrOPS<-Teams %>% filter(yearID %in% 1962:2001) %>%
+  mutate(singles=(H-HR-X2B-X3B)/G, BB=BB/G, HR=HR/G,
+         R_per_game=R/G, doubles=X2B/G, triples=X3B/G,
+         PA=BB+AB) %>%
+  mutate(OPS=(BB/PA+(singles+2*doubles+3*triples+4*HR)/AB))
+
+rmm<-regmod$coefficients
+
+#Predicted runs from prev regression model
+rmm<-as.data.frame(rmm)
+corrOPS2<-corrOPS%>%mutate(predrun=rmm[1,1]+rmm[2,1]*singles+
+                             rmm[3,1]*doubles+rmm[4,1]*triples+
+                             rmm[5,1]*HR)
+
+#Correlation between OPS & predicted runs
+OPSpredrun<-corrOPS2 %>% group_by(yearID) %>%
+  summarise(corrPR=cor(predrun, OPS))
+
+#Correlation between OPS & runs per game
+OPSrun<-corrOPS %>% group_by(yearID) %>%
+  summarise(corrR=cor(R_per_game, OPS))
