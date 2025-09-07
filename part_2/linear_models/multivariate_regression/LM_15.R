@@ -397,3 +397,10 @@ weight<-getco/getco["singles"]
 print(weight)
 #(Intercept)          BB     singles     doubles     triples          HR 
 #   1.755233    1.707146    1.000000    3.673497    3.462409    4.029015 
+regmod
+#Call:
+#  lm(formula = OPS ~ BB + singles + doubles + triples + HR, data = OPStabx)
+
+#Coefficients:
+#(Intercept)       BB      singles      doubles      triples           HR  
+#0.0002329    0.0002266    0.0001327    0.0004875    0.0004595    0.0005347 
