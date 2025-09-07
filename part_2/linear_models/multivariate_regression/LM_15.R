@@ -281,3 +281,12 @@ res<-Teams %>% filter(yearID %in% 1962:2018) %>%
   ungroup()
 res%>%filter(term=="BB") %>% ggplot(aes(yearID, estimate)) +
   geom_point() + geom_smooth(method="lm")
+
+#11. Use the results of the previous exercise to plot the estimated 
+#effects of BB on runs.
+
+res<-Teams %>% filter(yearID %in% 1962:2018) %>%
+  group_by(yearID) %>% do(tidy(lm(R~BB, data=.))) %>%
+  ungroup()
+res%>%filter(term=="BB") %>% ggplot(aes(yearID, estimate)) + 
+  geom_point() + geom_smooth(method="lm")
