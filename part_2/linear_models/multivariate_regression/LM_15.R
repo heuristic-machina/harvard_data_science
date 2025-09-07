@@ -234,3 +234,27 @@ SSS |>
   select(pair, estimate, conf.low, conf.high) |>
   ggplot(aes(pair, y=estimate, ymin=conf.low, ymax=conf.high)) +
   geom_errorbar() + geom_point()
+
+#4 Because we are selecting children at random, we can actually do 
+#something like a permutation test here. Repeat the computation of 
+#correlations 100 times taking a different sample each time. Hint: 
+#use similar code to what we used with simulations.
+
+B<-100
+N<-25
+#father son correlation
+rfs<-replicate(B, {
+  sample_n(fs, N, replace=TRUE) |>
+    summarise(r=cor(father, son)) |> pull(r)})
+#mother son correlation
+rms<-replicate(B, {
+  sample_n(ms, N, replace=TRUE) |>
+    summarise(r=cor(mother, son)) |> pull(r)})
+#father daughter correlation
+rfd<-replicate(B, {
+  sample_n(fd, N, replace=TRUE) |>
+    summarise(r=cor(father, daughter)) |> pull(r)})
+#mother daughter correlation
+rmd<-replicate(B, {
+  sample_n(md, N, replace=TRUE) |>
+    summarise(r=cor(mother, daughter)) |> pull(r)})
