@@ -140,3 +140,69 @@ confint(bb)
 #               2.5 %     97.5 %
 #(Intercept) 0.007789552 0.02317953
 #mean_bb     0.748916885 0.90918171
+
+#5. In a previous section, we computed the correlation between mothers
+# and daughters, mothers and sons, fathers and daughters, and fathers
+# and sons. We noticed that the highest correlation is between fathers
+# and sons and the lowest is between mothers and sons. We can compute
+# these correlations using:
+library(HistData)
+set.seed(1)
+galton_heights <- GaltonFamilies |>
+  group_by(family, gender) |>
+  sample_n(1) |>
+  ungroup()
+
+cors <- galton_heights |> 
+  pivot_longer(father:mother, 
+               names_to = "parent", values_to = "parentHeight") |>
+  mutate(child = ifelse(gender == "female", "daughter", "son")) |>
+  unite(pair, c("parent", "child")) |> 
+  group_by(pair) |>
+  summarize(cor = cor(parentHeight, childHeight))
+#Are these differences statistically significant? To answer this, we 
+#will compute the slopes of the regression line along with their 
+#standard errors. Start by using lm and the broom package to compute 
+#the slopes LSE and the standard errors.
+fs<-filter(galton_heights, gender=="male") |>
+  select(father, childHeight) |> rename(son=childHeight)
+fd<-filter(galton_heights, gender=="female") |>
+  select(father, childHeight) |> rename(daughter=childHeight)
+md<-filter(galton_heights, gender=="female") |>
+  select(mother, childHeight) |> rename(daughter=childHeight)
+ms<-filter(galton_heights, gender=="male") |>
+  select(mother, childHeight) |> rename(son=childHeight)
+fitfs<-lm(father~son, data=fs)
+fitms<-lm(mother~son, data=ms)
+fitmd<-lm(mother~daughter, data=md)
+fitfd<-lm(father~daughter, data=fd)
+tidy(fitfs)
+# A tibble: 2 × 5
+#term        estimate std.error statistic   p.value
+#<chr>          <dbl>     <dbl>     <dbl>    <dbl>
+# 1 (Intercept)   37.0      4.87    7.61    1.54e-12
+#2 son            0.463    0.0702   6.59    4.74e-10
+tidy(fitms)
+# A tibble: 2 × 5
+#term        estimate std.error statistic  p.value
+#<chr>          <dbl>     <dbl>     <dbl>    <dbl>
+# 1 (Intercept)   43.7     4.81       9.08   2.07e-16
+#2 son            0.293    0.0694    4.22   3.84e- 5
+tidy(fitfd)
+# A tibble: 2 × 5
+#term        estimate std.error statistic  p.value
+#<chr>          <dbl>     <dbl>     <dbl>    <dbl>
+# 1 (Intercept)   41.7     5.02     8.30    2.71e-14
+#2 daughter       0.432    0.0783   5.52    1.21e- 7
+tidy(fitmd)
+# A tibble: 2 × 5
+#term        estimate std.error statistic   p.value
+#<chr>          <dbl>     <dbl>     <dbl>    <dbl>
+#1 (Intercept)    40.8    4.21      9.70   4.62e-18
+#2 daughter       0.364   0.0656    5.55   1.07e- 7
+
+#2 Repeat the exercise above, but compute a confidence interval as well.
+tidyfitmd<-tidy(fitmd, conf.int=TRUE)
+tidyfit<-tidy(fitms, conf.int=TRUE)
+tidyfitfd<-tidy(fitfd, conf.int=TRUE)
+tidyfitfs<-tidy(fitfs, conf.int=TRUE)
