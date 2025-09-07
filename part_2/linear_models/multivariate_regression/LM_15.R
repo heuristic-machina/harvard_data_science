@@ -324,3 +324,18 @@ OPStab<-j %>% mutate(OPS=BB/PA+(singles+2*doubles+3*triples+4*HR)/AB)
 ggplot(data=OPStab, mapping=aes(x=R_per_game, y=OPS)) + geom_point() +
   labs(title='2001 Baseball On-Base-Percentages Vs. Runs Per Game',
        x='On-Base-Percentages', y='Runs per Game')
+
+#14. For every year since 1962, compute the correlation between runs 
+#per game and OPS. Then plot these correlations as a function of year.
+
+corrOPS<-Teams %>% filter(yearID %in% 1962:2001) %>%
+  mutate(singles=(H-HR-X2B-X3B)/G,
+         BB=BB/G, HR=HR/G, R_per_game=R/G,
+         doubles=X2B/G, triples=X3B/G, PA=BB+AB) %>%
+  mutate(OPS=(BB/PA+(singles+2*doubles+3*triples+4*HR)/AB)) %>%
+  group_by(yearID) %>% summarise(corrR=cor(R_per_game, OPS)) 
+ggplot(data=corrOPS, mapping=aes(x=yearID, y=corrR))+
+  geom_point()+
+  labs(
+    title="Yearly Correlation On-Base-Percentages Vs. Runs Per",
+    x="Year", y="Correlation")
