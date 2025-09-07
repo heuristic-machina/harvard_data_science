@@ -433,3 +433,27 @@ OPSpredrun<-corrOPS2 %>% group_by(yearID) %>%
 #Correlation between OPS & runs per game
 OPSrun<-corrOPS %>% group_by(yearID) %>%
   summarise(corrR=cor(R_per_game, OPS))
+
+#19. We see that using the regression approach predicts runs 
+#slightly better than OPS, but not that much. However, note that
+# we have been computing OPS and predicting runs for teams when 
+#these measures are used to evaluate players. Let’s show that OPS 
+#is quite similar to what one obtains with regression at the player
+# level. For the 1962 season and onward, compute the OPS and the 
+#predicted runs from our model for each player, and plot them. Use 
+#the PA per game correction we used in the previous chapter
+
+#Calculate OPS + predicted runs by PlayerID.#
+corrOPSX<-Batting %>% filter(yearID %in% 1962:2001) %>% 
+  mutate(singles=(H-HR-X2B-X3B)/G, BB=BB/G, HR=HR/G, 
+         R_per_game=R/G, doubles=X2B/G, triples=X3B/G, PA=BB+AB) %>%
+  mutate(OPS=(BB/PA+(singles+2*doubles+3*triples+4*HR)/AB)) %>% 
+  mutate(predrun=rmm[1,1]+rmm[2,1]*singles+
+           rmm[3,1]*doubles+rmm[4,1]*triples+rmm[5,1]*HR) %>% 
+  group_by(playerID, yearID) 
+
+#Plot OPS for Aaron Hanks from 1962 onwards.#
+J<-c("aaronha01")
+newdata<-subset(corrOPSX, playerID=="aaronha01")
+ggplot(data=newdata, mapping=aes(x=yearID, y=OPS))+
+  geom_point()+labs(title="Aaron Hanks OPS", x="Year", y="OPS")
