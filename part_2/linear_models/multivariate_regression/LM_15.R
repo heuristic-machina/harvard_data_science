@@ -457,3 +457,14 @@ J<-c("aaronha01")
 newdata<-subset(corrOPSX, playerID=="aaronha01")
 ggplot(data=newdata, mapping=aes(x=yearID, y=OPS))+
   geom_point()+labs(title="Aaron Hanks OPS", x="Year", y="OPS")
+
+#20. Which players have shown the largest difference between their 
+#rank by predicted runs and OPS?
+large<-corrOPSX%>%mutate(rankch=predrun-OPS)%>%
+  select(playerID, yearID, rankch)
+largex<-large%>%group_by(playerID)%>%
+  summarize(meanrk=mean(rankch))
+largex<-largex[order(largex$meanrk, decreasing=TRUE),]
+
+#10 players with the largest difference between their predicted runs and OPS.#
+head(largex, 10)
