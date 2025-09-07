@@ -201,7 +201,7 @@ tidy(fitmd)
 #1 (Intercept)    40.8    4.21      9.70   4.62e-18
 #2 daughter       0.364   0.0656    5.55   1.07e- 7
 
-#2 Repeat the exercise above, but compute a confidence interval as well.
+#6 Repeat the exercise above, but compute a confidence interval as well.
 tidyfitmd<-tidy(fitmd, conf.int=TRUE)
 #default conf.int is 95%
 #conf int = spread + or - qnorm(.95)*se or qnorm(.05)*se
@@ -214,7 +214,7 @@ tidyfit<-tidy(fitms, conf.int=TRUE)
 tidyfitfd<-tidy(fitfd, conf.int=TRUE)
 tidyfitfs<-tidy(fitfs, conf.int=TRUE)
 
-#3 Plot the confidence intervals and notice that they overlap, 
+#7 Plot the confidence intervals and notice that they overlap, 
 #which implies that the data is consistent with the inheritance of 
 #height being independent of sex.
 
@@ -235,7 +235,7 @@ SSS |>
   ggplot(aes(pair, y=estimate, ymin=conf.low, ymax=conf.high)) +
   geom_errorbar() + geom_point()
 
-#4 Because we are selecting children at random, we can actually do 
+#8 Because we are selecting children at random, we can actually do 
 #something like a permutation test here. Repeat the computation of 
 #correlations 100 times taking a different sample each time. Hint: 
 #use similar code to what we used with simulations.
@@ -258,3 +258,16 @@ rfd<-replicate(B, {
 rmd<-replicate(B, {
   sample_n(md, N, replace=TRUE) |>
     summarise(r=cor(mother, daughter)) |> pull(r)})
+
+#9. Fit a linear regression model to obtain the effects of BB and HR
+# on Runs (at the team level) in 1971. Use the tidy function in the
+# broom package to obtain the results in a data frame.
+library(Lahman)
+fit<-Teams %>% filter(yearID %in% 1971) %>% lm(R~BB+HR, data=.)
+tidy(fit, conf.int = TRUE)
+# A tibble: 3 × 7
+#term        estimate std.error statistic p.value conf.low conf.high
+#<chr>          <dbl>     <dbl>     <dbl>   <dbl>    <dbl>     <dbl>
+#1 (Intercept)  257.      112.         2.31 0.0314   25.3      489.   
+#2 BB             0.414     0.210      1.97 0.0625   -0.0237     0.852
+#3 HR             1.30      0.431      3.01 0.00673   0.399      2.19 
