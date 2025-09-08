@@ -167,3 +167,20 @@ summary(model_bone)
 #sexF          -0.095038   0.009940  -9.562  < 2e-16 ***
 #sexM:diethf   -0.012476   0.010136  -1.231  0.21876    
 #sexF:diethf   -0.031827   0.009901  -3.214  0.00136 ** 
+
+#7. In Chapter 11, we talked about pollster bias and used visualization
+# to motivate the presence of such bias. Here we will give it a more
+# rigorous treatment. We will consider two pollsters that conducted 
+#daily polls. We will look at national polls for the month before the 
+#election:
+polls <- polls_us_election_2016 |> 
+  filter(pollster %in% c("Rasmussen Reports/Pulse Opinion Research",
+                         "The Times-Picayune/Lucid") &
+           enddate >= "2016-10-15" &
+           state == "U.S.") |> 
+  mutate(spread = rawpoll_clinton/100 - rawpoll_trump/100) 
+#We want to answer the question: is there a pollster bias? Make a plot 
+#showing the spreads for each pollster.
+polls %>% ggplot(aes(pollster, spread)) +
+  geom_boxplot() + geom_point()
+#the times-picayune/lucid appears biased
