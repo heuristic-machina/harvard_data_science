@@ -22,3 +22,25 @@ chisq.test(observed, p = expected_probs)
 #X-squared = 0.058824, df = 1, p-value = 0.8084
 
 #outcome due to chance
+
+#2. Why did we use the Chi-square test instead of Fisher’s exact 
+#test in the previous exercise?
+
+#Because the Chi-square test runs faster.
+
+#3. Compute the odds ratio of “losing under pressure” along with 
+#a confidence interval.
+
+wins <- 8
+losses <- 9
+
+odds_losing <- losses / wins
+odds_losing
+# 1.125
+
+# Log-odds CI using standard error
+se_log_or <- sqrt(1/wins + 1/losses)
+ci_log_or <- log(odds_losing) + c(-1, 1) * qnorm(0.975) * se_log_or
+ci_or <- exp(ci_log_or)
+ci_or
+#[1] 0.4340532 2.9158295
