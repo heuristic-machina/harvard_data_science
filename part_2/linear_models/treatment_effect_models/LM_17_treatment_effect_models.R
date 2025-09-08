@@ -83,3 +83,38 @@ emm
 find_sd<-summary(emm) %>% left_join(g_10, by='group') %>%
   mutate(sd=SE*sqrt(n))
 find_sd
+
+#3. The dataset also includes a variable indicating which litter 
+#the mice came from. Create a boxplot showing weights by litter. 
+#Use faceting to make separate plots for each diet and sex combination.
+library(ggplot2)
+
+ggplot(dat, aes(x = litter, y = body_weight)) +
+  geom_boxplot() +
+  facet_grid(sex ~ diet) +  # rows = sex, columns = diet
+  labs(
+    x = "Litter",
+    y = "Body Weight",
+    title = "Observed Litter Body Weights"
+  )
+
+#4 Use a linear model to test for a litter effect, taking into 
+#account sex and diet. Use ANOVA to compare the variability explained
+# by litter with that of other factors.
+#body_weight=response, litter=predictor, sex+diet=covariates, dat=loci
+model<-lm(body_weight ~ litter + sex + diet, data=dat)
+summary(model)
+#Coefficients:
+#               Estimate  Std. Error t value Pr(>|t|)    
+#(Intercept)    27.6498     0.4196  65.888  < 2e-16 ***
+#  litter2      -1.2383     0.4530  -2.733  0.00641 ** 
+#  sexM          8.8394     0.4460  19.821  < 2e-16 ***
+#  diethf        5.3276     0.4490  11.866  < 2e-16 ***
+anova(model)
+#Analysis of Variance Table
+#Response: body_weight
+#           Df  Sum Sq Mean Sq  F value Pr(>F)    
+#litter      1    87.7    87.7   2.2628 0.1329    
+#sex         1 15148.1 15148.1 390.7959 <2e-16 ***
+#diet        1  5457.6  5457.6 140.7968 <2e-16 ***
+#Residuals 776 30079.4    38.8   
