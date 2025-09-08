@@ -133,3 +133,37 @@ ggplot(dat, aes(x = percent_fat, y = bone_density)) +
     y = "Bone Density",
     title = "Observed Bone Density and Fat Percentage"
   )
+
+#Fit a linear model and conduct a separate test for the diet 
+#effect on bone density for each sex. Note that the diet effect is 
+#statistically significant for females but not for males. Then fit 
+#the model to the entire dataset that includes diet, sex and their 
+#interaction. Notice that the diet effect is significant, yet the 
+#interaction effect is not. Explain how this can happen. Hint: To fit 
+#a model to the entire dataset with a separate effect for males and 
+#females, you can use the formula ~ sex + diet:sex
+
+model_bone<-lm(bone_density ~ sex + diet, data = dat)
+summary(model_bone)
+#results for males as females are the reference
+#Coefficients:
+#              Estimate Std. Error t value Pr(>|t|)    
+# (Intercept)  0.529678   0.006075  87.197  < 2e-16 ***
+#  sexM         0.104560   0.007088  14.752  < 2e-16 ***
+#  diethf      -0.022378   0.007087  -3.158  0.00165 ** 
+
+#switching the reference to males
+dat$sex <- relevel(dat$sex, ref = "M")
+#Coefficients:
+#             Estimate Std. Error   t value   Pr(>|t|)    
+#(Intercept)    0.634238   0.006137 103.344  < 2e-16 ***
+#  sexF        -0.104560   0.007088 -14.752  < 2e-16 ***
+#  diethf      -0.022378   0.007087  -3.158  0.00165 ** 
+model_bone<-lm(bone_density ~ sex + diet:sex, data = dat)
+summary(model_bone)
+#Coefficients:
+#               Estimate Std. Error t value   Pr(>|t|)    
+#(Intercept)    0.629404   0.007082  88.878  < 2e-16 ***
+#sexF          -0.095038   0.009940  -9.562  < 2e-16 ***
+#sexM:diethf   -0.012476   0.010136  -1.231  0.21876    
+#sexF:diethf   -0.031827   0.009901  -3.214  0.00136 ** 
