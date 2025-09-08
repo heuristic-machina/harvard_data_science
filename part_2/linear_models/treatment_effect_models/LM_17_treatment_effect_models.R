@@ -184,3 +184,125 @@ polls <- polls_us_election_2016 |>
 polls %>% ggplot(aes(pollster, spread)) +
   geom_boxplot() + geom_point()
 #the times-picayune/lucid appears biased
+
+#8. The data does seem to suggest there is a difference. However,
+# these data are subject to variability. Perhaps the differences
+# we observe are due to chance.
+
+#$Y_{i,j}:
+#Yi,j=d+bi+εi,j
+
+#with i=1, 2 indexing the two pollsters, bi the bias for 
+#pollster i, and εi,j poll to poll chance variability. 
+#We assume the ε are independent from each other, have 
+#expected value 0, and standard deviation σi regardless 
+#of j.  Which of the following best represents our question?
+
+# b1!=b2
+
+#9. In the right side of this model only εi,jis a random 
+#variable. The other two are constants. What is the expected 
+#value of Y1,j? 
+
+#E[Y1,j]=d+bi
+
+#10. Suppose we define Y¯1 as the average of poll results 
+#from the first poll, Y1,1...Y1,N1 with N1 the number of polls
+# conducted by the first pollster:
+polls |> 
+  filter(pollster=="Rasmussen Reports/Pulse Opinion Research") |> 
+  summarize(N_1 = n())
+##   N_1
+## 1  16
+
+#What is the expected values Y1? 
+#E[Y1]=d+b1
+
+#11 What is the standard error of Y1?
+#The standard error of SE[Y1]is σ1/sqrt(N1)
+
+#12. Suppose we define Y2 as the average of poll results 
+#from the first poll, Y2,1...Y2,N2 with N2 with the number
+# of polls conducted by the first pollster. What is the 
+#expected value of Y2? 
+
+#E[Y2]=d+b2
+
+#13 What is the standard error of Y2?
+#The standard error of SE[Y2]is σ1/sqrt(N2)
+
+#14. Using what we learned by answering the questions above,
+# what is the expected value of Y2-Y1?
+
+#E[Y2-Y1]=b2-b1
+
+#15.Using what we learned by answering the questions above, 
+#what is the standard error of Y2-Y1?
+
+#SE[Y2-Y1] = sqrt((sd2^2/N2)-sd1^2/N1))
+
+#16. The answer to the question above depends on σ2 and σ1
+#which we don’t know. We learned that we can estimate these with
+# the sample standard deviation. Write code that computes these 
+#two estimates.
+sigma<- polls %>% group_by(pollster) %>% summarise(s=sd(spread))
+sigma
+# A tibble: 2 × 2
+#pollster                                      s
+#<fct>                                        <dbl>
+#1 Rasmussen Reports/Pulse Opinion Research   0.0177
+#2 The Times-Picayune/Lucid                   0.0268
+
+#17. What does the CLT tell us about the distribution of  Y2-Y1?
+#Note that Y2 and Y1 are sample averages, so if we assume N2
+#and N1 are large enough, each is approximately normal. The 
+#difference of normals is also normal.
+
+#18. We have constructed a random variable that has expected 
+#value b2−b1, the pollster bias difference. If our model holds,
+# then this random variable has an approximately normal distribution
+# and we know its standard error. The standard error depends on σ1
+#and σ2, but we can plug the sample standard deviations we computed
+# above. We started off by asking: is b2−b1 different from 0? 
+#Use all the information we have learned above to construct a 95% 
+#confidence interval for the difference b2 and b1
+
+result<- polls %>% group_by(pollster) %>% 
+  summarize(avg=mean(spread), s=sd(spread), N=n())
+result
+## # A tibble: 2 × 4
+##   pollster                                      avg      s     N
+##   <fct>                                       <dbl>  <dbl> <int>
+## 1 Rasmussen Reports/Pulse Opinion Research 0.000625 0.0177    16
+## 2 The Times-Picayune/Lucid                 0.0529   0.0268    24
+
+#19. The confidence interval tells us there is relatively strong 
+#pollster effect resulting in a difference of about 5%. Random 
+#variability does not seem to explain it. We can compute a p-value
+# to relay the fact that chance does not explain it. What is the
+# p-value?
+est<-result$avg[2]-result$avg[1]
+sehat<-sqrt(result$s[2]^2/result$N[2] + result$s[1]^2/result$N[1])
+2*(1-pnorm(est/sehat, 0, 1))
+
+#20. The statistic formed by dividing our estimate of b2−b1
+#by its estimated standard error is called the t-statistic.
+#Y2-Y1/sqrt((s2^2/N2)-(s1^2/N1)
+#Now notice that we have more than two pollsters. We can also 
+#test for pollster effect using all pollsters, not just two. The 
+#idea is to compare the variability across polls to variability 
+#within polls.  For this exercise, create a new table:
+polls <- polls_us_election_2016 |> 
+  filter(enddate >= "2016-10-15" &
+           state == "U.S.") |>
+  group_by(pollster) |>
+  filter(n() >= 5) |> 
+  mutate(spread = rawpoll_clinton/100 - rawpoll_trump/100) |>
+  ungroup()
+#Compute the average and standard deviation for each pollster 
+#and examine the variability across the averages. Compare this 
+#to the variability within the pollsters, summarized by the 
+#standard deviation.
+var<-polls %>% group_by(pollster) %>% 
+  summarize(avg=mean(spread), s=sd(spread))
+var
