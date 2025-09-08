@@ -118,3 +118,18 @@ anova(model)
 #sex         1 15148.1 15148.1 390.7959 <2e-16 ***
 #diet        1  5457.6  5457.6 140.7968 <2e-16 ***
 #Residuals 776 30079.4    38.8   
+
+#5. The mouse_weights data includes two other outcomes: bone 
+#density and percent fat. Create a boxplot illustrating bone 
+#density by sex and diet. Compare what the visualizations reveal 
+#about the diet effect by sex.
+library(ggplot2)
+
+ggplot(dat, aes(x = percent_fat, y = bone_density)) +
+  geom_boxplot() +
+  facet_grid(sex ~ diet) +  # rows = sex, columns = diet
+  labs(
+    x = "Percent Fat",
+    y = "Bone Density",
+    title = "Observed Bone Density and Fat Percentage"
+  )
