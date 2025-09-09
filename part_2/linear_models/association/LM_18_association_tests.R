@@ -133,3 +133,45 @@ results
 #7 Earth/life sciences      38    118        18      108  0.0502
 #8 Social sciences          65    360        47      362  0.131 
 #9 Medical sciences         46    199        29      231  0.0225
+
+#log odds ratio scale
+#OR>1 and OR>1 are equally far from 1 in log space
+#se simple closed form
+#se_log_or=sqrt(1/a+1/b+1/c+1+d) where: a=yes_women,b=no_women,
+#c=yes_men,d=no_men
+
+
+#conf int=get 95% ci from the log OR +- 1.96 x se
+#flag: women favored=ci>1, men favored=ci<1, otherwise no difference
+library(dplyr)
+
+results <- research_funding_rates %>%
+  mutate(
+    a = awards_women,
+    b = applications_women - awards_women,
+    c = awards_men,
+    d = applications_men - awards_men,
+    OR = (a / b) / (c / d),
+    log_OR = log(OR),
+    SE_log_OR = sqrt(1/a + 1/b + 1/c + 1/d),
+    CI_low = exp(log_OR - 1.96 * SE_log_OR),
+    CI_high = exp(log_OR + 1.96 * SE_log_OR),
+    favored = case_when(
+      CI_low > 1 ~ "Women favored",
+      CI_high < 1 ~ "Men favored",
+      TRUE ~ "No clear difference"
+    )
+  ) %>%
+  select(discipline, OR, CI_low, CI_high, favored)
+
+results
+#discipline        OR    CI_low   CI_high             favored
+#1   Chemical sciences 0.9561129 0.4011820 2.2786462 No clear difference
+#2   Physical sciences 1.2576923 0.5327356 2.9691837 No clear difference
+#3             Physics 0.7777778 0.1476269 4.0977512 No clear difference
+#4          Humanities 1.4255993 0.8361760 2.4305091 No clear difference
+#5  Technical sciences 1.4061224 0.6807863 2.9042599 No clear difference
+#6   Interdisciplinary 2.1598361 0.9642179 4.8380060 No clear difference
+#7 Earth/life sciences 0.5175439 0.2788050 0.9607132         Men favored
+#8     Social sciences 0.7190820 0.4807431 1.0755828 No clear difference
+#9    Medical sciences 0.5431018 0.3287783 0.8971383         Men favored
