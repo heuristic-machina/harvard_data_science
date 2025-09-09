@@ -397,20 +397,54 @@ library(dslabs)
 # 1. NRC sentiment lexicon
 nrc <- get_sentiments("nrc")
 
-# 2. Add platform label to trump_tweets
-tweets_with_platform <- trump_tweets %>%
-  mutate(platform = ifelse(grepl("Android", source), "Android", "iPhone"))
+# Total words per sentiment
+total_per_sentiment <- tweet_words %>%
+  count(sentiment, name = "total_words")
 
-# 3. Tokenize and join to NRC
-tweet_words <- tweets_with_platform %>%
-  unnest_tokens(word, text) %>%
-  inner_join(nrc, by = "word")
+# Word counts per sentiment
+word_counts <- tweet_words %>%
+  count(sentiment, word, name = "count")
 
-#4. words by sentiment and count
-words_freq_sentiment <- tweet_words %>%
-  count(sentiment, word, sort = TRUE) %>%  # counts all occurrences
-  filter(n >= 25) %>%
-  arrange(sentiment, desc(n))
+# Join totals and compute OR
+word_or <- word_counts %>%
+  left_join(total_per_sentiment, by = "sentiment") %>%
+  group_by(word) %>%
+  mutate(
+    a = count,
+    b = total_words - count,
+    c = sum(count) - count,
+    d = sum(total_words) - total_words - c,
+    OR = (a / b) / (c / d),
+    log_OR = log(OR),
+    SE_log_OR = sqrt(1/a + 1/b + 1/c + 1/d),
+    CI_low = exp(log_OR - 1.96 * SE_log_OR),
+    CI_high = exp(log_OR + 1.96 * SE_log_OR)
+  ) %>%
+  ungroup()
 
-words_freq_sentiment
+extreme_words <- word_or %>%
+  filter(OR > 2 | OR < 0.5)
+
+
+library(ggplot2)
+
+extreme_words %>%
+  group_by(sentiment) %>%
+  slice_max(order_by = abs(log_OR), n = 5) %>%
+  ggplot(aes(x = reorder(word, OR), y = OR, fill = OR > 1)) +
+  geom_col() +
+  geom_hline(yintercept = 1, linetype = "dashed") +
+  coord_flip() +
+  scale_fill_manual(values = c("TRUE" = "blue", "FALSE" = "orange"),
+                    labels = c("Underrepresented", "Overrepresented")) +
+  facet_wrap(~ sentiment, scales = "free_y") +
+  labs(
+    title = "Words with Extreme Odds Ratios by Sentiment",
+    x = "Word",
+    y = "Odds Ratio",
+    fill = "Direction"
+  ) +
+  theme_minimal()
+
+
 
