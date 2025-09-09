@@ -255,8 +255,10 @@ ggplot(qq_df, aes(x = theoretical, y = sample, color = direction)) +
   ) +
   theme_minimal()
 
+#8&9
 #Compute an odds ratio comparing Android to iPhone for each 
-#sentiment and add it to the table.
+#sentiment and add it to the table.  Compute a 95% confidence 
+#interval for each odds ratio.
 library(tidyverse)
 library(dslabs)
 sentiment_counts
@@ -293,3 +295,46 @@ head(sentiment_or)
 #1 anger            962    527      21047     17141  1.49 0.397 
 #2 anticipation     917    707      21092     16961  1.04 0.0421
 #3 disgust          639    314      21370     17354  1.65 0.502 
+
+
+#10.Generate a plot showing the estimated odds ratios along with their 
+#confidence intervals.
+library(tidyverse)
+library(ggrepel)
+
+# Totals for each platform
+total_android <- sum(sentiment_counts$Android)
+total_iphone  <- sum(sentiment_counts$iPhone)
+
+# Compute ORs and CIs
+sentiment_or <- sentiment_counts %>%
+  mutate(
+    Android_no = total_android - Android,
+    iPhone_no  = total_iphone - iPhone,
+    OR = (Android / Android_no) / (iPhone / iPhone_no),
+    log_OR = log(OR),
+    SE_log_OR = sqrt(1/Android + 1/Android_no + 1/iPhone + 1/iPhone_no),
+    CI_low  = exp(log_OR - 1.96 * SE_log_OR),
+    CI_high = exp(log_OR + 1.96 * SE_log_OR),
+    direction = ifelse(OR > 1, "Favors Android", "Favors iPhone")
+  )
+
+# Plot
+ggplot(sentiment_or, 
+       aes(x = OR,y = reorder(sentiment, OR),                        color = direction)) +
+  geom_point(size = 3) +
+  geom_errorbarh(aes(xmin = CI_low,
+                     xmax = CI_high),
+                 height = 0.2) +
+  geom_vline(xintercept = 1, linetype = "dashed") +
+  scale_color_manual(values = c("Favors Android" = "blue",
+                                "Favors iPhone" = "orange")) +
+  labs(
+    title = "Odds Ratios of Sentiment: Android vs. iPhone Tweets",
+    x = "Odds Ratio (log scale)",
+    y = "Sentiment",
+    color = "Direction"
+  ) +
+  scale_x_log10() +
+  theme_minimal()
+
