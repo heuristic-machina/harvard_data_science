@@ -175,3 +175,82 @@ results
 #7 Earth/life sciences 0.5175439 0.2788050 0.9607132         Men favored
 #8     Social sciences 0.7190820 0.4807431 1.0755828 No clear difference
 #9    Medical sciences 0.5431018 0.3287783 0.8971383         Men favored
+
+
+#7. Divide the log odds ratio estimates by their respective standard
+# errors and generate a qqplot comparing these to a standard normal.
+# Do any of the disciplines deviate from what is expected by chance?
+
+#z=log(OR)/se_log(OR)
+results <- research_funding_rates %>%
+  mutate(
+    a = awards_women,
+    b = applications_women - awards_women,
+    c = awards_men,
+    d = applications_men - awards_men,
+    OR = (a / b) / (c / d),
+    log_OR = log(OR),
+    SE_log_OR = sqrt(1/a + 1/b + 1/c + 1/d),
+    z_score = log_OR / SE_log_OR
+  )
+library(ggplot2)
+
+ggplot(results, aes(sample = z_score)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(
+    title = "QQ Plot of Wald z-scores for Gender Funding Odds Ratios",
+    x = "Theoretical Quantiles (Standard Normal)",
+    y = "Observed Quantiles"
+  )
+
+#modified labeling for visually favored by discipline
+library(dplyr)
+library(ggplot2)
+library(ggrepel)
+
+# Step 1: Compute log OR, SE, and z-scores
+results <- research_funding_rates %>%
+  mutate(
+    a = awards_women,
+    b = applications_women - awards_women,
+    c = awards_men,
+    d = applications_men - awards_men,
+    log_OR = log((a / b) / (c / d)),
+    SE_log_OR = sqrt(1/a + 1/b + 1/c + 1/d),
+    z_score = log_OR / SE_log_OR,
+    direction = ifelse(log_OR > 0, "Favors women", "Favors men")
+  )
+
+# Step 2: Precompute QQ plot coordinates
+qq_data <- qqnorm(results$z_score, plot = FALSE)
+qq_df <- data.frame(
+  theoretical = qq_data$x,
+  sample = qq_data$y,
+  discipline = results$discipline,
+  direction = results$direction
+)
+
+# Step 3: Pick most extreme points for labeling
+label_df <- qq_df %>%
+  slice_max(order_by = abs(sample), n = 3)
+
+# Step 4: Plot with direction coloring
+ggplot(qq_df, aes(x = theoretical, y = sample, color = direction)) +
+  geom_point(size = 2.5) +
+  geom_abline(intercept = 0, slope = 1, color = "black", linetype = "dashed") +
+  geom_text_repel(
+    data = label_df,
+    aes(label = discipline),
+    size = 3.5,
+    show.legend = FALSE
+  ) +
+  scale_color_manual(values = c("Favors women" = "blue", "Favors men" = "orange")) +
+  labs(
+    title = "QQ Plot of Wald z-scores for Gender Funding Odds Ratios",
+    subtitle = "Blue = odds favor women, Orange = odds favor men",
+    x = "Theoretical Quantiles (Standard Normal)",
+    y = "Observed Quantiles",
+    color = "Direction of effect"
+  ) +
+  theme_minimal()
