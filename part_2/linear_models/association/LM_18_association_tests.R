@@ -254,3 +254,42 @@ ggplot(qq_df, aes(x = theoretical, y = sample, color = direction)) +
     color = "Direction of effect"
   ) +
   theme_minimal()
+
+#Compute an odds ratio comparing Android to iPhone for each 
+#sentiment and add it to the table.
+library(tidyverse)
+library(dslabs)
+sentiment_counts
+
+#OR>1 more likely android tweets
+#OR<1 more likely iPhone tweets
+library(dplyr)
+
+# Totals for each platform
+total_android <- sum(sentiment_counts$Android)
+total_iphone  <- sum(sentiment_counts$iPhone)
+
+sentiment_or <- sentiment_counts %>%
+  mutate(
+    # Counts for "absent" category
+    Android_no = total_android - Android,
+    iPhone_no  = total_iphone - iPhone,
+    
+    # Odds ratio: (a/b) / (c/d)
+    OR = (Android / Android_no) / (iPhone / iPhone_no),
+    
+    # Log OR and SE for CI
+    log_OR = log(OR),
+    SE_log_OR = sqrt(1/Android + 1/Android_no + 1/iPhone + 1/iPhone_no),
+    
+    CI_low  = exp(log_OR - 1.96 * SE_log_OR),
+    CI_high = exp(log_OR + 1.96 * SE_log_OR)
+  )
+
+head(sentiment_or)
+# A tibble: 6 × 10
+#sentiment    Android iPhone Android_no iPhone_no    OR log_OR
+#<chr>          <int>  <int>      <int>     <int> <dbl>  <dbl>
+#1 anger            962    527      21047     17141  1.49 0.397 
+#2 anticipation     917    707      21092     16961  1.04 0.0421
+#3 disgust          639    314      21370     17354  1.65 0.502 
