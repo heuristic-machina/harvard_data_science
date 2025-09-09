@@ -338,3 +338,79 @@ ggplot(sentiment_or,
   scale_x_log10() +
   theme_minimal()
 
+#11. FIX Test the null hypothesis that there is no difference 
+#between tweets from Android and iPhone and report the 
+#sentiments with p-values less than 0.05 and more likely to 
+#come from Android.
+library(dplyr)
+
+# Totals for each platform
+total_android <- sum(sentiment_counts$Android)
+total_iphone  <- sum(sentiment_counts$iPhone)
+
+android_favored <- sentiment_counts %>%
+  rowwise() %>%
+  mutate(
+    # Build 2×2 table for this sentiment
+    table_2x2 = list(matrix(
+      c(Android, total_android - Android,
+        iPhone,  total_iphone  - iPhone),
+      nrow = 2, byrow = TRUE,
+      dimnames = list(
+        Platform = c("Android", "iPhone"),
+        Sentiment = c("Present", "Absent")
+      )
+    )),
+    # Chi-square test (could swap to fisher.test if counts are small)
+    p_value = chisq.test(table_2x2)$p.value,
+    # Odds ratio
+    OR = (Android / (total_android - Android)) /
+      (iPhone  / (total_iphone  - iPhone))
+  ) %>%
+  ungroup() %>%
+  filter(p_value < 0.05, OR > 1) %>%
+  arrange(desc(OR)) %>%
+  select(sentiment, OR, p_value)
+
+android_favored
+# A tibble: 6 × 3
+#sentiment    OR  p_value
+#<chr>     <dbl>    <dbl>
+#1 disgust    1.65 4.22e-13
+#2 anger      1.49 5.84e-13
+#3 negative   1.46 1.60e-19
+#4 sadness    1.42 3.05e-10
+#5 fear       1.33 1.01e- 6
+#6 surprise   1.17 2.46e- 2
+
+#12 For each sentiment, find the words assigned to that 
+#sentiment, keep words that appear at least 25 times, 
+#compute the odd ratio for each, and show a barplot for 
+#those with odds ratio larger than 2 or smaller than 1/2.
+
+#dslabs has the aggregated data.
+#get nrc to unnest tokens for the sentiment dataset
+library(tidyverse)
+library(tidytext)
+library(dslabs)
+
+# 1. NRC sentiment lexicon
+nrc <- get_sentiments("nrc")
+
+# 2. Add platform label to trump_tweets
+tweets_with_platform <- trump_tweets %>%
+  mutate(platform = ifelse(grepl("Android", source), "Android", "iPhone"))
+
+# 3. Tokenize and join to NRC
+tweet_words <- tweets_with_platform %>%
+  unnest_tokens(word, text) %>%
+  inner_join(nrc, by = "word")
+
+#4. words by sentiment and count
+words_freq_sentiment <- tweet_words %>%
+  count(sentiment, word, sort = TRUE) %>%  # counts all occurrences
+  filter(n >= 25) %>%
+  arrange(sentiment, desc(n))
+
+words_freq_sentiment
+
