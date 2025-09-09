@@ -44,3 +44,92 @@ ci_log_or <- log(odds_losing) + c(-1, 1) * qnorm(0.975) * se_log_or
 ci_or <- exp(ci_log_or)
 ci_or
 #[1] 0.4340532 2.9158295
+
+#4. Notice that the p-value is larger than 0.05, but the 95% 
+#confidence interval does not include 1. What explains this?
+
+#p-value of .405 is greater than alpha=.05 and result is outside
+#rejection region.  Fail to reject null hypothesis of wins and 
+#losses equally likely
+
+#confidence interval includes 1
+-.5+qnorm(.975)*se_log_or
+#[1] 0.4523713
+.5+qnorm(.975)*se_log_or
+#[1] 1.452371
+
+#5. Multiply the two-by-two table by 2 and see if the p-value and
+# confidence interval are a better match.
+-1+qnorm(.975)*se_log_or
+#[1] -0.04762869
+1+qnorm(.975)*se_log_or
+#[1] 1.952371
+
+#6. FIX Use the research_funding_rates data to estimate the log 
+#odds ratio along and standard errors comparing women to men for 
+#each discipline. Compute a confidence interval and report all the 
+#disciplines for which one gender appears to be favored over the 
+#other.
+library(tidyverse)
+library(dslabs)
+research_funding_rates |> select(discipline, applications_total, 
+                                 success_rates_total)
+
+
+totals <- research_funding_rates |> 
+  select(-discipline) |> 
+  summarize_all(sum) |>
+  summarize(yes_men = awards_men, 
+            no_men = applications_men - awards_men, 
+            yes_women = awards_women, 
+            no_women = applications_women - awards_women)
+head(totals)
+#   yes_men no_men  yes_women   no_women
+#1     290   1345       177     1011
+totals_percents<- totals |> 
+  summarize(
+    percent_men=yes_men/(yes_men+no_men),
+    percent_women=yes_women/(yes_women+no_women)
+    )
+totals_percents
+#      percent_men percent_women
+#1     0.17737     0.1489899
+
+#awards rate
+rate <- with(totals, (yes_men + yes_women))/sum(totals)
+rate
+#> [1] 0.165
+#> 
+#> chi-square 2x2 data table for each discipline
+results <- research_funding_rates %>%
+  mutate(
+    yes_men   = awards_men,
+    no_men    = applications_men - awards_men,
+    yes_women = awards_women,
+    no_women  = applications_women - awards_women
+  ) %>%
+  select(discipline, yes_men, no_men, yes_women, no_women) %>%
+  rowwise() %>%
+  mutate(
+    test = list(chisq.test(matrix(c(yes_men, no_men,
+                                    yes_women, no_women),
+                                  nrow = 2, byrow = TRUE))),
+    OR   = (no_women / yes_women) / (no_men / yes_men)
+  ) %>%
+  mutate(p_value = test$p.value) %>%
+  select(-test) %>%
+  ungroup()
+
+results
+# A tibble: 9 × 6
+#discipline          yes_men no_men yes_women no_women chisq_p
+#<chr>                 <dbl>  <dbl>     <dbl>    <dbl>   <dbl>
+#1 Chemical sciences        22     61        10       29  1     
+#2 Physical sciences        26    109         9       30  0.766 
+#3 Physics                  18     49         2        7  1     
+#4 Humanities               33    197        32      134  0.242 
+#5 Technical sciences       30    159        13       49  0.466 
+#6 Interdisciplinary        12     93        17       61  0.0902
+#7 Earth/life sciences      38    118        18      108  0.0502
+#8 Social sciences          65    360        47      362  0.131 
+#9 Medical sciences         46    199        29      231  0.0225
