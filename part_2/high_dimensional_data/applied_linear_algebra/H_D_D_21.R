@@ -88,3 +88,52 @@ ggplot(df, aes(x = digit, y = distance)) +
     y = "Euclidean Distance"
   ) +
   theme_minimal()
+
+#4. Use the apply function and matrix algebra to compute the 
+#distance between the second digit mnist$train$images[4,] and 
+#all other digits represented in mnist$train$images. Then 
+#generate a boxplot as in exercise 2 and predict what digit is 
+#the fourth row.
+
+# Convert dist object to full matrix
+dmat <- as.matrix(d)
+
+# Distances from image 4 to all others
+dist_row4 <- dmat[4, ]
+
+# Combine with labels
+df_4 <- data.frame(
+  digit = factor(y),
+  distance = dist_row4
+)
+
+# Remove self-distance (0)
+df_4 <- df[df$distance != 0, ]
+
+# Boxplot of distances by digit
+library(ggplot2)
+ggplot(df_4, aes(x = digit, y = distance)) +
+  geom_boxplot(fill = "lightblue") +
+  labs(
+    title = paste("Distances from Image 4 (Digit", y[4], ") by Digit Class"),
+    x = "Digit Class",
+    y = "Euclidean Distance"
+  ) +
+  theme_minimal()
+
+#using apply() for digit
+# Row 2 as a vector
+target <- x[4, ]
+
+# Euclidean distance to each row using apply()
+dists <- apply(x, 1, function(row) sqrt(sum((row - target)^2)))
+
+# Ignore self-distance
+dists[4] <- Inf
+
+# Index of closest image
+closest_idx <- which.min(dists)
+
+# Predicted digit
+predicted_digit <- y[closest_idx]
+predicted_digit
