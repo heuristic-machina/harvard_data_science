@@ -57,4 +57,35 @@ avg_row<-rowMeans(x)
 #6. Compute the average of each column of x.
 avg_col<-colMeans(x)
 
-#
+#7. For each digit in the MNIST training data, compute the
+# proportion of pixels that are in a grey area, defined as
+# values between 50 and 205. Make a boxplot by digit class. 
+#Hint: Use logical operators and rowMeans.
+library(dslabs)
+library(ggplot2)
+
+# Extract training images and labels
+x <- mnist$train$images   # 60000 x 784 matrix
+y <- mnist$train$labels   # vector of length 60000
+
+# 1. Logical mask for grey pixels
+grey_mask <- x >= 50 & x <= 205
+
+# 2. Proportion of grey pixels per image
+grey_prop <- rowMeans(grey_mask)
+
+# 3. Combine with labels
+df <- data.frame(
+  digit = factor(y, levels = 0:9),
+  grey_prop = grey_prop
+)
+
+# 4. Boxplot by digit
+ggplot(df, aes(x = digit, y = grey_prop)) +
+  geom_boxplot(fill = "lightblue") +
+  labs(
+    title = "Proportion of Grey Pixels (50–205) by MNIST Digit",
+    x = "Digit",
+    y = "Proportion of Grey Pixels"
+  ) +
+  theme_minimal()
