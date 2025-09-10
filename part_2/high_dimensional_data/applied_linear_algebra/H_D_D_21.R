@@ -137,3 +137,53 @@ closest_idx <- which.min(dists)
 # Predicted digit
 predicted_digit <- y[closest_idx]
 predicted_digit
+
+#5. Compute the distance between each feature and the feature
+# representing the middle pixel (row 14 column 14). Create 
+#an image plot of where the distance is shown with color in 
+#the pixel position.
+
+#Copilot explanation
+#rows=images, columns=pixel positions flattened 28x28 grid
+#distance between features and middle pixel is comparing 
+#columns instead of rows
+
+#find middle pixel
+pixel_index <- (14 - 1) * 28 + 14  # row-major index
+pixel_index
+# [1] 378
+
+#compute distances between features
+target_pixel <- x[, pixel_index]
+
+pixel_dists <- apply(x,
+                     2,
+                     function(col) sqrt(sum((col - target_pixel)^2)))
+
+#matrix algebra
+target <- x[, pixel_index, drop = FALSE]  # keep as matrix
+
+# Squared norms of all pixel columns
+col_norms <- colSums(x^2)
+
+# Squared norm of target pixel column
+target_norm <- sum(target^2)
+
+# Dot products of target with all columns
+dots <- t(target) %*% x  # 1 × 784
+
+# Squared distances
+sq_dists <- col_norms + target_norm - 2 * as.vector(dots)
+
+pixel_dists <- sqrt(sq_dists)
+
+#image
+dist_matrix <- matrix(pixel_dists, nrow = 28, byrow = TRUE)
+
+image(1:28, 1:28, dist_matrix[, 28:1], col = gray.colors(256),
+      main = "Distance from Middle Pixel (14,14)")
+points(14, 28 - 14 + 1, col = "red", pch = 19)  # mark the middle pixel
+
+
+
+
