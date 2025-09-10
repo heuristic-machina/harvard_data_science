@@ -21,3 +21,10 @@ ggplot(label_counts, aes(x = digit, y = count)) +
     y = "Number of Images"
   ) +
   theme_minimal()
+
+#Exercises 20.11
+
+#1. Create a 100 by 10 matrix of randomly generated normal 
+#numbers. Put the result in x.
+set.seed(123)
+x<-matrix(rnorm(100*10, 100, 2))
