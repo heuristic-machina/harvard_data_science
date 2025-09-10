@@ -45,4 +45,8 @@ dim(x)
 #3. Add the scalar 1 to row 1, the scalar 2 to row 2, and 
 #so on, to the matrix x.
 
-add_scalar<- sweep(x, 1, 1:nrow(x), FUN='+')
+add_scalar_row<- sweep(x, 1, 1:nrow(x), FUN='+')
+
+#4. Add the scalar 1 to column 1, the scalar 2 to column 
+#2, and so on, to the matrix x. Hint: Use sweep with FUN = "+".
+add_scalar_col<- sweep(x, 1, 2:ncol(x), FUN='+')
