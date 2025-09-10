@@ -41,3 +41,8 @@ ncol(x)
 #[1] 10
 dim(x)
 #[1] 100  10
+
+#3. Add the scalar 1 to row 1, the scalar 2 to row 2, and 
+#so on, to the matrix x.
+
+add_scalar<- sweep(x, 1, 1:nrow(x), FUN='+')
