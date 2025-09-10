@@ -28,3 +28,16 @@ ggplot(label_counts, aes(x = digit, y = count)) +
 #numbers. Put the result in x.
 set.seed(123)
 x<-matrix(rnorm(100*10, 100, 2))
+
+#2. Apply the three R functions that give you the dimension 
+#of x, the number of rows of x, and the number of columns of
+# x, respectively.
+x <- matrix(rnorm(100 * 10, mean = 100, sd = 2), 
+            nrow = 100, ncol = 10)
+
+nrow(x)
+#[1] 100
+ncol(x)
+#[1] 10
+dim(x)
+#[1] 100  10
