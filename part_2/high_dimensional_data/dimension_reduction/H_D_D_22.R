@@ -100,3 +100,50 @@ ggplot(df, aes(x = PC1, y = bias, color = tissue)) +
   ) +
   theme_minimal() +
   theme(legend.position = "right")
+
+
+#3. We see an association with the first PC and the observation
+# averages. Redo the PCA, but only after removing the center.
+
+#side by side with and without centering
+library(dslabs)
+library(ggplot2)
+data(tissue_gene_expression)
+
+x <- tissue_gene_expression$x
+y <- tissue_gene_expression$y
+
+# PCA with centering
+pca_centered <- prcomp(x, center = TRUE, scale. = TRUE)
+
+# PCA without centering
+pca_uncentered <- prcomp(x, center = FALSE, scale. = TRUE)
+
+# Combine into one data frame for plotting
+df_centered <- data.frame(
+  PC1 = pca_centered$x[, 1],
+  PC2 = pca_centered$x[, 2],
+  tissue = y,
+  type = "Centered"
+)
+
+df_uncentered <- data.frame(
+  PC1 = pca_uncentered$x[, 1],
+  PC2 = pca_uncentered$x[, 2],
+  tissue = y,
+  type = "Uncentered"
+)
+
+df_all <- rbind(df_centered, df_uncentered)
+
+# Plot side-by-side
+ggplot(df_all, aes(x = PC1, y = PC2, color = tissue)) +
+  geom_point(size = 2, alpha = 0.8) +
+  facet_wrap(~ type, scales = "free") +
+  labs(
+    title = "PCA with vs. without Centering",
+    x = "PC1",
+    y = "PC2"
+  ) +
+  theme_minimal()
+
