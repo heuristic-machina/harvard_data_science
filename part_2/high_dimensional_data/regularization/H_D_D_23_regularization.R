@@ -136,3 +136,26 @@ movielens %>% mutate(date=round_date(date, unit='week')) %>%
   ggplot(aes(date, rating)) +
   geom_point() +
   geom_smooth()
+
+#7. The plot shows some evidence of a time effect. If we 
+#define d(u,i) as the day for user’s u rating of movie i,
+# which of the following models is most appropriate:
+
+#8. The movielens data also has a genres column. This column 
+#includes every genre that applies to the movie. Some movies
+# fall under several genres. Define a category as whatever 
+#combination appears in this column. Keep only categories 
+#with more than 1,000 ratings. Then compute the average and 
+#standard error for each category. Plot these as error bar 
+#plots.
+
+movielens %>% group_by(genres) %>%
+  summarize(n=n(), 
+            avg=mean(rating), se=sd(rating)/sqrt(n())) %>%
+  filter(n>=1000) %>%
+  mutate(genres=reorder(genres, avg)) %>%
+  ggplot(aes(x=genres, y=avg,
+             ymin=avg-2*se, ymax=avg+2*se)) +
+  geom_point() +
+  geom_errorbar() +
+  theme(axis.text.x = element_text(angle=90, hjust=1))
