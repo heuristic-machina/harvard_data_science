@@ -189,3 +189,74 @@ ggplot(pc_long, aes(x = tissue, y = score, fill = tissue)) +
     axis.text.x = element_text(angle = 45, hjust = 1),
     legend.position = "none"
   )
+
+#5. Plot the percent variance explained by PC number. Hint: 
+#Use the summary function.
+
+library(dslabs)
+library(ggplot2)
+
+# Data
+x <- tissue_gene_expression$x
+y <- tissue_gene_expression$y
+
+# PCA
+pca <- prcomp(x, center = TRUE, scale. = TRUE)
+
+# 1) Summary table
+pca_summary <- summary(pca)
+pca_summary  # Shows importance of each PC
+
+# 2) Extract variance explained
+var_explained <- pca_summary$importance["Proportion of Variance", ]
+cum_var <- pca_summary$importance["Cumulative Proportion", ]
+
+# 3) Create data frame for plotting
+df_var <- data.frame(
+  PC = factor(1:length(var_explained)),
+  Variance = var_explained,
+  Cumulative = cum_var
+)
+
+# 4) Screen plot for first 10 PCs
+ggplot(df_var[1:10, ], aes(x = PC, y = Variance)) +
+  geom_col(fill = "steelblue") +
+  geom_text(aes(label = round(Variance, 3)), vjust = -0.5, size = 3) +
+  labs(
+    title = "Variance Explained by First 10 Principal Components",
+    x = "Principal Component",
+    y = "Proportion of Variance"
+  ) +
+  theme_minimal()
+
+
+
+#Copilot illustration of cumulative variance on principal 
+#components
+library(dslabs)
+library(ggplot2)
+
+x <- tissue_gene_expression$x
+pca <- prcomp(x, center = TRUE, scale. = TRUE)
+pca_summary <- summary(pca)
+
+var_explained <- pca_summary$importance["Proportion of Variance", ]
+cum_var <- pca_summary$importance["Cumulative Proportion", ]
+
+df_var <- data.frame(
+  PC = 1:length(var_explained),
+  Variance = var_explained,
+  Cumulative = cum_var
+)
+
+ggplot(df_var[1:10, ], aes(x = PC)) +
+  geom_col(aes(y = Variance), fill = "steelblue") +
+  geom_line(aes(y = Cumulative), color = "red", size = 1) +
+  geom_point(aes(y = Cumulative), color = "red", size = 2) +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Variance Explained by Principal Components",
+    x = "Principal Component",
+    y = "Proportion of Variance"
+  ) +
+  theme_minimal()
