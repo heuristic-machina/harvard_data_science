@@ -66,12 +66,11 @@ movies_1993_onward <- movielens %>%
 
 movies_1993_onward
 # A tibble: 25 × 7
-#movieId avg_rating     n   title                year years n_year
+#movieId    avg_rating   n   title                year years n_year
 #     <int>     <dbl> <int> <chr>               <int> <dbl>  <dbl>
 #1     356       4.05   341 Forrest Gump         1994    32  10.7 
 #2     296       4.26   324 Pulp Fiction         1994    32  10.1 
 #3     318       4.49   311 Shawshank Redempti…  1994    32   9.72
-
 
 
 #3. From the table constructed in the previous example, we 
@@ -82,3 +81,27 @@ movies_1993_onward
 #plot of average rating versus ratings per year and show an 
 #estimate of the trend.
 
+data("movielens")
+
+current_year <- as.numeric(format(Sys.Date(), "%Y"))
+
+ratings_per_year<- movielens %>% filter(year >= 1993) %>%
+  group_by(movieId) %>%
+  summarize(
+    avg_rating = mean(rating),
+    n = n(),
+    title = first(title),
+    year = first(year),
+    .groups = "drop") %>%
+  mutate(
+      years = current_year - year + 1,
+      rate = n / years) %>%
+  ggplot(aes(rate, avg_rating)) +
+  geom_point(alpha=0.5) +
+  geom_smooth() +
+  scale_x_log10()
+      
+#Copilot: A log scale compresses the large values and expands 
+#the small ones, spreading the points more evenly across the
+# axis.  This makes patterns visible in the dense region that
+# were previously invisible.
