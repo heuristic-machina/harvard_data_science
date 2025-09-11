@@ -40,10 +40,45 @@ movielens %>%
 # are the 25 movies with the most ratings per year? Also, 
 #report their average rating.
 
+library(dslabs)
+library(dplyr)
+
+data("movielens")
+
+current_year <- as.numeric(format(Sys.Date(), "%Y"))
+
 movies_1993_onward <- movielens %>%
   filter(year >= 1993) %>%
   group_by(movieId) %>%
-  summarize(avg_rating = mean(rating), n = n(), title=title[1], year=year) %>%
-  mutate(n_year = n / years) %>%
-  top_n(25, n_year) %>%
+  summarize(
+    avg_rating = mean(rating),
+    n = n(),
+    title = first(title),
+    year = first(year),
+    .groups = "drop"   # drop grouping after summarise
+  ) %>%
+  mutate(
+    years = current_year - year + 1,
+    n_year = n / years
+  ) %>%
+  slice_max(n_year, n = 25) %>%
   arrange(desc(n_year))
+
+movies_1993_onward
+# A tibble: 25 × 7
+#movieId avg_rating     n   title                year years n_year
+#     <int>     <dbl> <int> <chr>               <int> <dbl>  <dbl>
+#1     356       4.05   341 Forrest Gump         1994    32  10.7 
+#2     296       4.26   324 Pulp Fiction         1994    32  10.1 
+#3     318       4.49   311 Shawshank Redempti…  1994    32   9.72
+
+
+
+#3. From the table constructed in the previous example, we 
+#see that the most rated movies tend to have above average 
+#ratings. This is not surprising: more people watch popular 
+#movies. To confirm this, stratify the post 1993 movies by 
+#ratings per year and compute their average ratings. Make a 
+#plot of average rating versus ratings per year and show an 
+#estimate of the trend.
+
