@@ -147,3 +147,45 @@ ggplot(df_all, aes(x = PC1, y = PC2, color = tissue)) +
   ) +
   theme_minimal()
 
+#4. For the first 10 PCs, make a boxplot showing the values 
+#for each tissue.
+
+#Copilot workflow:  run PCA, grab the first 10 PCs, reshape 
+#to long format, and then plot boxplots grouped by tissue.
+
+library(dslabs)
+library(ggplot2)
+library(reshape2)  # for melt()
+
+# Load data
+x <- tissue_gene_expression$x
+y <- tissue_gene_expression$y
+
+# PCA
+pca <- prcomp(x, center = TRUE, scale. = TRUE)
+
+# Take first 10 PCs and combine with tissue labels
+pc_df <- data.frame(pca$x[, 1:10], tissue = y)
+
+# Reshape to long format: one row per (sample, PC)
+pc_long <- melt(pc_df, id.vars = "tissue",
+                variable.name = "PC",
+                value.name = "score")
+
+# Boxplot
+#facet_wrap(~PC) creates separate boxplot for each principal
+#component
+#scales='free_y' allows each pc have its own vertical scale
+ggplot(pc_long, aes(x = tissue, y = score, fill = tissue)) +
+  geom_boxplot(outlier.size = 0.8) +
+  facet_wrap(~ PC, scales = "free_y", ncol = 5) +
+  labs(
+    title = "Distribution of First 10 Principal Components by Tissue Type",
+    x = "Tissue Type",
+    y = "PC Score"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "none"
+  )
