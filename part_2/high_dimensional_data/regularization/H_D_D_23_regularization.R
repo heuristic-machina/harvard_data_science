@@ -105,3 +105,34 @@ ratings_per_year<- movielens %>% filter(year >= 1993) %>%
 #the small ones, spreading the points more evenly across the
 # axis.  This makes patterns visible in the dense region that
 # were previously invisible.
+
+#4. In the previous exercise, we see that the more a movie 
+#is rated, the higher the rating. Suppose you are doing a 
+#predictive analysis in which you need to fill in the 
+#missing ratings with some value. Which of the following 
+#strategies would you use?
+
+#Fill in the value with a lower value than the average since
+# lack of rating is associated with lower ratings. Try out
+# different values and evaluate prediction in a test set.
+
+#5. The movielens dataset also includes a time stamp. This 
+#variable represents the time and data in which the rating 
+#was provided. The units are seconds since January 1, 1970. 
+#Create a new column date with the date. Hint: Use the 
+#as_datetime function in the lubridate package.
+library(lubridate)
+movielens <- mutate(movielens, date = as_datetime(timestamp))
+movielens
+
+
+#6. Compute the average rating for each week and plot this 
+#average against day. Hint: Use the round_date function 
+#before you group_by.
+
+movielens %>% mutate(date=round_date(date, unit='week')) %>%
+  group_by(date) %>%
+  summarize(rating=mean(rating)) %>%
+  ggplot(aes(date, rating)) +
+  geom_point() +
+  geom_smooth()
