@@ -31,3 +31,19 @@ movielens %>%
     x = "Year",
     y = "Number of Users (sqrt scale)"
   )
+
+#2. We see that, on average, movies that were released after
+# 1993 get more ratings. We also see that with newer movies, 
+#starting in 1993, the number of ratings decreases with year:
+# the more recent a movie is, the less time users have had to
+# rate it.  Among movies that came out in 1993 or later, what
+# are the 25 movies with the most ratings per year? Also, 
+#report their average rating.
+
+movies_1993_onward <- movielens %>%
+  filter(year >= 1993) %>%
+  group_by(movieId) %>%
+  summarize(avg_rating = mean(rating), n = n(), title=title[1], year=year) %>%
+  mutate(n_year = n / years) %>%
+  top_n(25, n_year) %>%
+  arrange(desc(n_year))
