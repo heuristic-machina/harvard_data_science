@@ -277,3 +277,19 @@ school_lambda<- schools %>%
   arrange(desc(reg_score)) %>%
   top_n(10, reg_score)
 school_lambda
+
+#17. A common mistake to make when using regularization is 
+#shrinking values towards 0 that are not centered around 0.
+# For example, if we don’t subtract the overall average before
+# shrinking, we actually obtain a very similar result. 
+#Confirm this by re-running the code from exercise 6, but 
+#without removing the overall mean.
+
+lambdas<-seq(10,250)
+rmse_not_cent<-sapply(lambdas, function(lambdas){
+  score_not_cent<-sapply(scores,
+                             function(x) sum(x)/length(x)+lambda)
+  sqrt(mean((score_not_cent-schools$quality)^2))
+  })
+lambdas[which.min(rmse_not_cent)]
+#[1] 10
