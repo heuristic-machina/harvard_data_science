@@ -224,3 +224,56 @@ schools %>% ggplot(aes(size,score)) +
   geom_point(alpha=.5) +
   geom_point(data=filter(schools, rank<=10), col=2) +
   scale_x_log10()
+
+#14. We can see that the standard error of the score has 
+#larger variability when the school is smaller. This is a 
+#basic statistical reality we learned in the probability and 
+#inference sections. In fact, note that 4 of the top 10 
+#schools are in the top 10 schools based on the exam score.
+
+#Let’s use regularization to pick the best schools. Remember
+# regularization shrinks deviations from the average towards
+# 0. So to apply regularization here, we first need to define
+# the overall average for all schools:
+overall <- mean(sapply(scores, mean))
+
+#and then define, for each school, how it deviates from 
+#that average. Write code that estimates the score above 
+#average for each school, but dividing by n + lambda instead
+# of n, with n the school size and lambda a regularization
+# parameter. Try lambda=3.
+
+lambda=3
+reg_school<-schools %>% 
+  mutate(reg_score=overall +
+           (score-overall)*size/(size+lambda)) %>%
+  arrange(desc(reg_score))
+
+reg_school %>% top_n(10, reg_score)
+
+#15. Notice that this improves things a bit. The number of 
+#small schools that are not highly ranked is now 4. Is there
+# a better lambda? Find the lambda that minimizes the 
+#RMSE = 1/100 summation(quality-estimate)^2.
+
+lambdas<-seq(10,250)
+rmse<-sapply(lambdas, function(lambda){
+  schools %>%
+    mutate(reg_score=overall +
+             (score-overall)*size/(size+lambda)) %>%
+    summarize(rmse=sqrt(1/100*sum((reg_score-quality)^2))) %>%
+    pull(rmse)
+})
+lambdas[which.min(rmse)]
+#[1] 125
+
+#16. Rank the schools based on the average obtained with 
+#the best lambda. Note that no small school is incorrectly 
+#included.
+
+lambda_best<-125
+school_lambda<- schools %>%
+  mutate(reg_score=overall + (score-overall)*size/(size+lambda_best)) %>%
+  arrange(desc(reg_score)) %>%
+  top_n(10, reg_score)
+school_lambda
