@@ -214,3 +214,13 @@ median(size)
 bottom_10<- schools |> top_n(10, -score) |> arrange((score)) |>
   select(id, size, score)
 bottom_10
+
+#13. The same is true for the worst schools! They are small 
+#as well. Plot the average score versus school size to see 
+#what’s going on. Highlight the top 10 schools based on the
+# true quality. Use the log scale transform for the size.
+
+schools %>% ggplot(aes(size,score)) +
+  geom_point(alpha=.5) +
+  geom_point(data=filter(schools, rank<=10), col=2) +
+  scale_x_log10()
