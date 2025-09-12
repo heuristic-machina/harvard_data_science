@@ -159,3 +159,40 @@ movielens %>% group_by(genres) %>%
   geom_point() +
   geom_errorbar() +
   theme(axis.text.x = element_text(angle=90, hjust=1))
+
+#Next 7 exercises for education system
+#testing if smaller sizes test better
+
+#simulate small schools dataset for 100 schools
+#simulate number of students in each school n
+
+set.seed(1986)
+n<-round(2^rnorm(1000, 8, 1))
+
+#rt(n, df=degrees of freedom) generates random variates
+
+mu<-round(80+2*rt(1000,5))
+range(mu)
+#[1] 67 90
+
+schools<-data.frame(id=paste('PS',1:100),
+                    size=n,
+                    quality=mu,
+                    rank=rank(-mu))
+
+#have students take test with average measured by quality
+#and standard deviation of 30 percentage points
+
+scores<-sapply(1:nrow(schools), function(i) {
+  scores<-rnorm(schools$size[i], schools$quality[i], 30)
+  scores
+})
+schools<-schools |> mutate(score=sapply(scores,mean))
+
+#10. What are the top schools based on the average score? 
+#Show just the ID, size, and the average score.
+schools |> top_n(10, score) |> arrange(desc(score)) |>
+  select(id, size, score)
+
+#11. Compare the median school size to the median school
+# size of the top 10 schools based on the score.
