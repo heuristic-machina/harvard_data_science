@@ -205,3 +205,12 @@ median(size)
 schools %>% summarize(median(size))
 median(size)
 #1          261
+
+#12. According to this test, it appears small schools are 
+#better than large schools. Five out of the top 10 schools 
+#have 100 or fewer students. But how can this be? We 
+#constructed the simulation so that quality and size are 
+#independent. Repeat the exercise for the worst 10 schools.
+bottom_10<- schools |> top_n(10, -score) |> arrange((score)) |>
+  select(id, size, score)
+bottom_10
