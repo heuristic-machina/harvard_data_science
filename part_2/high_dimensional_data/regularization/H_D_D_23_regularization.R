@@ -196,3 +196,12 @@ schools |> top_n(10, score) |> arrange(desc(score)) |>
 
 #11. Compare the median school size to the median school
 # size of the top 10 schools based on the score.
+
+top_10<- schools |> top_n(10, score) |> arrange(desc(score)) |>
+  select(id, size, score)
+median(size)
+#1        173.5
+
+schools %>% summarize(median(size))
+median(size)
+#1          261
