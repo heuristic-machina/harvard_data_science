@@ -249,3 +249,85 @@ plot(s$v[,2], ylim = c(-0.5, 0.5),type = "b",
 with(s, my_image((u[, 2, drop=FALSE]*d[2]) %*% t(v[, 2, drop=FALSE])))
 
 my_image(resid)
+
+#12 The second column clearly relates to a student’s difference
+# in ability in math/science versus the arts. We can see this
+# most clearly from the plot of s$v[,2]. Adding the matrix we
+# obtain with these two columns will help with our approximation:
+
+#   Y = D1,1U1V1T = D2,2U2V2T
+
+#We know it will explain 
+#sum(s$d[1:2]^2)/sum(s$d^2) * 100 percent 
+#of the total variability. We can compute new residuals like
+# this:
+
+resid <- y - with(s,sweep(u[, 1:2], 2, d[1:2], FUN="*") %*%
+                    t(v[, 1:2]))
+my_image(cor(resid), zlim = c(-1,1))
+axis(side = 2, 1:ncol(y), rev(colnames(y)), las = 2)
+
+#and see that the structure that is left is driven by the
+# differences between math and science. Confirm this by 
+#plotting U3, then plot V3T using the same range for the y-axis
+# limits, then make an image of U3D3,3V3T and compare it to 
+#the image of resid.
+
+
+plot(s$u[,3], ylim = c(-0.5, 0.5),type = "b",
+     pch = 19, col = "firebrick",
+     xlab = "Index", ylab = "s$u[,3]", main= "U3")
+
+plot(s$v[,3], ylim = c(-0.5, 0.5),type = "b",
+     pch = 19, col = "firebrick",
+     xlab = "Index", ylab = "s$u[,3]", main= "V3")
+
+with(s, my_image((u[, 3, drop=FALSE]*d[3]) %*% t(v[, 3, drop=FALSE])))
+
+my_image(resid)
+
+
+#13 The third column clearly relates to a student’s difference
+# in ability in math and science. We can see this most clearly
+# from the plot of s$v[,3]. Adding the matrix we obtain with
+# these two columns will help with our approximation:
+
+#   Y = D1,1U1V1T + D2,2U2V2T + D3,3U3V3T
+
+#We know it will explain: 
+#sum(s$d[1:3]^2)/sum(s$d^2) * 100 percent of the total 
+#variability. We can compute new residuals like this:
+
+resid <- y - with(s,sweep(u[, 1:3], 2, d[1:3], FUN="*") %*% t(v[, 1:3]))
+my_image(cor(resid), zlim = c(-1,1))
+axis(side = 2, 1:ncol(y), rev(colnames(y)), las = 2)
+
+#We no longer see structure in the residuals: they seem to be
+# independent of each other. This implies that we can describe
+# the data with the following model:
+#   Y = D1,1U1V1T + D2,2U2V2T + D3,3U3V3T + E
+
+#with E a matrix of independent identically distributed errors.
+# This model is useful because we summarize 100x24 observations
+# with 3 x (100+24+1) numbers.
+
+#Furthermore, the three components of the model have useful 
+#interpretations: 1) the overall ability of a student, 2) the 
+#difference in ability between the math/sciences and arts, 
+#and 3) the remaining differences between the three subjects.
+
+#The sizes D1,1, D2,2, D3,3 tell us the variability explained
+# by each component. Finally, note that the components
+# DJ,JUJVJ are equivalent to the jth principal component.
+
+#Finish the exercise by plotting an image of Y, an image of
+# D1,1U1V1 + D2,2U2V2 + D3,3U3V3 and an image of the residuals,
+#all with the the same zlim.
+
+y_hat <- with(s,sweep(u[, 1:3], 2,
+                      d[1:3], FUN="*") %*% t(v[, 1:3]))
+my_image(y, zlim = range(y))
+
+my_image(y_hat, zlim = range(y))
+
+my_image(y - y_hat, zlim = range(y))
