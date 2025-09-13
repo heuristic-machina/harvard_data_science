@@ -207,3 +207,45 @@ plot(s$v[,1], ylim = c(-0.25, 0.25),type = "b",
 
 #heatmap comparison
 with(s, my_image((u[, 1, drop=FALSE]*d[1]) %*% t(v[, 1, drop=FALSE])))
+
+# 11. We see that with just a vector of length 100, a scalar, 
+#and a vector of length 24, we actually come close to 
+#reconstructing the original 100x24 matrix. This is our first
+# matrix factorization:
+
+#   Y = d1,1u1v1T
+
+#We know it explains s$d[1]^2/sum(s$d^2) * 100 percent of the 
+#total variability. Our approximation only explains the 
+#observation that good students tend to be good in all subjects.
+# But another aspect of the original data that our approximation
+# does not explain was the higher similarity we observed within
+# subjects. We can see this by computing the difference between
+# our approximation and original data and then computing the 
+#correlations. You can see this by running this code:
+
+resid <- y - with(s,(u[,1, drop=FALSE]*d[1]) %*%
+                    t(v[,1, drop=FALSE]))
+my_image(cor(resid), zlim = c(-1,1))
+axis(side = 2, 1:ncol(y), rev(colnames(y)), las = 2)
+
+#Now that we have removed the overall student effect, the 
+#correlation plot reveals that we have not yet explained the
+# within subject correlation nor the fact that math and science
+# are closer to each other than to the arts. So let’s explore 
+#the second column of the SVD. Repeat the previous exercise 
+#but for the second column: Plot U2, then plot V2T using the 
+#same range for the y-axis limits, then make an image of 
+#U2D2,2V2T and compare it to the image of resid.
+
+plot(s$u[,2], ylim = c(-0.5, 0.5),type = "b",
+     pch = 19, col = "firebrick",
+     xlab = "Index", ylab = "s$u[,2]", main= "U2")
+
+plot(s$v[,2], ylim = c(-0.5, 0.5),type = "b",
+     pch = 19, col = "firebrick",
+     xlab = "Index", ylab = "s$v[,2]", main= "V2T")
+
+with(s, my_image((u[, 2, drop=FALSE]*d[2]) %*% t(v[, 2, drop=FALSE])))
+
+my_image(resid)
