@@ -85,6 +85,9 @@ sum(ss_yv)
 ss_y
 #[1] 175434.6
 
+all.equal(ss_y, ss_yv, check.attributes = FALSE)
+# "Mean relative difference: 1.73222"
+#[1] TRUE
 isTRUE(all.equal(sum(ss_y), sum(ss_yv)))
 #[1] TRUE
 
@@ -115,8 +118,36 @@ axis(1, at = 1:length(ss_y),
 plot(ss_yv, type = "b", pch = 19, col = "steelblue",
      xaxt = "n", xlab = "", ylab = "Sum of Squares",
      main = "Sum of Squares per Right Singular Vector V")
-axis(1, at = 1:length(ss_yv), labels = paste0("V", 1:length(ss_yv)), las = 2, cex.axis = 0.7)
+axis(1, at = 1:length(ss_yv),
+     labels = paste0("V", 1:length(ss_yv)),
+     las = 2, cex.axis = 0.7)
 
- 
+#Alternate plot
+plot(s$d^2, type = "b", pch = 19, col = "firebrick",
+      xlab = "Component Index", ylab = "Variance Explained",
+      main = "Singular Values Squared")
 
+#Copilot:So when you see the first few singular vectors dominate
+# in ss_yv, it’s telling you:
+#Your data lives mostly in a low-dimensional subspace
+#The remaining directions (like V5–V24) contribute very little
+# — similar to how lower rows in echelon form may be all zeros
+#In that sense, the first few singular vectors are analogous 
+#to the pivot columns in echelon form — they’re the ones that 
+#carry the signal.
 
+#5. We see that the variability of the columns of YV is 
+#decreasing. Furthermore, we see that, relative to the first 
+#three, the variability of the columns beyond the third is 
+#almost 0. Now notice that we didn’t have to compute ss_yv 
+#because we already have the answer. How? Remember that YV=UD
+#and because U is orthogonal, we know that the sum of squares 
+#of the columns of UD are the diagonal entries of D squared. 
+#Confirm this by plotting the square root of ss_yv versus the 
+#diagonal entries of D.
+ss_ud <- apply((s$u %*% diag(s$d))^2, 2, sum)
+
+all.equal(ss_ud, ss_yv, check.attributes = FALSE)
+#[1] TRUE
+
+plot(s$d, sqrt(ss_yv))
