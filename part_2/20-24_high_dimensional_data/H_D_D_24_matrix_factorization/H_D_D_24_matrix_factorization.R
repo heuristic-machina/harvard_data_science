@@ -204,3 +204,6 @@ plot(s$u[,1], ylim = c(-0.25, 0.25),type = "b",
 plot(s$v[,1], ylim = c(-0.25, 0.25),type = "b",
      pch = 19, col = "firebrick",
      xlab = "Index", ylab = "s$v[,1]", main= "V1")
+
+#heatmap comparison
+with(s, my_image((u[, 1, drop=FALSE]*d[1]) %*% t(v[, 1, drop=FALSE])))
