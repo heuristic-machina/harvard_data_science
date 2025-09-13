@@ -53,3 +53,31 @@ axis(side = 2, 1:ncol(y), rev(colnames(y)), las = 2)
 
 #There is a correlation among all tests, but higher if the tests
 # are in science and math and even higher within each subject.
+
+
+#3 Compute the sum of squares of the columns of Y and store them
+# in ss_y. Then compute the sum of squares of columns of the 
+#transformed YV and store them in ss_yv. Confirm that sum(ss_y)
+# is equal to sum(ss_yv).
+s <- svd(y)
+names(s)
+#[1] "d" "u" "v"
+
+#y_svd <- sweep(s$u, d) %*% t(s$v)
+#given code object 'd' not found error
+
+#Copilot fix
+y_svd <- s$u %*% diag(s$d) %*% t(s$v)
+max(abs(y - y_svd))
+#[1] 7.105427e-14
+
+ss_y<-apply((y)^2, 2, sum)
+sum(ss_y)
+ss_yv<-apply((y%*%s$v)^2,2,sum)
+sum(ss_yv)
+#[1] 175434.6
+ss_y
+#[1] 175434.6
+
+isTRUE(all.equal(sum(ss_y), sum(ss_yv)))
+#[1] TRUE
