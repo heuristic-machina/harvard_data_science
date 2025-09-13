@@ -174,3 +174,16 @@ par(mar = c(5, 5, 4, 2))
 plot(UD[,1], rowMeans(y), type = "b",
      pch = 19, col = "firebrick",
      xlab = "UD[,1]", ylab = "rowMeans(y)")
+
+#9 we see that the first column of UD is almost identical to 
+#the average score for each student except for the sign. This 
+#implies that multiplying Y by the first column of V must be 
+#performing a similar operation to taking the average. Make 
+#an image plot of V and describe the first column relative to 
+#others and how this relates to taking an average.
+
+my_image(s$v)
+#The first column is very close to being a constant, which 
+#implies that the first column of YV is the sum of the rows 
+#of Y multiplied by some constant, and is thus proportional 
+#to an average.
