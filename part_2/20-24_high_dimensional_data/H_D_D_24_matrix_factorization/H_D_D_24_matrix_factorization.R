@@ -150,4 +150,27 @@ ss_ud <- apply((s$u %*% diag(s$d))^2, 2, sum)
 all.equal(ss_ud, ss_yv, check.attributes = FALSE)
 #[1] TRUE
 
-plot(s$d, sqrt(ss_yv))
+#6. From the above we know that the sum of squares of the
+#columns of Y (the total sum of squares) add up to the sum of 
+#s$d^2, and that the transformation YV gives us columns with sums 
+#of squares equal to s$d^2. Now compute what percent of the 
+#total variability is explained by just the first three columns
+# of YV.
+
+sum(s$d[1:3]^2) / sum(s$d^2)
+#[1] 0.9877922
+
+#7 Use the sweep function to compute UD without constructing
+# diag(s$d) and without using matrix multiplication.
+identical(s$u %*% diag(s$d), sweep(s$u, 2, s$d, FUN = "*"))
+#[1] TRUE
+
+#8 Compute the average score for each student and plot it
+# against U1D1,1 , and describe what you find.
+rowMeans(y)
+UD <- sweep(s$u, 2, s$d, FUN = "*")
+
+par(mar = c(5, 5, 4, 2))
+plot(UD[,1], rowMeans(y), type = "b",
+     pch = 19, col = "firebrick",
+     xlab = "UD[,1]", ylab = "rowMeans(y)")
