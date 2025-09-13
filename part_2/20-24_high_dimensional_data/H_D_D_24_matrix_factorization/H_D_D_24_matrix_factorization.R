@@ -187,3 +187,20 @@ my_image(s$v)
 #implies that the first column of YV is the sum of the rows 
 #of Y multiplied by some constant, and is thus proportional 
 #to an average.
+
+#10 We already saw that we can rewrite UD as:
+#   u1d1,1 + u2d2,2 + ... + updp,p
+#with uj the j-th column of U.  This implies that we can 
+#rewrite the entire SVD as:
+#   Y = u1d1,1v1T + u2d2,2v2T + ... + updp,pvpT
+#with Vj the jth column of V.  Plot u1, then plot v1T using the
+#same range for the y-axis limits.  Then make an image of 
+#u1d1,1v1T and compare it to the image of Y.  Hint:  Use the
+#my_image function defined above and use the drop=FALSE argument
+#to assure the subsets of matrices are matrices.
+plot(s$u[,1], ylim = c(-0.25, 0.25),type = "b",
+     pch = 19, col = "firebrick",
+     xlab = "Index", ylab = "s$u[,1]", main= "U1")
+plot(s$v[,1], ylim = c(-0.25, 0.25),type = "b",
+     pch = 19, col = "firebrick",
+     xlab = "Index", ylab = "s$v[,1]", main= "V1")
