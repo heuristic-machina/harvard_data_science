@@ -113,10 +113,10 @@ axis(1, at = 1:length(ss_y),
      labels = colnames(y), las = 2, cex.axis = 0.7)
 
 plot(ss_yv, type = "b", pch = 19, col = "steelblue",
-      xaxt = "n", xlab = "", ylab = "Sum of Squares",
-      main = "Sum of Squares per Right Singular Vector V")
-axis(1, at = 1:length(ss_y),
-     labels = colnames(y), las = 2, cex.axis = 0.7)
+     xaxt = "n", xlab = "", ylab = "Sum of Squares",
+     main = "Sum of Squares per Right Singular Vector V")
+axis(1, at = 1:length(ss_yv), labels = paste0("V", 1:length(ss_yv)), las = 2, cex.axis = 0.7)
+
  
 
 
