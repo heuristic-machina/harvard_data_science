@@ -24,18 +24,24 @@ colnames(y) <- c(paste(rep("Math",k), 1:k, sep="_"),
                  paste(rep("Science",k), 1:k, sep="_"),
                  paste(rep("Arts",k), 1:k, sep="_"))
 
+#plot shows x by subject
+par(mar = c(8, 5, 4, 2))  # More space at bottom
+plot(ss_y, type = "b", pch = 19, col = "steelblue",
+     xaxt = "n", xlab = "", ylab = "Sum of Squares",
+     main = "Sum of Squares per Subject Column")
+axis(1, at = 1:length(ss_y), labels = colnames(y),
+     las = 2, cex.axis = 0.7)
 my_image <- function(x, zlim = range(x), ...){
-  colors = rev(RColorBrewer::brewer.pal(9, "RdBu"))
+  par(mar = c(8, 5, 4, 2))
+  colors <- rev(RColorBrewer::brewer.pal(9, "RdBu"))
   cols <- 1:ncol(x)
   rows <- 1:nrow(x)
-  image(cols, rows, t(x[rev(rows),,drop=FALSE]),
+  image(cols, rows, t(x[rev(rows), , drop = FALSE]),
         xaxt = "n", yaxt = "n",
-        xlab="", ylab="",  col = colors, zlim = zlim, ...)
-  abline(h=rows + 0.5, v = cols + 0.5)
-  axis(side = 1, cols, colnames(x), las = 2)
+        xlab = "", ylab = "", col = colors, zlim = zlim, ...)
+  abline(h = rows + 0.5, v = cols + 0.5)
+  axis(side = 1, at = cols, labels = colnames(x), las = 2, cex.axis = 0.7)
 }
-
-my_image(y)
 
 #1. How would you describe the data based on this figure?
 
@@ -81,3 +87,36 @@ ss_y
 
 isTRUE(all.equal(sum(ss_y), sum(ss_yv)))
 #[1] TRUE
+
+#4. We see that the total sum of squares is preserved. This
+# is because V is orthogonal. Now to start understanding how YV
+#is useful, plot ss_y against the column number and then do the
+# same for ss_yv. What do you observe?
+
+#resetting margins after heatmap plot
+#plot shows x as index
+par(mar = c(5, 5, 4, 2))
+
+plot(ss_y, type = "b", pch = 19, col = "steelblue",
+      xlab = "Column Index", ylab = "Sum of Squares",
+      main = "Sum of Squares per Subject Column")
+
+range(ss_y)
+#[1] 6936.943 7751.430
+
+#improved graph
+par(mar = c(8, 5, 4, 2))  # More space at bottom
+plot(ss_y, type = "b", pch = 19, col = "steelblue",
+      xaxt = "n", xlab = "", ylab = "Sum of Squares",
+      main = "Sum of Squares per Subject Column")
+axis(1, at = 1:length(ss_y),
+     labels = colnames(y), las = 2, cex.axis = 0.7)
+
+plot(ss_yv, type = "b", pch = 19, col = "steelblue",
+      xaxt = "n", xlab = "", ylab = "Sum of Squares",
+      main = "Sum of Squares per Right Singular Vector V")
+axis(1, at = 1:length(ss_y),
+     labels = colnames(y), las = 2, cex.axis = 0.7)
+ 
+
+
