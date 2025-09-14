@@ -102,3 +102,24 @@ cm_type$table
 #Prediction Female Male
 #Female     26   13
 #Male       42   69
+
+#4. Use the confusionMatrix function in the caret package
+# to report accuracy.
+cm_type$overall['Accuracy']
+#Accuracy 
+#0.6333333 
+
+#5. Now use the sensitivity and specificity functions to 
+#report specificity and sensitivity.
+
+library(caret)
+specificity(y_hat, y)
+#[1] 0.8414634
+sensitivity(y_hat, y)
+#[1] 0.3823529
+
+#6. What is the prevalence (% of females) in the dat dataset
+# defined above?
+cm_type$byClass['Prevalence']
+#Prevalence 
+#0.4533333
