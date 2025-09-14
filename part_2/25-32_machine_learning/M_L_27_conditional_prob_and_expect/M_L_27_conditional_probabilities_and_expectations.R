@@ -29,3 +29,19 @@ heights %>%
   group_by(g) %>%
   summarize(p=mean(sex=='Male'), height=mean(height)) %>%
   qplot(height, p, data=.)
+
+#3. Generate data from a bivariate normal distribution using 
+#the MASS package like this:
+Sigma <- 9*matrix(c(1,0.5,0.5,1), 2, 2)
+dat <- MASS::mvrnorm(n = 10000, c(69, 69), Sigma) |>
+  data.frame() |> setNames(c("x", "y"))
+
+#You can make a quick plot of the data using plot(dat). Use 
+#an approach similar to the previous exercise to estimate the 
+#conditional expectations and make a plot.
+ps <- seq(0, 1, 0.1)
+dat %>% 
+  mutate(g = cut(x, quantile(x, ps), include.lowest = TRUE)) %>%  
+  group_by(g) %>%  
+  summarize(y = mean(y), x = mean(x)) %>%
+  qplot(x, y, data =.)
