@@ -35,3 +35,35 @@ sensitivity(data = y_hat, reference = test_set$sex)
 specificity(data = y_hat, reference = test_set$sex)
 #> [1] 0.833
 
+#Exercises 26.9 
+
+library(lubridate)
+dat <- mutate(reported_heights,
+              date_time = ymd_hms(time_stamp)) |>
+  filter(date_time >= make_date(2016, 01, 25) & 
+           date_time < make_date(2016, 02, 1)) |>
+  mutate(type = ifelse(day(date_time) == 25 &
+                         hour(date_time) == 8 & 
+                         between(minute(date_time), 15, 30),
+                       "inclass", "online")) |>
+  select(sex, type)
+x <- dat$type
+y <- factor(dat$sex, c("Female", "Male"))
+
+#1. Show summary statistics that indicate that the type is 
+#predictive of sex.
+
+summary_table<-table(dat$type, dat$sex)
+summary_table
+
+#           Female Male
+#inclass     26   13
+#online      42   69
+
+chisq.test(summary_table)
+#Pearson's Chi-squared test with Yates' continuity correction
+#data:  summary_table
+#X-squared = 8.5502, df = 1, p-value = 0.003455
+
+#p-value < 0.05 concluding type and sex are not independent
+#i.e. type is predictive of sex
