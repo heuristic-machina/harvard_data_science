@@ -68,3 +68,37 @@ chisq.test(summary_table)
 
 #p-value < 0.05 concluding type and sex are not independent
 #i.e. type is predictive of sex
+
+(dat %>% 
+    group_by(type) %>% 
+    summarize(propf = mean(sex == "Female")))[1,] 
+## # A tibble: 1 x 2
+##   type    propf
+##   <chr>   <dbl>
+## 1 inclass 0.667
+
+(dat %>% 
+    group_by(type) %>% 
+    summarize(propf = mean(sex == "Female")))[2,]
+## # A tibble: 1 x 2
+##   type   propf
+##   <chr>  <dbl>
+## 1 online 0.378
+
+
+#2. Instead of using height to predict sex, use the type 
+#variable.
+
+ifelse(x == "inclass", "Female", "Male") %>% 
+  factor(levels = levels(y)) -> y_hat 
+
+mean(y_hat==y)
+## [1] 0.6333333
+
+#3. Show the confusion matrix.
+cm_type <- confusionMatrix(data=y_hat, reference=y)
+cm_type$table
+#Reference
+#Prediction Female Male
+#Female     26   13
+#Male       42   69
