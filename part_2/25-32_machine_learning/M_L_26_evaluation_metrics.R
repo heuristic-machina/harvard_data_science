@@ -60,6 +60,7 @@ summary_table
 #inclass     26   13
 #online      42   69
 
+#Axion:
 chisq.test(summary_table)
 #Pearson's Chi-squared test with Yates' continuity correction
 #data:  summary_table
