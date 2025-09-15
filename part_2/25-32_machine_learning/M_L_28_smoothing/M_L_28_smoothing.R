@@ -41,3 +41,18 @@ dat %>%
   ggplot() +
   geom_point(aes(date, deaths)) +
   geom_line(aes(date, smooth), lwd = 2, col = 2)
+
+#2. Plot the smooth estimates against day of the year, all on 
+#the same plot but with different colors.
+
+span <- 60 / as.numeric(diff(range(dat$date)))
+fit <- dat %>%
+  mutate(x = as.numeric(date)) %>%
+  loess(deaths ~ x, data = ., span = span, degree = 1)
+
+dat %>% 
+  mutate(smooth = predict(fit, as.numeric(date)),
+         day = yday(date),
+         year = as.character(year(date))) %>%
+  ggplot(aes(day, smooth, col = year)) +
+  geom_line(lwd = 2)
