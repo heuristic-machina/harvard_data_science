@@ -56,3 +56,30 @@ dat %>%
          year = as.character(year(date))) %>%
   ggplot(aes(day, smooth, col = year)) +
   geom_line(lwd = 2)
+
+#3. Suppose we want to predict 2s and 7s in our mnist_27 dataset
+# with just the second covariate. Can we do this? On first 
+#inspection it appears the data does not have much predictive 
+#power. In fact, if we fit a regular logistic regression, the 
+#coefficient for x_2 is not significant!
+library(broom)
+library(dslabs)
+mnist_27$train |> 
+  glm(y ~ x_2, family = "binomial", data = _) |> 
+  tidy()
+
+# A tibble: 2 × 5
+#term           estimate   std.error statistic  p.value
+#<chr>            <dbl>     <dbl>     <dbl>   <dbl>
+#1 (Intercept)   -0.123     0.251    -0.491   0.623
+#2 x_2            0.410     0.835     0.491   0.623
+
+qplot(x_2, y, data = mnist_27$train)
+
+#Fit a loess line to the data above and plot the results. 
+#Notice that there is predictive power, except the conditional 
+#probability is not linear.
+mnist_27$train %>% 
+  mutate(y = ifelse(y=="7", 1, 0)) %>%
+  ggplot(aes(x_2, y)) + 
+  geom_smooth(method = "loess")
