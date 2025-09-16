@@ -10,6 +10,7 @@ mnist_27$train |> ggplot(aes(x_1, x_2, color = y)) + geom_point()
 #28.5 Local weighted regression
 #weighted range of 3 weeks smooths line
 #default degrees=2 is for parabolas resulting in more noise
+#degree freedom=1 smooths noise
 
 total_days <- diff(range(polls_2008$day))
 span <- 21/total_days
