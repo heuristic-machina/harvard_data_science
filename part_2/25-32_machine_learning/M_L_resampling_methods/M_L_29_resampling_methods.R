@@ -126,3 +126,50 @@ ggplot(fit)
 fit$results
 #   k       Accuracy     Kappa      AccuracySD    KappaSD
 #7 251      0.7366656   0.4690416   0.03328032    0.06331109
+
+
+#6 We used the entire dataset to select the columns used in 
+#the model. This step needs to be included as part of the 
+#algorithm. The cross validation was done after this selection.
+
+#7 Re-do cross validation with selection step in cross 
+#validation 
+#Axion: prevents data leaks from test fold to training folds
+#inflates performance
+
+library(caret)
+library(genefilter)
+
+# Set up folds
+set.seed(1)
+folds <- createFolds(y, k = 10)
+
+accuracies <- numeric(length(folds))
+
+for (i in seq_along(folds)) {
+  # Split data
+  test_idx <- folds[[i]]
+  x_train <- x[-test_idx, ]
+  y_train <- y[-test_idx]
+  x_test <- x[test_idx, ]
+  y_test <- y[test_idx]
+  
+  # Feature selection on training set only
+  tt <- colttests(x_train, y_train)
+  ind <- which(tt$p.value <= 0.01)
+  
+  # Subset both train and test sets
+  x_train_subset <- x_train[, ind]
+  x_test_subset <- x_test[, ind]
+  
+  # Fit model (e.g., logistic regression)
+  fit <- train(x_train_subset, y_train, method = "glm")
+  
+  # Predict and compute accuracy
+  y_hat <- predict(fit, x_test_subset)
+  accuracies[i] <- mean(y_hat == y_test)
+}
+
+# Final estimate
+mean(accuracies)
+#[1] 0.487
