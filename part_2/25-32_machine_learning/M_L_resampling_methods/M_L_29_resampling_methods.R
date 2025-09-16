@@ -173,3 +173,15 @@ for (i in seq_along(folds)) {
 # Final estimate
 mean(accuracies)
 #[1] 0.487
+
+#8 Use the train function to predict tissue from gene 
+#expression. Use kNN. What k works best?
+
+data("tissue_gene_expression")
+fit <- with(tissue_gene_expression,
+            train(x, y, method = "knn",
+                  tuneGrid = data.frame( k = seq(1, 7, 2))))
+ggplot(fit)
+fit$results
+#k  Accuracy     Kappa AccuracySD    KappaSD
+#1 1 0.9888862 0.9865847 0.01421656 0.01716420
