@@ -116,3 +116,13 @@ fit <- train(x_subset, y, method = "glm")
 fit$results
 #parameter  Accuracy     Kappa    AccuracySD    KappaSD
 #1none    0.7547533   0.5088535   0.02094083    0.04247884
+
+#5.cross-validation with kNN
+#grid tuning parameters: k=seq(101, 301, 25)
+fit <- train(x_subset, y, method = "knn",
+             tuneGrid = data.frame(k = seq(101, 301, 25)))
+ggplot(fit)
+
+fit$results
+#   k       Accuracy     Kappa      AccuracySD    KappaSD
+#7 251      0.7366656   0.4690416   0.03328032    0.06331109
