@@ -75,3 +75,20 @@ grid.arrange(p1, p2, ncol = 2)
 summary(mnist_27$true_p$x_2)
 #Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 #0.0000  0.1528  0.3056  0.3056  0.4583  0.6111 
+
+#Exercises 29.8
+#1. Using train() to find accuracy of random generated 
+#dataset's subset
+set.seed(1996)
+n <- 1000
+p <- 10000
+x <- matrix(rnorm(n * p), n, p)
+colnames(x) <- paste("x", 1:ncol(x), sep = "_")
+y <- rbinom(n, 1, 0.5) |> factor()
+
+x_subset <- x[ ,sample(p, 100)]
+
+fit <- train(x_subset, y, method = "glm")
+fit$results
+#parameter  Accuracy       Kappa    AccuracySD    KappaSD
+#1 none     0.5052329 0.009740464   0.02993012    0.06042542
