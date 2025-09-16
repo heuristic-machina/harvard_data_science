@@ -77,6 +77,7 @@ summary(mnist_27$true_p$x_2)
 #0.0000  0.1528  0.3056  0.3056  0.4583  0.6111 
 
 #Exercises 29.8
+
 #1. Using train() to find accuracy of random generated 
 #dataset's subset
 set.seed(1996)
@@ -92,3 +93,26 @@ fit <- train(x_subset, y, method = "glm")
 fit$results
 #parameter  Accuracy       Kappa    AccuracySD    KappaSD
 #1 none     0.5052329 0.009740464   0.02993012    0.06042542
+
+#2. t-test y=0 or y=1 to find the most predictive outcome
+devtools::install_bioc("genefilter")
+install.packages("genefilter")
+library(genefilter)
+tt <- colttests(x, y)
+
+# a vector of the p-values
+pvals<-tt$p.value
+
+#3.predictors statistically significantly associated with y
+#p-value cutoff=0.01
+ind<-which(pvals<=0.01)
+length(ind)
+#[1] 108
+
+#4.using significantly signficant index x=length 108 columns 
+#rerun cross validation using x
+x_subset<-x[,ind]
+fit <- train(x_subset, y, method = "glm")
+fit$results
+#parameter  Accuracy     Kappa    AccuracySD    KappaSD
+#1none    0.7547533   0.5088535   0.02094083    0.04247884
