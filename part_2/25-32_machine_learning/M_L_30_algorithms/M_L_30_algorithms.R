@@ -69,3 +69,44 @@ abline(h = 0.5, lty = 2) +
   abline(v = 67, lty = 2)
 #> integer(0)
 
+
+#30.3.3 Quadratic discriminant analysis MNIST dataset
+params_27<- mnist_27$train |>
+  group_by(y) |>
+  summarize(avg_1=mean(x_1), avg_2=mean(x_2),
+            sd_1=sd(x_1), sd_2=sd(x_2),
+            r=cor(x_1, x_2))
+params_27
+## A tibble: 2 × 6
+#     y     avg_1   avg_2   sd_1    sd_2     r
+#   <fct>   <dbl>    <dbl>  <dbl>    <dbl>   <dbl>
+#1    2     0.136   0.287   0.0670  0.0600  0.415
+#2    7     0.238   0.290   0.0745  0.104   0.468
+
+
+
+#Here we have 2 predictors and had to compute 4 means, 
+#4 SDs, and 2 correlations. Notice that if we have 10 
+#predictors, we have 45 correlations for each class.
+
+#as number of predictors increase can lead to overfitting
+# K x p(p-1)/2 
+
+#quadratic discriminant takes the response group factor
+#and non factor discriminators x_1 and x_2 shown as '.' 
+train_qda <- MASS::qda(y ~ ., data = mnist_27$train)
+y_hat <- predict(train_qda, mnist_27$test)$class
+
+confusionMatrix(y_hat, mnist_27$test$y)$overall["Accuracy"] 
+#> Accuracy 
+#>    0.815
+#>    
+#>good fit but not as good as kernal smoother
+
+mnist_27$train |> mutate(y = factor(y)) |> 
+  ggplot(aes(x_1, x_2, fill = y, color = y)) + 
+  geom_point(show.legend = FALSE) + 
+  stat_ellipse(type = "norm") +
+  facet_wrap(~y)
+
+
