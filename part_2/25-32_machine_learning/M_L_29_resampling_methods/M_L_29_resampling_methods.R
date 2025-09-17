@@ -185,3 +185,16 @@ ggplot(fit)
 fit$results
 #k  Accuracy     Kappa AccuracySD    KappaSD
 #1 1 0.9888862 0.9865847 0.01421656 0.01716420
+
+
+#9 How many times do 3, 4, and 7 appear in the first 
+#re-sampled index?
+set.seed(1995)
+indexes <- createResample(mnist_27$train$y, 10)
+
+sum(indexes[[1]] == 3)
+#[1] 1
+sum(indexes[[1]] == 4)
+#[1] 2
+sum(indexes[[1]] == 7)
+#[1] 1
