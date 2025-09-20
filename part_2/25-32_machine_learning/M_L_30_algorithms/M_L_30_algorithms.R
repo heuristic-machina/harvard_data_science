@@ -182,3 +182,155 @@ res
 
 #On average, the RMSE does not change much as n gets larger, 
 #while the variability of RMSE does decrease.
+
+#4 Now repeat exercise 1, but this time make the correlation 
+#between x and y larger by changing Sigma like this:
+set.seed(1)
+n <- 100
+Sigma <- 9*matrix(c(1, 0.95, 0.95, 1), 2, 2)
+dat <- MASS::mvrnorm(n = 100, c(69, 69), Sigma) %>%
+  data.frame() %>% setNames(c("x", "y"))
+
+set.seed(1)
+rmse<- replicate(100, {
+  y <- dat$y
+  test_index <- createDataPartition(y,
+                                    times = 1,
+                                    p = 0.5,
+                                    list = FALSE)
+  train_set <- dat |> slice(-test_index)
+  test_set <- dat |> slice(test_index)
+  fit <- lm(y ~ x, data = train_set)
+  y_hat <- fit$coef[1] + fit$coef[2]*test_set$x
+  sqrt(mean((y_hat - test_set$y)^2))
+})
+mean(rmse)
+#[1] 0.9078124
+sd(rmse)
+#[1] 0.05821304
+
+#5. Which of the following best explains why the RMSE in 
+#exercise 4 is so much lower than exercise 1:
+
+#When we increase the correlation between x and y, x has
+# more predictive power and thus provides a better estimate
+# of y. This correlation has a much bigger effect on RMSE than
+# n. Large n simply provide us more precise estimates of the 
+#linear model coefficients.
+
+#6. Create a dataset using the following code:
+set.seed(1)
+Sigma <- matrix(c(1, 3/4, 3/4, 3/4, 1, 0, 3/4, 0, 1), 3, 3)
+dat <- MASS::mvrnorm(n = 100, c(0, 0, 0), Sigma) |>
+  data.frame() |> setNames(c("y", "x_1", "x_2"))
+
+#   1   .75   .75
+# .75     1     0
+# .75     0     1
+
+#Error in MASS::mvrnorm(n = 100, c(0, 0, 0), Sigma) : 
+#'Sigma' is not positive definite'
+
+#Axion: A matrix is positive definite if all its 
+#eigenvalues are positive. For a covariance matrix, this 
+#ensures:
+#All variables have non-negative variance.
+#The matrix defines a valid multivariate normal distribution.
+#No linear combination of variables has zero or negative variance.
+
+#softening the matrix 0s to .25 allows all variables to share some
+#covariance and the matrix becomes more positive definite
+set.seed(1)
+Sigma <- matrix(c(1.0, 0.75, 0.75,
+                  0.75, 1.0, 0.25,
+                  0.75, 0.25, 1.0), 3, 3)
+dat <- MASS::mvrnorm(n = 100, c(0, 0, 0), Sigma) %>%
+  data.frame() %>% setNames(c("y", "x_1", "x_2"))
+
+cor(dat)
+#            y       x_1       x_2
+#y   1.0000000 0.7287301 0.7096290
+#x_1 0.7287301 1.0000000 0.1890924
+#x_2 0.7096290 0.1890924 1.0000000
+
+#Use the caret package to partition into a test and training 
+#set of equal size. Compare the RMSE when using just x_1, just
+# x_2, and both x_1 and x_2. Train a linear model and report the
+# RMSE.
+
+set.seed(1)
+test_index <- createDataPartition(dat$y,
+                                  times = 1,
+                                  p = 0.5,
+                                  list = FALSE)
+train_set <- dat %>% slice(-test_index)
+test_set <- dat %>% slice(test_index)
+
+fit <- lm(y ~ x_1, data = train_set)
+y_hat <- predict(fit, newdata = test_set)
+sqrt(mean((y_hat-test_set$y)^2))
+#[1] 0.6175662
+fit <- lm(y ~ x_2, data = train_set)
+y_hat <- predict(fit, newdata = test_set)
+sqrt(mean((y_hat-test_set$y)^2))
+#[1] 0.5881607
+fit <- lm(y ~ x_1 + x_2, data = train_set)
+y_hat <- predict(fit, newdata = test_set)
+sqrt(mean((y_hat-test_set$y)^2))
+#[1] 0.3161433
+
+#lowest RMSE is both covariates since both are highly correlated to 
+#eachother and y
+
+#Axion heatmap visual
+library(ggplot2)
+library(reshape2)
+
+# Compute correlation matrix
+cor_mat <- cor(dat)
+
+# Melt for ggplot
+cor_melt <- melt(cor_mat)
+
+# Plot
+ggplot(cor_melt, aes(Var1, Var2, fill = value)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white",
+                       midpoint = 0, limit = c(-1,1), space = "Lab",
+                       name = "Correlation") +
+  theme_minimal() +
+  coord_fixed() +
+  labs(title = "Correlation Heatmap", x = "", y = "") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+
+
+
+#Axion visual of why centering mean at zero is visually helpful
+library(MASS)
+library(ggplot2)
+library(dplyr)
+
+set.seed(1)
+Sigma <- matrix(c(1, 0.75, 0.75,
+                  0.75, 1, 0.25,
+                  0.75, 0.25, 1), 3, 3)
+
+# Centered at origin
+dat_centered <- mvrnorm(n = 100, mu = c(0, 0, 0), Sigma) %>%
+  data.frame() %>% setNames(c("y", "x_1", "x_2")) %>%
+  mutate(type = "Centered")
+
+# Shifted mean
+dat_shifted <- mvrnorm(n = 100, mu = c(70, 70, 70), Sigma) %>%
+  data.frame() %>% setNames(c("y", "x_1", "x_2")) %>%
+  mutate(type = "Shifted")
+
+# Combine
+dat_all <- bind_rows(dat_centered, dat_shifted)
+
+# Plot
+ggplot(dat_all, aes(x = x_1, y = x_2, color = type)) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Effect of Mean Vector on Multivariate Normal Samples",
+       x = "x₁", y = "x₂") +
+  theme_minimal()
