@@ -32,7 +32,7 @@ library(dslabs)
 head(pr_death_counts)
 
 dat<-pr_death_counts %>% filter(date <= "2018-05-01")
-  
+
 span <- 60 / as.numeric(diff(range(dat$date)))
 fit <- dat %>% mutate(x = as.numeric(date)) %>%
   loess(deaths ~ x, data = ., span = span, degree = 1)

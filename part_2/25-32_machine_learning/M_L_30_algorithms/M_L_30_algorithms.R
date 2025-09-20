@@ -101,7 +101,7 @@ confusionMatrix(y_hat, mnist_27$test$y)$overall["Accuracy"]
 #> Accuracy 
 #>    0.815
 #>    
-#>good fit but not as good as kernal smoother
+#>good fit but not as good as kernel smoother
 
 mnist_27$train |> mutate(y = factor(y)) |> 
   ggplot(aes(x_1, x_2, fill = y, color = y)) + 
@@ -110,3 +110,75 @@ mnist_27$train |> mutate(y = factor(y)) |>
   facet_wrap(~y)
 
 
+#30.4.3 Regression Trees
+library(rpart)
+fit <- rpart(margin ~ ., data = polls_2008)
+
+
+
+#Exercises 30.6
+#1. Create a dataset using the following code:
+set.seed(1)
+n <- 100
+Sigma <- 9*matrix(c(1.0, 0.5, 0.5, 1.0), 2, 2)
+dat <- MASS::mvrnorm(n = 100, c(69, 69), Sigma) %>%
+  data.frame() %>% setNames(c("x", "y"))
+#Use the caret package to partition into a test and training
+# set of equal size. Train a linear model and report the RMSE.
+# Repeat this exercise 100 times and make a histogram of the
+# RMSEs and report the average and standard deviation. Hint:
+# adapt the code shown earlier like this:
+#and put it inside a call to replicate.
+set.seed(1)
+rmse<- replicate(100, {
+  y <- dat$y
+  test_index <- createDataPartition(y,
+                                    times = 1,
+                                    p = 0.5,
+                                    list = FALSE)
+  train_set <- dat |> slice(-test_index)
+  test_set <- dat |> slice(test_index)
+  fit <- lm(y ~ x, data = train_set)
+  y_hat <- fit$coef[1] + fit$coef[2]*test_set$x
+  sqrt(mean((y_hat - test_set$y)^2))
+})
+mean(rmse)
+#1 2.485441
+sd(rmse)
+#[1] 0.1316324
+
+#2. Now we will repeat the above but using larger datasets.
+# Repeat exercise 1 but for datasets with 
+#n <- c(100, 500, 1000, 5000, 10000). Save the average and 
+#standard deviation of RMSE from the 100 repetitions. 
+#Hint: use the sapply or map functions.
+set.seed(1)
+n <- c(100, 500, 1000, 5000, 10000)
+res <- sapply(n, function(n) {
+  Sigma <- 9*matrix(c(1.0, 0.5, 0.5, 1.0), 2, 2)
+  dat <- MASS::mvrnorm(n = 100, c(69, 69), Sigma) %>%
+    data.frame() %>% setNames(c("x", "y"))
+  rmse<- replicate(100, {
+    y <- dat$y
+    test_index <- createDataPartition(y,
+                                      times = 1,
+                                      p = 0.5,
+                                      list = FALSE)
+    train_set <- dat |> slice(-test_index)
+    test_set <- dat |> slice(test_index)
+    fit <- lm(y ~ x, data = train_set)
+    y_hat <- fit$coef[1] + fit$coef[2]*test_set$x
+    sqrt(mean((y_hat - test_set$y)^2))
+  })
+  c(avg=mean(rmse), sd=sd(rmse))
+})
+res
+#         [,1]      [,2]      [,3]      [,4]      [,5]
+#avg 2.4812746 2.6821855 2.8174015 2.6447523 2.6899310
+#sd  0.1276984 0.1527809 0.1992136 0.1487669 0.1942449
+
+#3. Describe what you observe with the RMSE as the size of 
+#the dataset becomes larger.
+
+#On average, the RMSE does not change much as n gets larger, 
+#while the variability of RMSE does decrease.
