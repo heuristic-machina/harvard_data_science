@@ -430,3 +430,17 @@ sd(rmse)
 hist(rmse, breaks = 20, col = "skyblue",
      main = "RMSE Distribution", xlab = "RMSE")
 
+#11. Generate 25 different datasets changing the difference between
+# the two class: delta <- seq(0, 3, len = 25). Plot accuracy versus
+# delta.
+
+set.seed(1)
+delta <- seq(0, 3, len = 25)
+res <- sapply(delta, function(d){
+  dat <- make_data(mu_1 = d)
+  fit_glm <- dat$train %>% glm(y ~ x, family = "binomial", data = .)
+  y_hat_glm <- ifelse(predict(fit_glm, dat$test) > 0.5, 1, 0) %>%
+    factor(levels = c(0, 1))
+  mean(y_hat_glm == dat$test$y)
+})
+qplot(delta, res)
