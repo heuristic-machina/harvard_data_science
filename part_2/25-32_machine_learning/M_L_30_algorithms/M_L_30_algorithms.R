@@ -334,3 +334,68 @@ ggplot(dat_all, aes(x = x_1, y = x_2, color = type)) +
   labs(title = "Effect of Mean Vector on Multivariate Normal Samples",
        x = "x₁", y = "x₂") +
   theme_minimal()
+
+
+#7. Repeat exercise 6 but now create an example in which x_1 and x_2 
+#are highly correlated:
+n <- 1000
+Sigma <- matrix(c(1.0, 0.75, 0.75,
+                  0.75, 1.0, 0.95,
+                  0.75, 0.95, 1.0),
+                3, 3)
+dat <- MASS::mvrnorm(n = 100, c(0, 0, 0), Sigma) |>
+  data.frame() |> setNames(c("y", "x_1", "x_2"))
+
+cor(dat)
+#y       x_1       x_2
+#y   1.0000000 0.7376090 0.7304403
+#x_1 0.7376090 1.0000000 0.9514117
+#x_2 0.7304403 0.9514117 1.0000000
+set.seed(1)
+test_index <- createDataPartition(dat$y,
+                                  times = 1,
+                                  p = 0.5,
+                                  list = FALSE)
+train_set <- dat %>% slice(-test_index)
+test_set <- dat %>% slice(test_index)
+
+fit <- lm(y ~ x_1, data = train_set)
+y_hat <- predict(fit, newdata = test_set)
+sqrt(mean((y_hat-test_set$y)^2))
+#[1] 0.828522
+fit <- lm(y ~ x_2, data = train_set)
+y_hat <- predict(fit, newdata = test_set)
+sqrt(mean((y_hat-test_set$y)^2))
+#[1] 0.7530944
+fit <- lm(y ~ x_1 + x_2, data = train_set)
+y_hat <- predict(fit, newdata = test_set)
+sqrt(mean((y_hat-test_set$y)^2))
+#[1] 0.8330126
+
+#8. Compare the results in 6 and 7 and choose the 
+#statement you agree with:
+
+#Adding extra predictors can improve RMSE substantially,
+#but not when they are highly correlated with another predictor.
+
+#9 Define the following dataset:
+set.seed(2)
+make_data <- function(n = 1000, p = 0.5, 
+                      mu_0 = 0, mu_1 = 2, 
+                      sigma_0 = 1,  sigma_1 = 1){
+  
+  y <- rbinom(n, 1, p)
+  f_0 <- rnorm(n, mu_0, sigma_0)
+  f_1 <- rnorm(n, mu_1, sigma_1)
+  x <- ifelse(y == 1, f_1, f_0)
+  
+  test_index <- createDataPartition(y, times = 1, p = 0.5, list = FALSE)
+  
+  list(train = data.frame(x = x, y = as.factor(y)) %>% slice(-test_index),
+       test = data.frame(x = x, y = as.factor(y)) %>% slice(test_index))
+}
+dat <- make_data()
+
+#Note that we have defined a variable x that is predictive of a 
+#binary outcome y.
+dat$train %>% ggplot(aes(x, color = y)) + geom_density()
