@@ -398,4 +398,35 @@ dat <- make_data()
 
 #Note that we have defined a variable x that is predictive of a 
 #binary outcome y.
+#color=y shows both binary outcomes
 dat$train %>% ggplot(aes(x, color = y)) + geom_density()
+
+#10. Repeat the simulation from exercise 1 100 times and compare the 
+#average accuracy for each method and notice they give practically 
+#the same answer.
+set.seed(1)
+n <- 100
+Sigma <- 9*matrix(c(1.0, 0.5, 0.5, 1.0), 2, 2)
+dat <- MASS::mvrnorm(n = 100, c(69, 69), Sigma) %>%
+  data.frame() %>% setNames(c("x", "y"))
+set.seed(1)
+rmse<- replicate(100, {
+  y <- dat$y
+  test_index <- createDataPartition(y,
+                                    times = 1,
+                                    p = 0.5,
+                                    list = FALSE)
+  train_set <- dat |> slice(-test_index)
+  test_set <- dat |> slice(test_index)
+  fit <- lm(y ~ x, data = train_set)
+  y_hat <- predict(fit, newdata = test_set)
+  #rmse-a measure of prediction accuracy
+  sqrt(mean((y_hat - test_set$y)^2))
+})
+mean(rmse)
+#[1] 2.485441
+sd(rmse)
+#[1] 0.1316324
+hist(rmse, breaks = 20, col = "skyblue",
+     main = "RMSE Distribution", xlab = "RMSE")
+
