@@ -444,3 +444,60 @@ res <- sapply(delta, function(d){
   mean(y_hat_glm == dat$test$y)
 })
 qplot(delta, res)
+
+#12
+library(dslabs)
+mnist_127$train |> ggplot(aes(x_1, x_2,
+                              color = y)) + geom_point()
+
+#Fit QDA using the qda function in the MASS package the create
+#a confusion matrix for predictions on the test. Which of the 
+#following best describes the confusion matrix:
+
+library(MASS)
+library(caret)  # for confusionMatrix()
+
+# Fit QDA model
+qda_fit <- MASS::qda(y ~ ., data = mnist_127$train)
+# Predict on test
+qda_pred <- predict(qda_fit, mnist_127$test)
+# Confusion matrix
+confusionMatrix(qda_pred$class, mnist_127$test$y)
+
+             Reference
+Prediction   
+#             1       2       7
+#       1     111     9       11
+#       2     10      86      21
+#       7     21      28      102
+
+# Overall Statistics
+
+#Accuracy : 0.7494          
+#95% CI : (0.7038, 0.7912)
+#No Information Rate : 0.3559          
+#P-Value [Acc > NIR] : <2e-16          
+
+#Kappa : 0.6235          
+
+#Mcnemar's Test P-Value : 0.2429          
+
+#Statistics by Class:
+
+#                     Class: 1 Class: 2 Class: 7
+#Sensitivity            0.7817   0.6992   0.7612
+#Specificity            0.9222   0.8877   0.8151
+#Pos Pred Value         0.8473   0.7350   0.6755
+#Neg Pred Value         0.8843   0.8688   0.8710
+#Prevalence             0.3559   0.3083   0.3358
+#Detection Rate         0.2782   0.2155   0.2556
+#Detection Prevalence   0.3283   0.2932   0.3784
+#Balanced Accuracy      0.8519   0.7934   0.7881
+
+#negative prediction value:
+#Actual 1s= sum(column 1)=142 
+#False Negatives, predicted as 2 and 7: 10 + 21 = 31 
+#True Negatives, all non-1s (actual 2s and 7s) predicted as 2 or 7: 
+#Actual 2s predicted as 2 or 7: 86 + 28= 114 
+#Actual 7s predicted as 2 or 7: 21 + 102= 123 
+#Total TN = 237 NPV = 237/237+31 = .88

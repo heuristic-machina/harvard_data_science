@@ -71,7 +71,7 @@ p2 <- ggplot(grid, aes(x = x_1, y = x_2, fill = p)) +
 library(gridExtra)
 grid.arrange(p1, p2, ncol = 2)
 
-  
+
 summary(mnist_27$true_p$x_2)
 #Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 #0.0000  0.1528  0.3056  0.3056  0.4583  0.6111 
