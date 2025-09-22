@@ -464,6 +464,8 @@ qda_pred <- predict(qda_fit, mnist_127$test)
 # Confusion matrix
 confusionMatrix(qda_pred$class, mnist_127$test$y)
 
+#3 class: 3x3 table
+
              Reference
 Prediction   
 #             1       2       7
@@ -478,7 +480,8 @@ Prediction
 #No Information Rate : 0.3559          
 #P-Value [Acc > NIR] : <2e-16          
 
-#Kappa : 0.6235          
+#Kappa : 0.6235
+#shows qda model is substantially performing better than random guessing
 
 #Mcnemar's Test P-Value : 0.2429          
 
@@ -501,3 +504,56 @@ Prediction
 #Actual 2s predicted as 2 or 7: 86 + 28= 114 
 #Actual 7s predicted as 2 or 7: 21 + 102= 123 
 #Total TN = 237 NPV = 237/237+31 = .88
+
+#13. The byClass component returned by the confusionMatrix 
+#object provides sensitivity and specificity for each class. 
+#Because these terms only make sense when data is binary, each row
+#represents sensitivity and specificity when a particular class is
+#1 (positives) and the other two are considered 0s (negatives). 
+#Based on the values returned by confusionMatrix, which of the following
+# is the most common mistake:
+
+#answer:Calling 2s either a 1 or 7.  2 had the highest number of false 
+#negatives and the lowest sensitivity
+
+#14 Create a grid of x_1 and x_2 using:
+GS <- 150
+new_x <- with(mnist_127$train,
+              expand.grid(x_1 = seq(min(x_1),
+                                    max(x_1),
+                                    len = GS),
+                          x_2 = seq(min(x_2),
+                                    max(x_2),
+                                    len = GS)))
+
+#then visualize the decision rule by coloring the regions of the 
+#Cartesian plan to represent the label that would be called in that 
+#region.
+
+#This adds a label column to new_x, showing which digit (1, 2, or 7)
+# QDA would assign to each point in the 2D space.
+qda_pred_grid <- predict(qda_fit, newdata = new_x)
+new_x$label <- qda_pred_grid$class
+
+#Axion' plot
+#geom_tile paints the prediction tiles
+#geom_points are the actual train data points
+ggplot() +
+  geom_tile(data = new_x, aes(x = x_1, y = x_2,
+                              fill = label), alpha = 0.4) +
+  geom_point(data = mnist_127$train,
+             aes(x = x_1, y = x_2, color = y),
+             size = 1.5) +
+  scale_fill_manual(values = c("1" = "skyblue",
+                               "2" = "orange",
+                               "7" = "purple")) +
+  scale_color_manual(values = c("1" = "blue",
+                                "2" = "darkorange",
+                                "7" = "darkviolet")) +
+  labs(title = "QDA Decision Boundaries on MNIST 1-2-7",
+       fill = "Predicted Label",
+       color = "Actual Label") +
+  theme_minimal()
+
+
+
