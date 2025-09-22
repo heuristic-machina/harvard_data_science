@@ -579,4 +579,35 @@ ggplot() +
        color = "Actual Label") +
   theme_minimal()
 
+#14 Which of the following explains why LDA has worse accuracy:
 
+#LDA separates the space with lines making it too rigid.
+
+#15. Now repeat exercise 13 for kNN with k=31 and compute and 
+#compare the overall accuracy for all three methods.
+
+library(class)
+
+# Extract training and test features and labels
+train_x <- mnist_127$train[, c("x_1", "x_2")]
+train_y <- mnist_127$train$y
+test_x  <- mnist_127$test[, c("x_1", "x_2")]
+test_y  <- mnist_127$test$y
+
+# Predict using kNN with k = 31
+knn_pred <- knn(train = train_x, test = test_x, cl = train_y, k = 31)
+
+# QDA predictions
+qda_test_pred <- predict(qda_fit, mnist_127$test)$class
+
+# LDA predictions
+lda_test_pred <- predict(lda_fit, mnist_127$test)$class
+
+
+# Accuracy calculations
+mean(qda_test_pred == test_y)  # QDA accuracy
+#[1] 0.7493734
+mean(lda_test_pred == test_y)  # LDA accuracy
+#[1] 0.6290727
+mean(knn_pred == test_y)       # kNN accuracy
+#[1] 0.7568922
