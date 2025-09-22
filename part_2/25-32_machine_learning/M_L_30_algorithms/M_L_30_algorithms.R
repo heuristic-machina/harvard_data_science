@@ -555,5 +555,28 @@ ggplot() +
        color = "Actual Label") +
   theme_minimal()
 
+#lda comparision
+#1. fit the model
+lda_fit <- lda(y ~ x_1 + x_2, data = mnist_127$train)
+#2. predict on the grid
+lda_pred_grid <- predict(lda_fit, newdata = new_x)
+new_x$label_lda <- lda_pred_grid$class
+#plot
+ggplot() +
+  geom_tile(data = new_x, aes(x = x_1, y = x_2,
+                              fill = label_lda),
+            alpha = 0.4) +
+  geom_point(data = mnist_127$train, aes(x = x_1, y = x_2,
+                                         color = y), size = 1.5) +
+  scale_fill_manual(values = c("1" = "skyblue",
+                               "2" = "orange",
+                               "7" = "purple")) +
+  scale_color_manual(values = c("1" = "blue",
+                                "2" = "darkorange",
+                                "7" = "darkviolet")) +
+  labs(title = "LDA Decision Boundaries on MNIST 1-2-7",
+       fill = "Predicted Label",
+       color = "Actual Label") +
+  theme_minimal()
 
 
