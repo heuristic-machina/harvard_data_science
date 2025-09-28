@@ -209,6 +209,19 @@ mean(rmse)
 sd(rmse)
 #[1] 0.05821304
 
+#The base matrix represents a correlation matrix:
+#variance of x and y is 1
+#correlation between x and y is .95
+# 1   .95
+# .95   1
+#9 multiplies the scale
+
+#generated 100 samples of the bivariate normal distribution with
+#this covariance structure.  Then repeatedly splitting the data, fitting
+#a linear model, & calculating RMSE on the test set.  The high correlation
+#gives a well performing linear model.  Small std dev shows stable
+#predictive performance acoss splits
+
 #5. Which of the following best explains why the RMSE in 
 #exercise 4 is so much lower than exercise 1:
 
@@ -240,6 +253,12 @@ dat <- MASS::mvrnorm(n = 100, c(0, 0, 0), Sigma) |>
 
 #softening the matrix 0s to .25 allows all variables to share some
 #covariance and the matrix becomes more positive definite
+#   1   .75   .75
+# .75     1   .25
+# .75   .25     1
+
+
+
 set.seed(1)
 Sigma <- matrix(c(1.0, 0.75, 0.75,
                   0.75, 1.0, 0.25,
@@ -252,6 +271,24 @@ cor(dat)
 #y   1.0000000 0.7287301 0.7096290
 #x_1 0.7287301 1.0000000 0.1890924
 #x_2 0.7096290 0.1890924 1.0000000
+
+#visualization
+# Run PCA (centered and scaled)
+pca <- prcomp(dat, center = TRUE, scale. = TRUE)
+
+# Visualize loadings
+loadings <- as.data.frame(pca$rotation)
+loadings$Variable <- rownames(loadings)
+
+ggplot(loadings, aes(x = PC1, y = PC2, label = Variable)) +
+  geom_segment(aes(xend = 0, yend = 0), 
+               arrow = arrow(length = unit(0.2, "cm")),
+               color = "steelblue") +
+  geom_text(vjust = -0.5, size = 5) +
+  xlim(-1, 1) + ylim(-1, 1) +
+  coord_fixed() +
+  labs(title = "PCA Loadings Plot", x = "PC1", y = "PC2") +
+  theme_minimal()
 
 #Use the caret package to partition into a test and training 
 #set of equal size. Compare the RMSE when using just x_1, just
@@ -279,8 +316,9 @@ y_hat <- predict(fit, newdata = test_set)
 sqrt(mean((y_hat-test_set$y)^2))
 #[1] 0.3161433
 
-#lowest RMSE is both covariates since both are highly correlated to 
-#eachother and y
+#lowest RMSE is both covariates since both are highly 
+#correlated to y
+
 
 #Axion heatmap visual
 library(ggplot2)
@@ -331,7 +369,8 @@ dat_all <- bind_rows(dat_centered, dat_shifted)
 # Plot
 ggplot(dat_all, aes(x = x_1, y = x_2, color = type)) +
   geom_point(alpha = 0.6) +
-  labs(title = "Effect of Mean Vector on Multivariate Normal Samples",
+  labs(title =
+         "Effect of Mean Vector on Multivariate Normal Samples",
        x = "x₁", y = "x₂") +
   theme_minimal()
 
@@ -347,7 +386,7 @@ dat <- MASS::mvrnorm(n = 100, c(0, 0, 0), Sigma) |>
   data.frame() |> setNames(c("y", "x_1", "x_2"))
 
 cor(dat)
-#y       x_1       x_2
+#           y       x_1       x_2
 #y   1.0000000 0.7376090 0.7304403
 #x_1 0.7376090 1.0000000 0.9514117
 #x_2 0.7304403 0.9514117 1.0000000
@@ -372,6 +411,24 @@ y_hat <- predict(fit, newdata = test_set)
 sqrt(mean((y_hat-test_set$y)^2))
 #[1] 0.8330126
 
+#visualization
+# Run PCA (centered and scaled)
+pca <- prcomp(dat, center = TRUE, scale. = TRUE)
+
+# Visualize loadings
+loadings <- as.data.frame(pca$rotation)
+loadings$Variable <- rownames(loadings)
+
+ggplot(loadings, aes(x = PC1, y = PC2, label = Variable)) +
+  geom_segment(aes(xend = 0, yend = 0), 
+               arrow = arrow(length = unit(0.2, "cm")),
+               color = "steelblue") +
+  geom_text(vjust = -0.5, size = 5) +
+  xlim(-1, 1) + ylim(-1, 1) +
+  coord_fixed() +
+  labs(title = "PCA Loadings Plot", x = "PC1", y = "PC2") +
+  theme_minimal()
+
 #8. Compare the results in 6 and 7 and choose the 
 #statement you agree with:
 
@@ -389,10 +446,15 @@ make_data <- function(n = 1000, p = 0.5,
   f_1 <- rnorm(n, mu_1, sigma_1)
   x <- ifelse(y == 1, f_1, f_0)
   
-  test_index <- createDataPartition(y, times = 1, p = 0.5, list = FALSE)
+  test_index <- createDataPartition(y, 
+                                    times = 1,
+                                    p = 0.5,
+                                    list = FALSE)
   
-  list(train = data.frame(x = x, y = as.factor(y)) %>% slice(-test_index),
-       test = data.frame(x = x, y = as.factor(y)) %>% slice(test_index))
+  list(train = data.frame(x = x, y = as.factor(y)) %>%
+         slice(-test_index),
+       test = data.frame(x = x, y = as.factor(y)) %>%
+         slice(test_index))
 }
 dat <- make_data()
 
@@ -406,8 +468,12 @@ dat$train %>% ggplot(aes(x, color = y)) + geom_density()
 #the same answer.
 set.seed(1)
 n <- 100
-Sigma <- 9*matrix(c(1.0, 0.5, 0.5, 1.0), 2, 2)
-dat <- MASS::mvrnorm(n = 100, c(69, 69), Sigma) %>%
+Sigma <- 9*matrix(c(1.0, 0.5,
+                    0.5, 1.0),
+                  2, 2)
+dat <- MASS::mvrnorm(n = 100,
+                     c(69, 69),
+                     Sigma) %>%
   data.frame() %>% setNames(c("x", "y"))
 set.seed(1)
 rmse<- replicate(100, {
@@ -420,7 +486,7 @@ rmse<- replicate(100, {
   test_set <- dat |> slice(test_index)
   fit <- lm(y ~ x, data = train_set)
   y_hat <- predict(fit, newdata = test_set)
-  #rmse-a measure of prediction accuracy
+  #rmse - a measure of prediction accuracy
   sqrt(mean((y_hat - test_set$y)^2))
 })
 mean(rmse)
@@ -438,8 +504,10 @@ set.seed(1)
 delta <- seq(0, 3, len = 25)
 res <- sapply(delta, function(d){
   dat <- make_data(mu_1 = d)
-  fit_glm <- dat$train %>% glm(y ~ x, family = "binomial", data = .)
-  y_hat_glm <- ifelse(predict(fit_glm, dat$test) > 0.5, 1, 0) %>%
+  fit_glm <- dat$train %>%
+    glm(y ~ x, family = "binomial", data = .)
+  y_hat_glm <- ifelse(predict(fit_glm,
+                              dat$test) > 0.5, 1, 0) %>%
     factor(levels = c(0, 1))
   mean(y_hat_glm == dat$test$y)
 })
@@ -481,7 +549,8 @@ Prediction
 #P-Value [Acc > NIR] : <2e-16          
 
 #Kappa : 0.6235
-#shows qda model is substantially performing better than random guessing
+#shows qda model is substantially performing better than 
+#random guessing
 
 #Mcnemar's Test P-Value : 0.2429          
 
@@ -611,3 +680,67 @@ mean(lda_test_pred == test_y)  # LDA accuracy
 #[1] 0.6290727
 mean(knn_pred == test_y)       # kNN accuracy
 #[1] 0.7568922
+
+#16 To understand how a simple method like kNN can outperform a model 
+#that explicitly tries to emulate Bayes’ rule, explore the conditional
+# distributions of x_1 and x_2 to see if the normal approximation holds.
+# Generative models can be very powerful, but only when we are able to 
+#successfully approximate the joint distribution of predictors conditioned
+#on each class.
+
+#Gaussian class-conditional distributions are normal approximations and
+#relevant for LDA and QDA.  The workflow:
+
+#combine test data with labels
+library(ggplot2)
+library(dplyr)
+
+#Ensure its a dataframe
+plot_data <- as.data.frame(mnist_127$train)
+plot_data <- plot_data[, c('x_1', 'x_2', 'y')]
+plot_data$y <- as.factor(plot_data$y)
+
+#Density plot x_1
+ggplot(plot_data, aes(x = x_1, fill = y)) +
+  geom_density(alpha=.5) +
+  labs(title = 'Conditional Density of x_1 by Class',
+       x='x_1',
+       y = 'Density') +
+  theme_minimal()
+#Density plot x_2
+ggplot(plot_data, aes(x = x_2, fill = y)) +
+  geom_density(alpha=.5) +
+  labs(title = 'Conditional Density of x_2 by Class',
+       x='x_2',
+       y = 'Density') +
+  theme_minimal()
+
+#QDA assumes each class has its own covariance matrix (flexible)
+#LDA assumes equal covariance across classes (restrictive)
+#kNN when distributions are skewed, multimodal, or overlapping
+
+#17 Earlier we used logistic regression to predict sex from 
+#height. Use kNN to do the same. Use the code described in this 
+#chapter to select the F1 measure and plot it against k. Compare 
+#to the F1 of about 0.6 we obtained with regression.
+library(dslabs)
+library(tidyverse)
+library(caret)
+data('heights')
+
+set.seed(1)
+test_index <- createDataPartition(heights$sex,
+                                  times=1,
+                                  p=.5,
+                                  list=FALSE)
+test_set <- heights[test_index, ]
+train_set <- heights[-test_index, ]
+
+ks <- seq(1, 101, 3)
+f1 <- sapply(ks, function(k){
+  fit <- knn3(sex ~ height, data = train_set, k=k)
+  y_hat <- predict(fit, test_set, type='class') %>%
+    factor(levels=levels(train_set$sex))
+  F_meas(data=y_hat, reference=test_set$sex)
+})
+plot(ks, f1)
