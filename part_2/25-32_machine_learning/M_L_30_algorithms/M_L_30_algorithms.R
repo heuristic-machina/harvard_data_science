@@ -792,6 +792,18 @@ ggplot(dat, aes(x=x)) +
 #randomForest from the randomForest package, and remake the scatterplot
 #with the prediction line
 
+#22 Use the function plot to see if the random forest has converged
+#or if we need more trees.
+
+#we use mean square error to visualize how the classification error
+#changes as more trees are added.  If its stable or add more to increase
+#performance
+
+#traceable error fit
+rf_fit <- randomForest(y~x, data=dat, ntree=500, keep.inbag=TRUE)
+#plot error vs. number of trees
+plot(rf_fit)
+#plot flattens at 200 and appears converged
 #fit random forest
 install.packages('randomForest')
 library(randomForest)
@@ -805,3 +817,20 @@ ggplot(dat, aes(x=x)) +
   labs(title = 'Random Forest Fit: y vs x',
        x='x', y='y /Predicted y') +
   theme_minimal()
+
+#23 It seems that the default values for the random forest result in
+#an estimate that is too flexible (not smooth).  Re-run the random 
+#forest but this time with nodesize set at 50 and maxnodes set at 25.
+#Remake the plot.
+rf_fit <- randomForest(y ~ x, data=dat, nodesize=50)
+#predict
+dat$y_hat <- predict(rf_fit)
+ggplot(dat, aes(x=x)) +
+  geom_point(aes(y=y), color='gray60', alpha=.6) +
+  geom_line(aes(y=y_hat), color='forestgreen', size=1.2) +
+  labs(title = 'Random Forest Fit: y vs x',
+       x='x', y='y /Predicted y') +
+  theme_minimal()
+
+#as nodesize increases it loses the forest look and approaches
+#a linear curve
