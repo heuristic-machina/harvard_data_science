@@ -744,3 +744,33 @@ f1 <- sapply(ks, function(k){
   F_meas(data=y_hat, reference=test_set$sex)
 })
 plot(ks, f1)
+
+#18 Create a simple dataset where the outcome grows .75 units on average
+#for every increase in a predictor:
+n <- 1000
+sigma <- 0.25
+x <- rnorm(n, 0, 1)
+y <- 0.75 * x + rnorm(n, 0, sigma)
+dat <- data.frame(x = x, y = y)
+
+#use rpart to fit a regression tree and save the result to fit
+
+library(rpart)
+n <- 1000
+sigma <- 0.25
+set.seed(1, sample.kind = 'Rounding')
+x <- rnorm(n, 0, 1)
+y <- 0.75 * x + rnorm(n, 0, sigma)
+dat <- data.frame(x=x, y=y)
+fit1 <- rpart(y ~ ., data=dat)
+
+#19 Plot the final tree so that you can see where the 
+#partitions occurred.
+library(rpart)
+library(rpart.plot)
+
+#fit the tree
+fit1 <- rpart(y ~ ., data=dat)
+#plot
+rpart.plot(fit1, type=2, extra=101, under=TRUE, faclen=0,
+           box.palette='Blues', shadow.col = 'gray', nn =TRUE)
