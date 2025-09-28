@@ -774,3 +774,16 @@ fit1 <- rpart(y ~ ., data=dat)
 #plot
 rpart.plot(fit1, type=2, extra=101, under=TRUE, faclen=0,
            box.palette='Blues', shadow.col = 'gray', nn =TRUE)
+
+#20 Make a scatterplot y vs x along with the predicted values 
+#based on the fit
+
+#add predictions
+dat$y_hat <- predict(fit1)
+#plot
+ggplot(dat, aes(x=x)) +
+  geom_point(aes(y=y), color='gray60', alpha=0.6) +
+  geom_line(aes(y=y_hat), color='blue', size=1.2) +
+  labs(title='Regression Tree Fit: y vs x',
+       x = 'x', y = 'y / Predicted y') +
+  theme_minimal()
