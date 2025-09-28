@@ -834,3 +834,65 @@ ggplot(dat, aes(x=x)) +
 
 #as nodesize increases it loses the forest look and approaches
 #a linear curve
+
+#overlap plot
+rf_5  <- randomForest(y ~ x, data = dat, nodesize = 5)
+rf_50 <- randomForest(y ~ x, data = dat, nodesize = 50)
+
+dat$y_hat_5  <- predict(rf_5)
+dat$y_hat_50 <- predict(rf_50)
+
+ggplot(dat, aes(x = x)) +
+  geom_point(aes(y = y), color = "gray60", alpha = 0.6) +
+  geom_line(aes(y = y_hat_5), color = "forestgreen", size = 1.2) +
+  geom_line(aes(y = y_hat_50), color = "darkorange", size = 1.2, linetype = "dashed") +
+  labs(title = "Random Forest Predictions: nodesize 5 vs 50",
+       x = "x", y = "y / Predicted y") +
+  theme_minimal()
+
+
+#24 This dslabs dataset includes the tissue_gene_expression with a 
+#matrix x:
+library(dslabs)
+dim(tissue_gene_expression$x)
+
+#with the gene expression measured on 500 genes for 189 biological
+#samples representing seven different tissues. The tissue type is stored
+#in tissue_gene_expression$y
+table(tissue_gene_expression$y)
+#Fit a random forest using the randomForest function in the package
+#randomForest. Then use varImp function to see which are the top 10
+#most predictive genes. Make a histogram of the reported importance
+#to get an idea of the distribution of the importance values.
+
+library(dslabs)
+library(randomForest)
+library(caret)
+library(ggplot2)
+data("tissue_gene_expression")
+
+#fit forest model
+#predict tissue type
+rf_model <- randomForest(x= tissue_gene_expression$x,
+                         y= tissue_gene_expression$y,
+                         importance=TRUE)
+#extract variable importance
+#caret's varImp for importance scores
+
+imp <- varImp(rf_model, scale = FALSE)
+
+# Convert to data frame and add gene names
+imp_df <- data.frame(Gene = rownames(imp), Importance = imp[, 1])
+
+# Sort and slice top 10
+top_genes <- imp_df %>%
+  arrange(desc(Importance)) %>%
+  slice(1:10)
+
+# Plot
+ggplot(top_genes, aes(x = reorder(Gene, Importance), y = Importance)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Top 10 Predictive Genes by Importance",
+       x = "Gene", y = "Importance Score") +
+  theme_minimal()
