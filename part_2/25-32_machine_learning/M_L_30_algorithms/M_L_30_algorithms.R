@@ -787,3 +787,21 @@ ggplot(dat, aes(x=x)) +
   labs(title='Regression Tree Fit: y vs x',
        x = 'x', y = 'y / Predicted y') +
   theme_minimal()
+
+#21 Now model with a random forest instead of a regression tree using
+#randomForest from the randomForest package, and remake the scatterplot
+#with the prediction line
+
+#fit random forest
+install.packages('randomForest')
+library(randomForest)
+rf_fit <- randomForest(y ~ x, data=dat)
+#predict
+dat$y_hat <- predict(rf_fit)
+#plot
+ggplot(dat, aes(x=x)) +
+  geom_point(aes(y=y), color='gray60', alpha=.6) +
+  geom_line(aes(y=y_hat), color='forestgreen', size=1.2) +
+  labs(title = 'Random Forest Fit: y vs x',
+       x='x', y='y /Predicted y') +
+  theme_minimal()
