@@ -116,7 +116,7 @@ fit <- rpart(margin ~ ., data = polls_2008)
 
 
 
-#Exercises 30.6
+#Exercises 31.6 Examples of Algorithms
 #1. Create a dataset using the following code:
 set.seed(1)
 n <- 100
